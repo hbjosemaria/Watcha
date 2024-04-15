@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.presentation.appscreens
+package com.simplepeople.watcha.ui.appscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,16 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.simplepeople.watcha.domain.core.Genre
+import androidx.navigation.NavController
 import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.ui.appnavigation.AppScreens
 
 @Composable
 fun HomeScreen(
-    navigateToMovieDetails: (Int) -> Unit,
-    movieList: List<Movie> //TODO: remove this later. This is a filling example.
+    navController: NavController,
+    movieList: Set<Movie> //TODO: remove this later. This is a filling example.
 ) {
     Scaffold (
-        topBar = {/*Without topbar*/},
         bottomBar = {
             BottomAppBar {
             }
@@ -36,7 +36,7 @@ fun HomeScreen(
         MovieList(
             paddingValues = paddingValues,
             movieList,
-            navigateToMovieDetails = navigateToMovieDetails
+            navController = navController
         )
     }
 }
@@ -44,15 +44,15 @@ fun HomeScreen(
 @Composable
 fun MovieList(
     paddingValues: PaddingValues,
-    movieList: List<Movie>,
-    navigateToMovieDetails: (Int) -> Unit) {
+    movieSet: Set<Movie>,
+    navController: NavController) {
     LazyColumn (modifier = Modifier
         .padding(paddingValues.calculateBottomPadding())
     ) {
-        items(movieList) {movie ->
+        items(movieSet.toList()) { movie ->
             MovieAvatar(
                 movie,
-                navigateToMovieDetails = {navigateToMovieDetails})
+                navController = navController)
         }
     }
 }
@@ -60,9 +60,9 @@ fun MovieList(
 @Composable
 fun MovieAvatar(
     movie: Movie,
-    navigateToMovieDetails: (Int) -> Unit) {
+    navController: NavController) {
     Column(modifier = Modifier
-        .clickable { navigateToMovieDetails(movie.movieId) } //TODO: add arg to navigation to get movie details by its ID
+        .clickable { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") } //TODO: add arg to navigation to get movie details by its ID
     ) {
         Image(painter = painterResource(id = movie.picture), contentDescription = movie.overview)
         Spacer(modifier = Modifier
@@ -72,3 +72,5 @@ fun MovieAvatar(
         Text(text = movie.overview)
     }
 }
+
+//Here should be located the stateHolders. These have the compose or flow status holder where de data is collected from the ViewModel and then passed to the UI element

@@ -1,5 +1,6 @@
-package com.simplepeople.watcha.presentation.appnavigation
+package com.simplepeople.watcha.ui.appnavigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -7,13 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.domain.core.exampleMovieList
-import com.simplepeople.watcha.presentation.appscreens.HomeScreen
-import com.simplepeople.watcha.presentation.appscreens.MovieDetailsScreen
+import com.simplepeople.watcha.domain.core.exampleMovieSet
+import com.simplepeople.watcha.ui.appscreen.HomeScreen
+import com.simplepeople.watcha.ui.appscreen.MovieDetailsScreen
+import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 
 sealed class AppScreens(val route: String, val screenName: Int) {
     object HomeScreen: AppScreens("home", R.string.home)
-    object MovieDetailsScreen: AppScreens("movie_details/{movieId}", R.string.movie_details)
+    object MovieDetailsScreen: AppScreens("movie_details", R.string.movie_details)
     object FavoritesScreen: AppScreens("favorites", R.string.list_favorites)
     object SearchScreen: AppScreens("search", R.string.search)
 }
@@ -24,14 +26,17 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = AppScreens.HomeScreen.route) {
         composable(AppScreens.HomeScreen.route){
             HomeScreen(
-                navigateToMovieDetails = {navController.navigate(AppScreens.MovieDetailsScreen.route)},
-                movieList = exampleMovieList) //TODO: remove this later. It's an example filling list.
+                navController = navController,
+                movieList = exampleMovieSet) //TODO: remove this later. It's an example filling list.
         }
         composable(
-            AppScreens.MovieDetailsScreen.route,
+            AppScreens.MovieDetailsScreen.route + "/{movieId}",
             arguments = listOf(navArgument("movieId") {type = NavType.IntType})) {
+            val movieId = it.arguments?.getInt("movieId")
+            val movie = exampleMovieSet.find {movie -> movie.movieId == (movieId ?: 1)}
             MovieDetailsScreen(
-                movie = exampleMovieList[0] //TODO: remove this later. It's an example.
+                movie = movie!!, //TODO: remove this later. It's an example.
+                navigateBack = {navController.popBackStack()}
             )
         }
         composable(AppScreens.FavoritesScreen.route) {

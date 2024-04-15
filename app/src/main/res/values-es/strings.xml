@@ -32,4 +32,6 @@
     <string name="subscription_basic">Básica</string>
     <string name="subscription_standard">Estándar</string>
     <string name="subscription_premium">Premium</string>
+    <string name="navigation_back">Atrás</string>
+    <string name="movie_score_empty">N/A</string>
 </resources>
