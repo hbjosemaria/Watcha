@@ -1,12 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Watcha</string>
-    <string name="title_activity_main" translatable="false">MainActivity</string>
     <string name="home">Home</string>
     <string name="movie_details">Details</string>
     <string name="movie_title">Title</string>
     <string name="movie_description">Description</string>
     <string name="list_favorites">Favorites</string>
-    <string name="movie_mark_favorite">Add avorite</string>
+    <string name="movie_mark_favorite">Add favorite</string>
     <string name="movie_unmark_favorite">Remove favorite</string>
     <string name="search">Search</string>
     <string name="genre_action">Action</string>

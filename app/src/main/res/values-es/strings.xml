@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Watcha</string>
+    <string name="home">Inicio</string>
+    <string name="movie_details">Detalles</string>
+    <string name="movie_title">Título</string>
+    <string name="movie_description">Descripción</string>
+    <string name="list_favorites">Favoritos</string>
+    <string name="movie_mark_favorite">Añadir favorito</string>
+    <string name="movie_unmark_favorite">Eliminar favorito</string>
+    <string name="search">Buscar</string>
+    <string name="genre_action">Acción</string>
+    <string name="genre_adventure">Aventura</string>
+    <string name="genre_animation">Animación</string>
+    <string name="genre_comedy">Comedia</string>
+    <string name="genre_crime">Crimen</string>
+    <string name="genre_documentary">Documental</string>
+    <string name="genre_drama">Drama</string>
+    <string name="genre_family">Familia</string>
+    <string name="genre_fantasy">Fantasía</string>
+    <string name="genre_history">HIstoria</string>
+    <string name="genre_horror">Terror</string>
+    <string name="genre_music">Música</string>
+    <string name="genre_mystery">Misterio</string>
+    <string name="genre_romance">Romance</string>
+    <string name="genre_science_fiction">Ciencia ficción</string>
+    <string name="genre_tv_movie">Película de TV</string>
+    <string name="genre_thriller">Suspense</string>
+    <string name="genre_war">Bélica</string>
+    <string name="genre_western">Western</string>
+    <string name="subscription_free">Gratuita</string>
+    <string name="subscription_basic">Básica</string>
+    <string name="subscription_standard">Estándar</string>
+    <string name="subscription_premium">Premium</string>
+</resources>
