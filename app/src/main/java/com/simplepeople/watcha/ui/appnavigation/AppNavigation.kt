@@ -24,15 +24,17 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = AppScreens.HomeScreen.route) {
         composable(AppScreens.HomeScreen.route){
             HomeScreen(
-                navController = navController,
-                movieList = exampleMovieSet) //TODO: remove this later. It's an example filling list.
+                navController = navController)
         }
         composable(
             AppScreens.MovieDetailsScreen.route + "/{movieId}",
-            arguments = listOf(navArgument("movieId") {type = NavType.IntType})) {
-            val movieId = it.arguments?.getInt("movieId")
+            arguments = listOf(navArgument("movieId") {
+                type = NavType.IntType
+                nullable = false
+            })) {
+            val movieId = it.arguments?.getInt("movieId") ?: 1
             MovieDetailsScreen(
-                movieId = movieId!!, //TODO: remove this later. It's an example.
+                movieId = movieId,
                 navigateBack = {navController.popBackStack()}
             )
         }

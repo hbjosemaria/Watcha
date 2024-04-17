@@ -1,8 +1,9 @@
 plugins {
+    val hiltVersion = "2.44"
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android") version "2.44" apply false
+    id("com.google.dagger.hilt.android") version hiltVersion apply false
 }
 
 android {
@@ -53,7 +54,8 @@ android {
 
 dependencies {
 
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.scalars)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.navigation.compose)

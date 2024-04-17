@@ -13,11 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -25,16 +25,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.core.exampleMovieSet
 import com.simplepeople.watcha.ui.appnavigation.AppScreens
+import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    movieList: Set<Movie> //TODO: remove this later. This is a filling example.
+    navController: NavController
 ) {
     Scaffold (
         topBar = {},
@@ -46,7 +47,6 @@ fun HomeScreen(
             .fillMaxSize()
     ) { MovieList(
             paddingValues = it,
-            movieList,
             navController = navController
         )
     }
@@ -55,8 +55,11 @@ fun HomeScreen(
 @Composable
 fun MovieList(
     paddingValues: PaddingValues,
-    movieSet: Set<Movie>,
+    homeViewModel: HomeViewModel = viewModel(),
     navController: NavController) {
+
+    val movieSet: Set<Movie> by homeViewModel.movieSet.collectAsState()
+
     LazyColumn (modifier = Modifier
         .padding(paddingValues)
         .fillMaxSize()
@@ -64,7 +67,7 @@ fun MovieList(
         items(movieSet.toList()) { movie ->
             MovieAvatar(
                 movie,
-                navController = navController)
+                navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") })
         }
     }
 }
@@ -72,9 +75,9 @@ fun MovieList(
 @Composable
 fun MovieAvatar(
     movie: Movie,
-    navController: NavController) {
+    navigateToMovieDetails: () -> Unit) {
     Card(modifier = Modifier
-        .clickable { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") }
+        .clickable { navigateToMovieDetails() }
         .fillMaxWidth()
         .padding(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp) //TODO: add arg to navigation to get movie details by its ID
@@ -105,12 +108,19 @@ fun MovieAvatar(
     }
 }
 
-@Preview
+@Preview(name = "Movie Card")
 @Composable
 private fun MovieAvatarPreview() {
+    val navigateToMovieDetails = rememberNavController().navigate(AppScreens.MovieDetailsScreen.route)
     MovieAvatar(
         exampleMovieSet.first(),
-        rememberNavController()
+        {navigateToMovieDetails}
     )
+}
 
+@Preview(name = "Home Movie List")
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreen(navController = rememberNavController())
+    
 }

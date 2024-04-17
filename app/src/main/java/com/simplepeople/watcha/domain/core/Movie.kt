@@ -3,14 +3,14 @@ package com.simplepeople.watcha.domain.core
 import com.simplepeople.watcha.R
 
 data class Movie(
-    val movieId: Int,
-    val title: String,
-    val overview: String,
-    val picture: Int,
-    val company: String,
-    val genres: List<Genre>,
-    val releaseDate: String,
-    val voteAverage: String? = null,
+    val movieId: Int = 1,
+    val title: String = "",
+    val overview: String = "",
+    val picture: Int = R.drawable.watcha_logo,
+    val company: String = "",
+    val genres: List<Genre> = listOf(),
+    val releaseDate: String = "",
+    val voteAverage: String? = "",
     var isFavorite: Boolean = false
 )
 

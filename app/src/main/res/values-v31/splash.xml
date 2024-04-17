@@ -5,5 +5,7 @@
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/watcha_logo</item>
         <item name="android:windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.Watcha</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>

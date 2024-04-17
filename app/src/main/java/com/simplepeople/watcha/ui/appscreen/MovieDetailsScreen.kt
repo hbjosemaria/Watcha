@@ -21,7 +21,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,120 +41,127 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
+import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
-    movieDetailsViewModel: MovieDetailsViewModel = viewModel(),
+    movieDetailsViewModel: MovieDetailsViewModel = viewModel(factory = MovieDetailsViewModelFactory(movieId)),
     navigateBack: () -> Unit
 ) {
-    val movie by remember {mutableStateOf(movieDetailsViewModel.getMovieDetails(movieId))}
+
+    val movie by movieDetailsViewModel.movie.collectAsState()
     
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
 
         topBar = { TopAppBar(
-            title = { Text(movie.title) },
+            title = {},
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent.copy(alpha = 0f)
+            ),
             navigationIcon = { IconButton(onClick = {navigateBack()}) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.navigation_back))
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.navigation_back),
+                    tint = Color.Black
+                )
             }}
         )}
     ) {
-        Surface (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(it.calculateBottomPadding())
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                Box {
-                     Image(
-                        painter = painterResource(id = R.drawable.watcha_logo),
-                        contentDescription = movie.title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White)
-                     ) //TODO: Load image from website with Glide? Website base URL to each image is this: https://image.tmdb.org/t/p/w1280/
-                    Text(//TODO: make it a circle with the rating
-                        text = movie.voteAverage ?: stringResource(id = R.string.movie_score_empty),
-                        style = TextStyle(
-                            color = Color.Black
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(0.dp, 20.dp, 20.dp, 0.dp)
-                            .background(Color.Gray)
-                    )
-                    IconButton(
-                        onClick = { movieDetailsViewModel.toggleFavorite(movie) },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(0.dp, 0.dp, 20.dp, 20.dp)
-                    ) {
-                        Icon(
-                            imageVector = if (!movie.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = stringResource(R.string.movie_mark_favorite),
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
-                    }
-                }
-                Column(
+            Box {
+                 Image(
+                    painter = painterResource(id = R.drawable.watcha_logo),
+                    contentDescription = movie.title,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(15.dp)
+                        .fillMaxWidth()
+                        .background(Color.White)
+                 ) //TODO: Load image from website with Glide? Website base URL to each image is this: https://image.tmdb.org/t/p/w1280/
+                Text(//TODO: make it a circle with the rating
+                    text = movie.voteAverage ?: stringResource(id = R.string.movie_score_empty),
+                    style = TextStyle(
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(0.dp, 20.dp, 20.dp, 0.dp)
+                        .background(Color.Gray)
+                )
+                IconButton(
+                    onClick = { movieDetailsViewModel.toggleFavorite() },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(0.dp, 0.dp, 20.dp, 20.dp)
                 ) {
-                    Text(
-                        text = movie.title,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                    Spacer(
+                    Icon(
+                        imageVector = if (movie.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = stringResource(R.string.movie_mark_favorite),
                         modifier = Modifier
-                            .padding(5.dp, 0.dp, 0.dp, 5.dp)
-                    )
-                    Row {
-                        Text(
-                            text = movie.releaseDate,
-                            style = TextStyle(
-                                fontSize = 14.sp
-                            ),
-                            modifier = Modifier
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Text(
-                            text = movie.company,
-                            style = TextStyle(
-                                fontSize = 14.sp
-                            ),
-                        )
-                    }
-                    Row {
-                        Text(
-                            text = movie.genres.map{ stringResource(id = it.title) }.joinToString(", "),
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 15.dp))
-                    Text(
-                        text = movie.overview
+                            .fillMaxSize()
                     )
                 }
             }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp)
+            ) {
+                Text(
+                    text = movie.title,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(
+                    modifier = Modifier
+                        .padding(5.dp, 0.dp, 0.dp, 5.dp)
+                )
+                Row {
+                    Text(
+                        text = movie.releaseDate,
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        ),
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                    )
+                    Text(
+                        text = movie.company,
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        ),
+                    )
+                }
+                Row {
+                    Text(
+                        text = movie.genres.map{ stringResource(id = it.title) }.joinToString(", "),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 0.dp, 15.dp))
+                Text(
+                    text = movie.overview
+                )
+            }
         }
+
     }
 }
+
+
 
 @Preview(
     showBackground = true,
