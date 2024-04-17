@@ -8,15 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MovieDetailsViewModel : ViewModel() {
+class MovieDetailsViewModel() : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailsUiState())
     val uiState : StateFlow<MovieDetailsUiState> = _uiState.asStateFlow()
-
-    /*TODO: fetch movie details
-    init {
-        getMovieDetails(movieId)
-    }*/
 
     fun toggleFavorite(movie: Movie) {
         _uiState.value = MovieDetailsUiState(isFavourite = !_uiState.value.isFavourite)

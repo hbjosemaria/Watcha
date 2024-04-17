@@ -11,7 +11,8 @@ data class Movie(
     val genres: List<Genre>,
     val releaseDate: String,
     val voteAverage: String? = null,
-    var isFavorite: Boolean = false)
+    var isFavorite: Boolean = false
+)
 
 val exampleMovieSet = setOf(
     Movie(1, "Filling film 1", "This is an exciting filling film", R.drawable.watcha_logo, "My own company", listOf(Genre.ACTION, Genre.ADVENTURE, Genre.COMEDY), "2024-04-15", "5.35"),

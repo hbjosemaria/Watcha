@@ -9,10 +9,13 @@ import com.simplepeople.watcha.ui.theme.WatchaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen().apply{
-            //TODO: load user data and favorite list here
-        }
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        /* //TODO: load user data and favorite list here
+        splashScreen.setKeepOnScreenCondition()
+        */
+
         setContent {
             WatchaTheme {
                 AppNavigation()
