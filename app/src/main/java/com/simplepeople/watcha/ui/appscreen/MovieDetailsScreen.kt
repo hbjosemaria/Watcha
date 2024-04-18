@@ -1,7 +1,5 @@
 package com.simplepeople.watcha.ui.appscreen
 
-import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,45 +25,51 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
+@Composable //TODO: clean and refactor MovieDetailsScreen in several composables
 fun MovieDetailsScreen(
     movieId: Int,
-    movieDetailsViewModel: MovieDetailsViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ) {
 
+    val movieDetailsViewModel =
+        hiltViewModel<MovieDetailsViewModel, MovieDetailsViewModel.MovieDetailsViewModelFactory>(
+            creationCallback = { factory -> factory.create(movieId = movieId) }
+        )
+
     val movie by movieDetailsViewModel.movie.collectAsState()
-    
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
 
-        topBar = { TopAppBar(
-            title = {},
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent.copy(alpha = 0f)
-            ),
-            navigationIcon = { IconButton(onClick = {navigateBack()}) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(id = R.string.navigation_back),
-                    tint = Color.Black
-                )
-            }}
-        )}
+        topBar = {
+            TopAppBar(
+                title = {},
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent.copy(alpha = 0f)
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { navigateBack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(id = R.string.navigation_back),
+                            tint = Color.Black
+                        )
+                    }
+                }
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -73,13 +77,13 @@ fun MovieDetailsScreen(
                 .padding(it.calculateBottomPadding())
         ) {
             Box {
-                 Image(
-                    painter = painterResource(id = R.drawable.watcha_logo),
+                AsyncImage(
+                    model = movie.picture,
                     contentDescription = movie.title,
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.White)
-                 ) //TODO: Load image from website with Glide? Website base URL to each image is this: https://image.tmdb.org/t/p/w1280/
+                )
                 Text(//TODO: make it a circle with the rating
                     text = movie.voteAverage ?: stringResource(id = R.string.movie_score_empty),
                     style = TextStyle(
@@ -129,16 +133,11 @@ fun MovieDetailsScreen(
                         modifier = Modifier
                             .padding(0.dp, 0.dp, 10.dp, 0.dp)
                     )
-                    Text(
-                        text = movie.company,
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        ),
-                    )
                 }
                 Row {
                     Text(
-                        text = movie.genres.map{ stringResource(id = it.title) }.joinToString(", "),
+                        text = movie.genres.map { stringResource(id = it.title) }
+                            .joinToString(", "),
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium
@@ -147,25 +146,13 @@ fun MovieDetailsScreen(
                 }
                 Spacer(
                     modifier = Modifier
-                        .padding(0.dp, 0.dp, 0.dp, 15.dp))
+                        .padding(0.dp, 0.dp, 0.dp, 15.dp)
+                )
                 Text(
                     text = movie.overview
                 )
             }
         }
 
-    }
-}
-
-
-
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-private fun MovieDetailsScreenPreview() {
-    MovieDetailsScreen(1) {
-        
     }
 }

@@ -34,4 +34,5 @@
     <string name="subscription_premium">Premium</string>
     <string name="navigation_back">Atrás</string>
     <string name="movie_score_empty">N/A</string>
+    <string name="genre_not_specified">No especificado</string>
 </resources>

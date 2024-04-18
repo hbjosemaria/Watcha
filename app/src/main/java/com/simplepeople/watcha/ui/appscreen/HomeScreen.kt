@@ -29,8 +29,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.domain.core.exampleMovieSet
 import com.simplepeople.watcha.ui.appnavigation.AppScreens
 import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 
@@ -38,7 +39,7 @@ import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 fun HomeScreen(
     navController: NavController
 ) {
-    Scaffold (
+    Scaffold(
         topBar = {},
         bottomBar = {
             BottomAppBar {
@@ -46,7 +47,8 @@ fun HomeScreen(
         },
         modifier = Modifier
             .fillMaxSize()
-    ) { MovieList(
+    ) {
+        MovieList(
             paddingValues = it,
             navController = navController
         )
@@ -57,13 +59,15 @@ fun HomeScreen(
 fun MovieList(
     paddingValues: PaddingValues,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    navController: NavController) {
+    navController: NavController
+) {
 
     val movieSet: Set<Movie> by homeViewModel.movieSet.collectAsState()
 
-    LazyColumn (modifier = Modifier
-        .padding(paddingValues)
-        .fillMaxSize()
+    LazyColumn(
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize()
     ) {
         items(movieSet.toList()) { movie ->
             MovieAvatar(
@@ -76,22 +80,25 @@ fun MovieList(
 @Composable
 fun MovieAvatar(
     movie: Movie,
-    navigateToMovieDetails: () -> Unit) {
+    navigateToMovieDetails: () -> Unit
+) {
     Card(modifier = Modifier
         .clickable { navigateToMovieDetails() }
         .fillMaxWidth()
         .padding(10.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp) //TODO: add arg to navigation to get movie details by its ID
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
-        Image(
-            painter = painterResource(id = movie.picture),
+        AsyncImage(
+            model = movie.picture,
             contentDescription = movie.overview,
             modifier = Modifier
-                .fillMaxWidth())
-        Spacer(modifier = Modifier
-            .padding(5.dp, 0.dp, 5.dp, 0.dp)
+                .fillMaxWidth()
         )
-        Column (
+        Spacer(
+            modifier = Modifier
+                .padding(5.dp, 0.dp, 5.dp, 0.dp)
+        )
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(6.dp)
@@ -107,21 +114,4 @@ fun MovieAvatar(
         }
 
     }
-}
-
-@Preview(name = "Movie Card")
-@Composable
-private fun MovieAvatarPreview() {
-    val navigateToMovieDetails = rememberNavController().navigate(AppScreens.MovieDetailsScreen.route)
-    MovieAvatar(
-        exampleMovieSet.first(),
-        {navigateToMovieDetails}
-    )
-}
-
-@Preview(name = "Home Movie List")
-@Composable
-private fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
-    
 }

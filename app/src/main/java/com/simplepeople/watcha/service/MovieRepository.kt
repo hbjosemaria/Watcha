@@ -18,13 +18,13 @@ object MovieRepository {
 
     @Provides
     @Singleton
-    fun provideExternalMovieRepository(apiService: TmdbApiServiceImpl) : ExternalMovieRepository {
+    fun provideExternalMovieRepository(apiService: TmdbApiServiceImpl): ExternalMovieRepository {
         return ExternalMovieRepositoryImpl(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideLocalMovieRepository(apiService: RoomMovieServiceImpl) : LocalMovieRepository {
+    fun provideLocalMovieRepository(apiService: RoomMovieServiceImpl): LocalMovieRepository {
         return LocalMovieRepositoryImpl(apiService)
     }
 

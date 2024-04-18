@@ -7,35 +7,36 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.domain.core.exampleMovieSet
 import com.simplepeople.watcha.ui.appscreen.HomeScreen
 import com.simplepeople.watcha.ui.appscreen.MovieDetailsScreen
 
 sealed class AppScreens(val route: String, val screenName: Int) {
-    object HomeScreen: AppScreens("home", R.string.home)
-    object MovieDetailsScreen: AppScreens("movie_details", R.string.movie_details)
-    object FavoritesScreen: AppScreens("favorites", R.string.list_favorites)
-    object SearchScreen: AppScreens("search", R.string.search)
+    object HomeScreen : AppScreens("home", R.string.home)
+    object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details)
+    object FavoritesScreen : AppScreens("favorites", R.string.list_favorites)
+    object SearchScreen : AppScreens("search", R.string.search)
 }
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = AppScreens.HomeScreen.route) {
-        composable(AppScreens.HomeScreen.route){
+        composable(AppScreens.HomeScreen.route) {
             HomeScreen(
-                navController = navController)
+                navController = navController
+            )
         }
         composable(
             AppScreens.MovieDetailsScreen.route + "/{movieId}",
             arguments = listOf(navArgument("movieId") {
                 type = NavType.IntType
                 nullable = false
-            })) {
+            })
+        ) {
             val movieId = it.arguments?.getInt("movieId") ?: 1
             MovieDetailsScreen(
                 movieId = movieId,
-                navigateBack = {navController.popBackStack()}
+                navigateBack = { navController.popBackStack() }
             )
         }
         composable(AppScreens.FavoritesScreen.route) {

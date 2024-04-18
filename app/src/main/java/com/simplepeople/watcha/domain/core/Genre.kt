@@ -21,5 +21,6 @@ enum class Genre(val title: Int) {
     TV_MOVIE(R.string.genre_tv_movie),
     THRILLER(R.string.genre_thriller),
     WAR(R.string.genre_war),
-    WESTERN(R.string.genre_western)
+    WESTERN(R.string.genre_western),
+    NOT_SPECIFIED(R.string.genre_not_specified)
 }

@@ -12,12 +12,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         actionBar?.hide() //TODO: remove this when I can fix the Style NoActionBar bug
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        /* //TODO: load user data and favorite list here
-        splashScreen.setKeepOnScreenCondition()
-        */
+        //TODO: add here loading conditions before HomeScreen appears
+        // splashScreen.setKeepOnScreenCondition(SplashScreen.KeepOnScreenCondition {  })
 
         setContent {
             WatchaTheme {
