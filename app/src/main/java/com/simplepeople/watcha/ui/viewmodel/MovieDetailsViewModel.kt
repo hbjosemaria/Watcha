@@ -5,18 +5,34 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.simplepeople.watcha.MainActivity
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.core.exampleMovieSet
+import com.simplepeople.watcha.domain.repo.ExternalMovieRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 //TODO: uiState for success, error and loading screen state
 
-class MovieDetailsViewModel(movieId: Int) : ViewModel() {
+@HiltViewModel(assistedFactory = MovieDetailsViewModel.MovieDetailsViewModelFactory::class)
+class MovieDetailsViewModel @AssistedInject constructor(
+    private val movieRepository: ExternalMovieRepository,
+    @Assisted private val movieId: Int
+) : ViewModel() {
+
+    @AssistedFactory
+    interface MovieDetailsViewModelFactory {
+        fun create(movieId: Int) : MovieDetailsViewModel
+    }
 
     /*Comment: this is one of the options suggested to use when working with Flow
     private val _movie = MutableStateFlow<Movie>(Movie())
@@ -42,18 +58,7 @@ class MovieDetailsViewModel(movieId: Int) : ViewModel() {
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
-            movie.value = exampleMovieSet.find { it.movieId == movieId } ?: exampleMovieSet.first() //TODO: call to repo for fetching movie details and then remove this example
+            movie.value = movieRepository.getMovieById(movieId)
         }
-    }
-}
-
-//Comment: a ViewModelFactory implementation was needed in order to initialize movie data in the MovieDetailsViewModel
-class MovieDetailsViewModelFactory(private val movieId: Int) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MovieDetailsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MovieDetailsViewModel(movieId) as T
-        }
-        throw IllegalArgumentException("Not valid ViewModel class")
     }
 }

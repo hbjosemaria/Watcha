@@ -1,9 +1,10 @@
+import java.util.Properties
+
 plugins {
-    val hiltVersion = "2.44"
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android") version hiltVersion apply false
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -21,6 +22,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("TMDB_API_KEY")}\"")
     }
 
     buildTypes {
@@ -41,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -56,8 +62,14 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.converter.scalars)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation (libs.hilt.android.v2511)
+    kapt (libs.hilt.compiler)
+    androidTestImplementation  (libs.hilt.android.testing)
+    kaptAndroidTest (libs.google.hilt.compiler)
+    testImplementation (libs.hilt.android.testing)
+    kaptTest (libs.com.google.dagger.hilt.compiler2)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
