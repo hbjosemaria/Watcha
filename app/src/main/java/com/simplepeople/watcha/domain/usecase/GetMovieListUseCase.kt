@@ -7,7 +7,11 @@ import javax.inject.Inject
 class GetMovieListUseCase @Inject constructor(
     private val repository: ExternalMovieRepository
 ) {
-    suspend fun getMovieListMapped(): Set<Movie> {
+    suspend fun getFirstPage(): Set<Movie> {
         return repository.getMovies().toDomain()
+    }
+
+    suspend fun getNextPage(page: Int): Set<Movie> {
+        return repository.getMoviesByPage(page).toDomain()
     }
 }

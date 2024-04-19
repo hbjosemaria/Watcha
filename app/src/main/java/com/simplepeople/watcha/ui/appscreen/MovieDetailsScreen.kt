@@ -52,7 +52,6 @@ fun MovieDetailsScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-
         topBar = {
             TopAppBar(
                 title = {},
@@ -69,7 +68,8 @@ fun MovieDetailsScreen(
                     }
                 }
             )
-        }
+        },
+        bottomBar = {}
     ) {
         Column(
             modifier = Modifier

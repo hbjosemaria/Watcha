@@ -12,6 +12,7 @@ interface ExternalMovieRepository {
     suspend fun getMovies(): MovieListResponse
     suspend fun getMovieById(movieId: Int): MovieResponse
     suspend fun getMoviesByTitle(searchText: String): MovieListResponse
+    suspend fun getMoviesByPage(page: Int): MovieListResponse
 
 }
 
@@ -24,12 +25,17 @@ interface LocalMovieRepository {
 class ExternalMovieRepositoryImpl(private val apiService: TmdbApiServiceImpl) :
     ExternalMovieRepository {
 
-    override suspend fun getMovies(): MovieListResponse = apiService.getMovies()
+    override suspend fun getMovies(): MovieListResponse =
+        apiService.getMovies()
+
     override suspend fun getMovieById(movieId: Int): MovieResponse =
         apiService.getMovieById(movieId)
 
     override suspend fun getMoviesByTitle(searchText: String): MovieListResponse =
         apiService.getMoviesByTitle(searchText)
+
+    override suspend fun getMoviesByPage(page: Int): MovieListResponse =
+        apiService.getMoviesByPage(page)
 
 }
 

@@ -1,8 +1,6 @@
 package com.simplepeople.watcha.ui.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.domain.core.Movie
@@ -24,15 +22,28 @@ class HomeViewModel @Inject constructor(
     var movieSet = MutableStateFlow<Set<Movie>>(setOf())
         private set
 
+    var currentPage = MutableStateFlow(1)
+        private set
+
     init {
-        getDefaultMovieSet()
+        getFirstPage()
     }
 
-    fun getDefaultMovieSet() {
+    fun getFirstPage() {
         viewModelScope.launch {
             movieSet.value = withContext(Dispatchers.IO) {
-                getMovieListUseCase.getMovieListMapped()
+                getMovieListUseCase.getFirstPage()
             }
+        }
+    }
+
+    fun getNextPage() {
+        viewModelScope.launch{
+            currentPage.value++
+            movieSet.value = movieSet.value.plus(withContext(Dispatchers.IO) {
+                Log.i("Loading next page: ", currentPage.value.toString())
+                getMovieListUseCase.getNextPage(currentPage.value)
+            })
         }
     }
 }
