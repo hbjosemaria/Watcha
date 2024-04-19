@@ -7,7 +7,7 @@
     <string name="movie_description">Descripción</string>
     <string name="list_favorites">Favoritos</string>
     <string name="movie_mark_favorite">Añadir favorito</string>
-    <string name="movie_unmark_favorite">Eliminar favorito</string>
+    <string name="movie_uncheck_favorite">Eliminar favorito</string>
     <string name="search">Buscar</string>
     <string name="genre_action">Acción</string>
     <string name="genre_adventure">Aventura</string>

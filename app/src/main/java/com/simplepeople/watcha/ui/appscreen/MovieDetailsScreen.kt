@@ -1,13 +1,17 @@
 package com.simplepeople.watcha.ui.appscreen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -49,6 +53,8 @@ fun MovieDetailsScreen(
 
     val movie by movieDetailsViewModel.movie.collectAsState()
 
+    val scrollState: ScrollState = rememberScrollState()
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -74,6 +80,7 @@ fun MovieDetailsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(it.calculateBottomPadding())
         ) {
             Box {
@@ -82,6 +89,7 @@ fun MovieDetailsScreen(
                     contentDescription = movie.title,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .aspectRatio(1920f / 1280f)
                         .background(Color.White)
                 )
                 Text(//TODO: make it a circle with the rating

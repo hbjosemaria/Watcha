@@ -2,7 +2,6 @@ package com.simplepeople.watcha.ui.appscreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,46 +27,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.ui.appnavigation.AppScreens
 import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-@Composable
-fun HomeScreen(
-    navController: NavController
-) {
-    Scaffold(
-        topBar = {},
-        bottomBar = {
-            BottomAppBar {
-            }
-        },
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        MovieList(
-            paddingValues = it,
-            navController = navController
-        )
-    }
-}
-
-
 @OptIn(FlowPreview::class)
 @Composable
-fun MovieList(
-    paddingValues: PaddingValues,
+fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-
     val movieSet: Set<Movie> by homeViewModel.movieSet.collectAsState()
 
     val lazyListState = rememberLazyListState()
-
 
     LaunchedEffect(lazyListState) {
         snapshotFlow {
@@ -84,7 +56,6 @@ fun MovieList(
 
     LazyColumn(
         modifier = Modifier
-            .padding(paddingValues)
             .fillMaxSize(),
         state = lazyListState
     ) {
@@ -94,6 +65,7 @@ fun MovieList(
                 navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") })
         }
     }
+
 }
 
 @Composable
@@ -102,7 +74,9 @@ fun MovieAvatar(
     navigateToMovieDetails: () -> Unit
 ) {
     Card(modifier = Modifier
-        .clickable { navigateToMovieDetails() }
+        .clickable {
+            navigateToMovieDetails()
+        }
         .fillMaxWidth()
         .padding(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
@@ -111,7 +85,7 @@ fun MovieAvatar(
             model = movie.picture,
             contentDescription = movie.title,
             modifier = Modifier
-                .aspectRatio(1920f/1280f)
+                .aspectRatio(1920f / 1280f)
                 .fillMaxWidth()
         )
         Spacer(
@@ -132,6 +106,5 @@ fun MovieAvatar(
             )
             Text(text = movie.overview)
         }
-
     }
 }
