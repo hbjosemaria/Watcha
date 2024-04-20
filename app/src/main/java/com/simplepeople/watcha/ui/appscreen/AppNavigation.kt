@@ -47,7 +47,7 @@ sealed class AppScreens(
 ) {
     data object HomeScreen : AppScreens("home", R.string.home)
     data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details)
-    data object FavoritesScreen : AppScreens("favorites", R.string.list_favorites)
+    data object FavoriteScreen : AppScreens("favorites", R.string.list_favorites)
     data object SearchScreen : AppScreens("search", R.string.search)
 }
 
@@ -68,10 +68,10 @@ class BottomNavigationItemProvider {
                 AppScreens.HomeScreen.name
             ),
             BottomNavigationItem(
-                AppScreens.FavoritesScreen.route,
+                AppScreens.FavoriteScreen.route,
                 Icons.Filled.Favorite,
                 Icons.Outlined.FavoriteBorder,
-                AppScreens.FavoritesScreen.name
+                AppScreens.FavoriteScreen.name
             )
         )
     }
@@ -150,10 +150,10 @@ fun AppNavigation(
                     movieId = movieId
                 )
             }
-            composable(AppScreens.FavoritesScreen.route,
+            composable(AppScreens.FavoriteScreen.route,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }) {
-                FavoritesScreen()
+                FavoriteScreen()
             }
             composable(AppScreens.SearchScreen.route,
                 enterTransition = { EnterTransition.None },
@@ -164,6 +164,8 @@ fun AppNavigation(
     }
 }
 
+//TODO: make it semi-visible and add an event listener when scrolling to hide it when scrolling forward(up)
+// Also, fix the AppBar padding to fix it over the Scaffold content
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

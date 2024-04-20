@@ -11,11 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
 
 @Composable
@@ -33,9 +37,13 @@ fun MovieAvatar(
 
     ) {
         AsyncImage( //TODO: Fix poster size
-            model = movie.picture,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(movie.picture)
+                .crossfade(true)
+                .build(),
             contentDescription = movie.title,
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
+            placeholder = painterResource(id = R.drawable.movie_placeholder)
         )
         Spacer(
             modifier = Modifier

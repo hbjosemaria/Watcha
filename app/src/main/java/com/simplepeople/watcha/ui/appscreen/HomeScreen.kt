@@ -46,7 +46,12 @@ fun HomeScreen(
             .fillMaxSize(),
         state = lazyListState
     ) {
-        items(movieSet.toList()) { movie ->
+        items(
+            items = movieSet.toList(),
+            key = {
+                it.movieId
+            }
+        ) { movie ->
             MovieAvatar(
                 movie,
                 navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") })

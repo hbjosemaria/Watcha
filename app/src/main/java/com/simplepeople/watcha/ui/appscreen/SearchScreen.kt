@@ -11,13 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.simplepeople.watcha.R
@@ -37,17 +33,19 @@ fun SearchScreen(
 ) {
 
     val movieSet by searchViewModel.movieSet.collectAsState()
-    var textFieldState by remember { mutableStateOf(TextFieldValue("")) }
+    val textFieldText by searchViewModel.textFieldText.collectAsState()
 
-    LaunchedEffect(textFieldState) {
+    LaunchedEffect(textFieldText) {
         snapshotFlow {
-            textFieldState
+            textFieldText
         }
             .distinctUntilChanged()
             .debounce(500L)
             .collectLatest { textFieldValue ->
-                if (textFieldValue.text.isNotBlank()) {
-                    searchViewModel.getMoviesByTitle(textFieldValue.text)
+                if (textFieldValue.isNotBlank()) {
+                    searchViewModel.getMoviesByTitle(textFieldText)
+                } else {
+                    searchViewModel.cleanMovieSearch()
                 }
             }
     }
@@ -57,9 +55,9 @@ fun SearchScreen(
             .fillMaxWidth()
     ) {
         TextField(
-            value = textFieldState,
-            onValueChange = {
-                textFieldState = it
+            value = textFieldText,
+            onValueChange = {newText ->
+                searchViewModel.onTextFieldChange(newText)
             },
             placeholder = { Text(stringResource(R.string.search_placeholder)) },
             maxLines = 1,
@@ -67,11 +65,17 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxWidth()
         )
+        //TODO: scroll back to top automatically when new movie data is fetched
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            items(movieSet.toList()) { movie ->
+            items(
+                items = movieSet.toList(),
+                key = {
+                    it.movieId
+                }
+            ) { movie ->
                 MovieAvatar(
                     movie = movie,
                     navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") }
