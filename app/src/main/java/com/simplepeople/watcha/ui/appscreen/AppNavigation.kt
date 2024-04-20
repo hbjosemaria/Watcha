@@ -5,26 +5,30 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -32,15 +36,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
+import com.simplepeople.watcha.ui.appscreen.BottomNavigationItemProvider.Companion.bottomNavigationItemList
+import com.simplepeople.watcha.ui.viewmodel.AppNavigationViewModel
 
 sealed class AppScreens(
     val route: String,
     val name: Int
 ) {
-    object HomeScreen : AppScreens("home", R.string.home)
-    object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details)
-    object FavoritesScreen : AppScreens("favorites", R.string.list_favorites)
-    object SearchScreen : AppScreens("search", R.string.search)
+    data object HomeScreen : AppScreens("home", R.string.home)
+    data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details)
+    data object FavoritesScreen : AppScreens("favorites", R.string.list_favorites)
+    data object SearchScreen : AppScreens("search", R.string.search)
 }
 
 data class BottomNavigationItem(
@@ -60,12 +66,6 @@ class BottomNavigationItemProvider {
                 AppScreens.HomeScreen.name
             ),
             BottomNavigationItem(
-                AppScreens.SearchScreen.route,
-                Icons.Filled.Search,
-                Icons.Outlined.Search,
-                AppScreens.SearchScreen.name
-            ),
-            BottomNavigationItem(
                 AppScreens.FavoritesScreen.route,
                 Icons.Filled.Favorite,
                 Icons.Outlined.FavoriteBorder,
@@ -76,62 +76,44 @@ class BottomNavigationItemProvider {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    appNavigationViewModel: AppNavigationViewModel = hiltViewModel()
+) {
 
     val navController = rememberNavController()
 
-    var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
-
-    var showBottomBar by rememberSaveable {
-        mutableStateOf(true)
-    }
+    val showBottomBar by appNavigationViewModel.showBottomBar.collectAsState()
 
     //Set a listener for navigation changes in order to check if the Scaffold BottomBar should be shown or not
     navController.addOnDestinationChangedListener { _, destination, _ ->
-        showBottomBar = !destination.route!!.startsWith(AppScreens.MovieDetailsScreen.route)
+
+        //If navigation destiny is not any of the first level layer, then hide Search icon and BottomBar
+        if (destination.route == AppScreens.SearchScreen.route ||
+            destination.route!!.startsWith(AppScreens.MovieDetailsScreen.route)
+        ) {
+            appNavigationViewModel.toggleShoWSearchIcon(false)
+            appNavigationViewModel.toggleShowBottomBar(false)
+            appNavigationViewModel.toggleShowBackIcon(true)
+        } else {
+            appNavigationViewModel.toggleShoWSearchIcon(true)
+            appNavigationViewModel.toggleShowBottomBar(true)
+            appNavigationViewModel.toggleShowBackIcon(false)
+        }
+
+        if (destination.route == AppScreens.HomeScreen.route) {
+            appNavigationViewModel.updateBottomBarSelectedIndex(
+                bottomNavigationItemList.indexOfFirst { it.navigationRoute == AppScreens.HomeScreen.route }
+            )
+        }
     }
 
     Scaffold(
-        topBar = {},
+        topBar = {
+            SharedTopBar(navController)
+        },
         bottomBar = {
             if (showBottomBar) {
-                BottomAppBar {
-                    NavigationBar {
-                        BottomNavigationItemProvider.bottomNavigationItemList.forEachIndexed { index, item ->
-                            val itemLabel = stringResource(item.itemLabel)
-                            NavigationBarItem(
-                                selected = selectedItemIndex == index,
-                                onClick = {
-                                    selectedItemIndex = index
-                                    navController.navigate(item.navigationRoute) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
-                                icon = {
-                                    if (selectedItemIndex == index) {
-                                        Icon(
-                                            imageVector = item.itemSelectedIcon,
-                                            contentDescription = itemLabel
-                                        )
-                                    } else {
-                                        Icon(
-                                            imageVector = item.itemNotSelectedIcon,
-                                            contentDescription = itemLabel
-                                        )
-                                    }
-                                },
-                                label = {
-                                    Text(itemLabel)
-                                })
-                        }
-                    }
-                }
+                SharedBottomBar(navController)
             }
         },
         modifier = Modifier
@@ -161,8 +143,7 @@ fun AppNavigation() {
             ) {
                 val movieId = it.arguments?.getInt("movieId") ?: 1
                 MovieDetailsScreen(
-                    movieId = movieId,
-                    navigateBack = { navController.popBackStack() }
+                    movieId = movieId
                 )
             }
             composable(AppScreens.FavoritesScreen.route,
@@ -174,6 +155,105 @@ fun AppNavigation() {
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }) {
                 SearchScreen()
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SharedTopBar(
+    navController: NavController,
+    appNavigationViewModel: AppNavigationViewModel = hiltViewModel()
+) {
+
+    val showTopBar by appNavigationViewModel.showTopBar.collectAsState()
+    val showSearchIcon by appNavigationViewModel.showSearchIcon.collectAsState()
+    val showBackIcon by appNavigationViewModel.showBackIcon.collectAsState()
+
+    if (showTopBar) {
+        TopAppBar(
+            title = {},
+            navigationIcon = {
+                if (showBackIcon) {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            Icons.Filled.ArrowBack.name
+                        )
+                    }
+                }
+            },
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+            actions = {
+                if (showSearchIcon) {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(AppScreens.SearchScreen.route) {
+                                appNavigationViewModel.toggleShoWSearchIcon(false)
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = Icons.Default.Search.name
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+}
+
+
+@Composable
+fun SharedBottomBar(
+    navController: NavController,
+    appNavigationViewModel: AppNavigationViewModel = hiltViewModel()
+) {
+
+    val selectedItemIndex by appNavigationViewModel.bottomBarSelectedIndex.collectAsState()
+
+    BottomAppBar {
+        NavigationBar {
+            bottomNavigationItemList.forEachIndexed { index, item ->
+                val itemLabel = stringResource(item.itemLabel)
+                NavigationBarItem(
+                    selected = selectedItemIndex == index,
+                    onClick = {
+                        appNavigationViewModel.updateBottomBarSelectedIndex(index)
+                        navController.navigate(item.navigationRoute) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        if (selectedItemIndex == index) {
+                            Icon(
+                                imageVector = item.itemSelectedIcon,
+                                contentDescription = itemLabel
+                            )
+                        } else {
+                            Icon(
+                                imageVector = item.itemNotSelectedIcon,
+                                contentDescription = itemLabel
+                            )
+                        }
+                    },
+                    label = {
+                        Text(itemLabel)
+                    })
             }
         }
     }
