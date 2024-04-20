@@ -35,4 +35,6 @@
     <string name="navigation_back">Back</string>
     <string name="movie_score_empty">N/A</string>
     <string name="genre_not_specified">Not specified</string>
+    <string name="search_label">Search movie</string>
+    <string name="search_placeholder">What movie are we watching?</string>
 </resources>

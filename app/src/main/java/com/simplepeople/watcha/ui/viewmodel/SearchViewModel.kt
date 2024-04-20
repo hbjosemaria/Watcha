@@ -11,37 +11,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-//TODO: uiState for success, error and loading screen state
-
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val getMovieListUseCase: GetMovieListUseCase
-) : ViewModel() {
+): ViewModel()  {
 
     var movieSet = MutableStateFlow<Set<Movie>>(setOf())
         private set
 
-    var currentPage = MutableStateFlow(1)
-        private set
-
-    init {
-        getFirstPage()
-    }
-
-    fun getFirstPage() {
+    fun getMoviesByTitle(searchText: String) {
         viewModelScope.launch {
             movieSet.value = withContext(Dispatchers.IO) {
-                getMovieListUseCase.getFirstPage()
+                getMovieListUseCase.getByTitle(searchText)
             }
         }
+
     }
 
-    fun getNextPage() {
-        viewModelScope.launch{
-            currentPage.value++
-            movieSet.value = movieSet.value.plus(withContext(Dispatchers.IO) {
-                getMovieListUseCase.getNextPage(currentPage.value)
-            })
-        }
-    }
 }

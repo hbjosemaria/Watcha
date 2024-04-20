@@ -2,6 +2,7 @@ package com.simplepeople.watcha.ui.appscreen
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -38,6 +39,7 @@ import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.appscreen.BottomNavigationItemProvider.Companion.bottomNavigationItemList
 import com.simplepeople.watcha.ui.viewmodel.AppNavigationViewModel
+import kotlinx.coroutines.FlowPreview
 
 sealed class AppScreens(
     val route: String,
@@ -75,6 +77,8 @@ class BottomNavigationItemProvider {
     }
 }
 
+@FlowPreview
+@ExperimentalFoundationApi
 @Composable
 fun AppNavigation(
     appNavigationViewModel: AppNavigationViewModel = hiltViewModel()
@@ -154,7 +158,7 @@ fun AppNavigation(
             composable(AppScreens.SearchScreen.route,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }) {
-                SearchScreen()
+                SearchScreen(navController)
             }
         }
     }

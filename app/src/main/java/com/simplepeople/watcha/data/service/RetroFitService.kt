@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.service
+package com.simplepeople.watcha.data.service
 
 import com.simplepeople.watcha.BuildConfig
 import com.simplepeople.watcha.data.tmdb.TmdbApiServiceImpl

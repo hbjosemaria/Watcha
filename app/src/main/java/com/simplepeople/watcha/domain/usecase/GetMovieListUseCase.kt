@@ -14,4 +14,8 @@ class GetMovieListUseCase @Inject constructor(
     suspend fun getNextPage(page: Int): Set<Movie> {
         return repository.getMoviesByPage(page).toDomain()
     }
+
+    suspend fun getByTitle(searchText: String): Set<Movie> {
+        return repository.getMoviesByTitle(searchText).toDomain()
+    }
 }

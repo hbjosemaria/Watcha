@@ -35,4 +35,6 @@
     <string name="navigation_back">Atrás</string>
     <string name="movie_score_empty">N/A</string>
     <string name="genre_not_specified">No especificado</string>
+    <string name="search_label">Buscar película</string>
+    <string name="search_placeholder">¿Qué peli vamos a ver?</string>
 </resources>
