@@ -2,16 +2,15 @@ package com.simplepeople.watcha.ui.appscreen.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.ui.appscreen.common.MovieItem
 import com.simplepeople.watcha.ui.appscreen.navigation.AppScreens
@@ -27,7 +26,8 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val movieList: List<Movie> by homeViewModel.movieLIst.collectAsState()
+//    val movieList: List<Movie> by homeViewModel.movieList.collectAsState()
+    val movieList: LazyPagingItems<Movie> = homeViewModel.movieList.collectAsLazyPagingItems()
 
     val lazyListState = rememberLazyListState()
 
@@ -38,7 +38,7 @@ fun HomeScreen(
             .distinctUntilChanged()
             .debounce(500L)
             .collectLatest { cannotScrollForward ->
-                if (cannotScrollForward) homeViewModel.getNextPage()
+//                if (cannotScrollForward) homeViewModel.getNextPage()
             }
     }
 
@@ -47,12 +47,21 @@ fun HomeScreen(
             .fillMaxSize(),
         state = lazyListState
     ) {
+//        items(
+//            items = movieList,
+//            key = {
+//                it.movieId
+//            }
+//        ) { movie ->
+//            MovieItem(
+//                movie,
+//                navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.buildArgRoute(movie.movieId))}
+//            )
+//        }
         items(
-            items = movieList.toList(),
-            key = {
-                it.movieId
-            }
-        ) { movie ->
+            count = movieList.itemCount
+        ) { index ->
+            val movie = movieList[index]!!
             MovieItem(
                 movie,
                 navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.buildArgRoute(movie.movieId))}

@@ -2,22 +2,22 @@ package com.simplepeople.watcha.data.pager
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.simplepeople.watcha.data.model.MovieListResponse
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
+import com.simplepeople.watcha.domain.core.Movie
 import javax.inject.Inject
 
 class MoviePagingSource @Inject constructor(
-    private val apiService : ExternalMovieRepository
-) : PagingSource<Int, MovieListResponse>() {
+    private val repository : ExternalMovieRepository
+) : PagingSource<Int, Movie>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieListResponse> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val position = params.key ?: 1
-            val response = apiService.getMoviesByPage(position)
+            val response = repository.getMoviesByPage(position)
 
             if (response.results.isNotEmpty()) {
                 LoadResult.Page(
-                    data = listOf(response),
+                    data = response.toDomain(),
                     prevKey = if (position == 1) null else (position - 1),
                     nextKey = if (position == response.totalPages) null else (position + 1)
                 )
@@ -30,7 +30,7 @@ class MoviePagingSource @Inject constructor(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, MovieListResponse>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
