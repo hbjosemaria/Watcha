@@ -3,7 +3,7 @@ package com.simplepeople.watcha.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.domain.usecase.GetMovieListUseCase
+import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getMovieListUseCase: GetMovieListUseCase
+    private val movieListUseCase: MovieListUseCase
 ) : ViewModel() {
 
-    var movieSet = MutableStateFlow<Set<Movie>>(setOf())
+    var movieLIst = MutableStateFlow<List<Movie>>(listOf())
         private set
 
     var currentPage = MutableStateFlow(1)
@@ -30,8 +30,8 @@ class HomeViewModel @Inject constructor(
 
     fun getFirstPage() {
         viewModelScope.launch {
-            movieSet.value = withContext(Dispatchers.IO) {
-                getMovieListUseCase.getFirstPage()
+            movieLIst.value = withContext(Dispatchers.IO) {
+                movieListUseCase.getFirstPage()
             }
         }
     }
@@ -39,8 +39,8 @@ class HomeViewModel @Inject constructor(
     fun getNextPage() {
         viewModelScope.launch{
             currentPage.value++
-            movieSet.value = movieSet.value.plus(withContext(Dispatchers.IO) {
-                getMovieListUseCase.getNextPage(currentPage.value)
+            movieLIst.value = movieLIst.value.plus(withContext(Dispatchers.IO) {
+                movieListUseCase.getNextPage(currentPage.value)
             })
         }
     }

@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.model
 
 import com.google.gson.annotations.SerializedName
-import com.simplepeople.watcha.data.tmdb.TmdbApiUrl
+import com.simplepeople.watcha.data.services.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
 
@@ -117,7 +117,8 @@ data class MovieResponse(
             picture = TmdbApiUrl.IMG_BASE_URL.url + this.posterPath,
             genres = this.genres.map { it.toDomain() },
             releaseDate = this.releaseDate,
-            voteAverage = this.voteAverage.toString()
+            voteAverage = this.voteAverage.toString(),
+            isFavorite = false
         )
     }
 

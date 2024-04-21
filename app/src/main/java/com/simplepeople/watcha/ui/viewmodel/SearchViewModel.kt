@@ -6,7 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.domain.usecase.GetMovieListUseCase
+import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getMovieListUseCase: GetMovieListUseCase
+    private val movieListUseCase: MovieListUseCase
 ): ViewModel()  {
 
-    var movieSet = MutableStateFlow<Set<Movie>>(setOf())
+    var movieList = MutableStateFlow<List<Movie>>(listOf())
         private set
 
     var textFieldText = MutableStateFlow("")
@@ -31,14 +31,14 @@ class SearchViewModel @Inject constructor(
 
     fun getMoviesByTitle(searchText: String) {
         viewModelScope.launch {
-            movieSet.value = withContext(Dispatchers.IO) {
-                getMovieListUseCase.getByTitle(searchText)
+            movieList.value = withContext(Dispatchers.IO) {
+                movieListUseCase.getByTitle(searchText)
             }
         }
     }
 
     fun cleanMovieSearch() {
-        movieSet.value = movieSet.value.drop(movieSet.value.size).toSet()
+        movieList.value = movieList.value.drop(movieList.value.size)
     }
 
 }

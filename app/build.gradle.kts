@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+//    id("com.google.devtools.ksp")
 }
 
 android {
@@ -59,17 +60,17 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.coil.compose)
     implementation(libs.retrofit)
     implementation(libs.converter.scalars)
     implementation(libs.converter.gson)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation (libs.hilt.android.v2511)
-    kapt (libs.hilt.compiler)
-    androidTestImplementation  (libs.hilt.android.testing)
-    kaptAndroidTest (libs.google.hilt.compiler)
-    testImplementation (libs.hilt.android.testing)
-    kaptTest (libs.com.google.dagger.hilt.compiler2)
+    kapt(libs.hilt.compiler)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)

@@ -1,8 +1,8 @@
-package com.simplepeople.watcha.data.service
+package com.simplepeople.watcha.data.module
 
 import com.simplepeople.watcha.BuildConfig
-import com.simplepeople.watcha.data.tmdb.TmdbApiServiceImpl
-import com.simplepeople.watcha.data.tmdb.TmdbApiUrl
+import com.simplepeople.watcha.data.services.TmdbApiService
+import com.simplepeople.watcha.data.services.TmdbApiUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetroFitService {
+object RetroFitModule {
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
@@ -36,8 +36,8 @@ object RetroFitService {
 
     @Provides
     @Singleton
-    fun provideTmdbApiService(retrofit: Retrofit): TmdbApiServiceImpl {
-        return retrofit.create(TmdbApiServiceImpl::class.java)
+    fun provideTmdbApiService(retrofit: Retrofit): TmdbApiService {
+        return retrofit.create(TmdbApiService::class.java)
     }
 
     class APIKeyInterceptor : Interceptor {

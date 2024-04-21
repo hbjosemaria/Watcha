@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen
+package com.simplepeople.watcha.ui.appscreen.moviedetails
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -38,7 +38,7 @@ import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 
 @Composable
-fun MovieDetailsScreen(
+fun MovieDetailsScreen (
     movieId: Int
 ) {
     val movieDetailsViewModel =
@@ -78,7 +78,9 @@ fun MovieDetailsScreen(
                     .background(Color.Gray)
             )
             IconButton(
-                onClick = { movieDetailsViewModel.toggleFavorite() },
+                onClick = {
+                    movieDetailsViewModel.toggleFavorite()
+                },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(0.dp, 0.dp, 20.dp, 20.dp)
@@ -136,6 +138,4 @@ fun MovieDetailsScreen(
             )
         }
     }
-
-
 }

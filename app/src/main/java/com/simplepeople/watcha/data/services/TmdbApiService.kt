@@ -1,8 +1,8 @@
-package com.simplepeople.watcha.data.tmdb
+package com.simplepeople.watcha.data.services
 
 import com.simplepeople.watcha.data.model.MovieListResponse
 import com.simplepeople.watcha.data.model.MovieResponse
-import com.simplepeople.watcha.domain.repo.ExternalMovieRepository
+import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,7 +13,7 @@ enum class TmdbApiUrl(val url: String) {
 }
 
 //Fetching data from API with all their params and then Gson maps them to their DTO model
-interface TmdbApiServiceImpl : ExternalMovieRepository {
+interface TmdbApiService : ExternalMovieRepository {
 
     @GET("movie/popular")
     override suspend fun getMovies(): MovieListResponse

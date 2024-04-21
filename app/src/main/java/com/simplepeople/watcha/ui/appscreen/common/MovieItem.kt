@@ -23,7 +23,7 @@ import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
 
 @Composable
-fun MovieAvatar(
+fun MovieItem(
     movie: Movie,
     navigateToMovieDetails: () -> Unit
 ) {

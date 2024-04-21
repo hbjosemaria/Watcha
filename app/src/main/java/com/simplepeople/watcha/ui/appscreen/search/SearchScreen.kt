@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen
+package com.simplepeople.watcha.ui.appscreen.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -17,14 +17,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.ui.appscreen.common.MovieAvatar
+import com.simplepeople.watcha.ui.appscreen.common.MovieItem
+import com.simplepeople.watcha.ui.appscreen.navigation.AppScreens
 import com.simplepeople.watcha.ui.viewmodel.SearchViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-@FlowPreview
+@OptIn(FlowPreview::class)
 @ExperimentalFoundationApi
 @Composable
 fun SearchScreen(
@@ -32,7 +33,7 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
-    val movieSet by searchViewModel.movieSet.collectAsState()
+    val movieList by searchViewModel.movieList.collectAsState()
     val textFieldText by searchViewModel.textFieldText.collectAsState()
 
     LaunchedEffect(textFieldText) {
@@ -71,14 +72,18 @@ fun SearchScreen(
                 .fillMaxWidth()
         ) {
             items(
-                items = movieSet.toList(),
+                items = movieList.toList(),
                 key = {
                     it.movieId
                 }
             ) { movie ->
-                MovieAvatar(
+                MovieItem(
                     movie = movie,
-                    navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") }
+                    navigateToMovieDetails = {navController.navigate(
+                        AppScreens.MovieDetailsScreen.buildArgRoute(
+                            movie.movieId
+                        )
+                    ) }
                 )
             }
         }

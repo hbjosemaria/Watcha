@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen
+package com.simplepeople.watcha.ui.appscreen.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.ui.appscreen.common.MovieAvatar
+import com.simplepeople.watcha.ui.appscreen.common.MovieItem
+import com.simplepeople.watcha.ui.appscreen.navigation.AppScreens
 import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -26,7 +27,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val movieSet: Set<Movie> by homeViewModel.movieSet.collectAsState()
+    val movieList: List<Movie> by homeViewModel.movieLIst.collectAsState()
 
     val lazyListState = rememberLazyListState()
 
@@ -47,15 +48,15 @@ fun HomeScreen(
         state = lazyListState
     ) {
         items(
-            items = movieSet.toList(),
+            items = movieList.toList(),
             key = {
                 it.movieId
             }
         ) { movie ->
-            MovieAvatar(
+            MovieItem(
                 movie,
-                navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.route + "/${movie.movieId}") })
+                navigateToMovieDetails = { navController.navigate(AppScreens.MovieDetailsScreen.buildArgRoute(movie.movieId))}
+            )
         }
     }
-
 }

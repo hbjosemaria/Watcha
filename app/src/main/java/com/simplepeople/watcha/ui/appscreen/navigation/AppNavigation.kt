@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen
+package com.simplepeople.watcha.ui.appscreen.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -37,7 +37,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.ui.appscreen.BottomNavigationItemProvider.Companion.bottomNavigationItemList
+import com.simplepeople.watcha.ui.appscreen.home.FavoriteScreen
+import com.simplepeople.watcha.ui.appscreen.home.HomeScreen
+import com.simplepeople.watcha.ui.appscreen.moviedetails.MovieDetailsScreen
+import com.simplepeople.watcha.ui.appscreen.navigation.BottomNavigationItemProvider.Companion.bottomNavigationItemList
+import com.simplepeople.watcha.ui.appscreen.search.SearchScreen
 import com.simplepeople.watcha.ui.viewmodel.AppNavigationViewModel
 import kotlinx.coroutines.FlowPreview
 
@@ -46,7 +50,14 @@ sealed class AppScreens(
     val name: Int
 ) {
     data object HomeScreen : AppScreens("home", R.string.home)
-    data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details)
+    data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details) {
+        fun buildArgRoute(value: Int) : String {
+            return "$route/${value.toString()}"
+        }
+        fun buildRoute() : String {
+            return "$route/{movieId}"
+        }
+    }
     data object FavoriteScreen : AppScreens("favorites", R.string.list_favorites)
     data object SearchScreen : AppScreens("search", R.string.search)
 }
@@ -91,6 +102,7 @@ fun AppNavigation(
     //Set a listener for navigation changes in order to check if the Scaffold BottomBar should be shown or not
     navController.addOnDestinationChangedListener { _, destination, _ ->
 
+        //TODO: refactor this call to make it cleaner and scalability proof
         //If navigation destiny is not any of the first level layer, then hide Search icon and BottomBar
         if (destination.route == AppScreens.SearchScreen.route ||
             destination.route!!.startsWith(AppScreens.MovieDetailsScreen.route)
@@ -140,7 +152,7 @@ fun AppNavigation(
                 )
             }
             composable(
-                AppScreens.MovieDetailsScreen.route + "/{movieId}",
+                AppScreens.MovieDetailsScreen.buildRoute(),
                 arguments = listOf(navArgument("movieId") {
                     type = NavType.IntType
                 })
@@ -150,12 +162,14 @@ fun AppNavigation(
                     movieId = movieId
                 )
             }
-            composable(AppScreens.FavoriteScreen.route,
+            composable(
+                AppScreens.FavoriteScreen.route,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }) {
-                FavoriteScreen()
+                FavoriteScreen(navController)
             }
-            composable(AppScreens.SearchScreen.route,
+            composable(
+                AppScreens.SearchScreen.route,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }) {
                 SearchScreen(navController)

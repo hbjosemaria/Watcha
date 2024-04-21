@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.model
 
 import com.google.gson.annotations.SerializedName
-import com.simplepeople.watcha.data.tmdb.TmdbApiUrl
+import com.simplepeople.watcha.data.services.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Movie
 
 //DTO Class
@@ -29,7 +29,7 @@ data class MovieListResponse(
     )
 
     //Function for mapping to Domain class
-    fun toDomain(): Set<Movie> {
+    fun toDomain(): List<Movie> {
         return results.map {
             Movie(
                 movieId = it.id,
@@ -39,6 +39,6 @@ data class MovieListResponse(
                 releaseDate = it.releaseDate,
                 voteAverage = it.voteAverage.toString()
             )
-        }.toSet()
+        }
     }
 }

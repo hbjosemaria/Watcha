@@ -3,7 +3,8 @@ package com.simplepeople.watcha.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.domain.usecase.GetMovieUseCase
+import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
+import com.simplepeople.watcha.domain.usecase.MovieUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -17,8 +18,8 @@ import kotlinx.coroutines.withContext
 
 @HiltViewModel(assistedFactory = MovieDetailsViewModel.MovieDetailsViewModelFactory::class)
 class MovieDetailsViewModel @AssistedInject constructor(
-    //private val favoriteUseCase: FavoriteUseCase, //TODO: Favorite Use Case and CRUD on Room
-    private val getMovieUseCase: GetMovieUseCase,
+    private val favoriteUseCase: FavoriteUseCase,
+    private val movieUseCase: MovieUseCase,
     @Assisted private val movieId: Int
 ) : ViewModel() {
 
@@ -35,18 +36,23 @@ class MovieDetailsViewModel @AssistedInject constructor(
     }
 
     fun toggleFavorite() {
-        movie.value = movie.value.copy(isFavorite = !movie.value.isFavorite)
-        if (movie.value.isFavorite) {
-            //TODO: save movie into local database list of favorites
-        } else {
-            //TODO: remove movie from local database list of favorites
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (!movie.value.isFavorite) {
+                    favoriteUseCase.saveFavorite(movie.value)
+                }
+                else {
+                    favoriteUseCase.deleteFavorite(movie.value)
+                }
+                movie.value = movie.value.copy(isFavorite = !movie.value.isFavorite)
+            }
         }
     }
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
             movie.value = withContext(Dispatchers.IO) {
-                getMovieUseCase.getMovieById(movieId)
+                movieUseCase.getMovieById(movieId)
             }
         }
     }
