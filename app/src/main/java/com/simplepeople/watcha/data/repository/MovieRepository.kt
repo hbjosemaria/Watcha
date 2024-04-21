@@ -1,11 +1,11 @@
 package com.simplepeople.watcha.data.repository
 
+import androidx.paging.PagingSource
 import com.simplepeople.watcha.data.model.MovieListResponse
 import com.simplepeople.watcha.data.model.MovieResponse
 import com.simplepeople.watcha.data.services.MovieDao
 import com.simplepeople.watcha.data.services.TmdbApiService
 import com.simplepeople.watcha.domain.core.Movie
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 //Interfaces which returns a Long or Int on insert and delete queries usually means if the query has success or not.
@@ -14,7 +14,6 @@ import javax.inject.Inject
 //Model interface guide for function implementation
 interface ExternalMovieRepository {
 
-    suspend fun getMovies(): MovieListResponse
     suspend fun getMovieById(movieId: Int): MovieResponse
     suspend fun getMoviesByTitle(searchText: String): MovieListResponse
     suspend fun getMoviesByPage(page: Int): MovieListResponse
@@ -23,7 +22,9 @@ interface ExternalMovieRepository {
 
 //Model interface function for function implementation
 interface LocalMovieRepository {
-    fun getFavoriteMovies(): Flow<List<Movie>>
+
+    //Added Paging loading with Room for favorite movies. PagingSource is responsible for fetching new data when needed
+    fun getFavoriteMovies(): PagingSource<Int, Movie>
     suspend fun getFavoriteById(movieId: Int): Movie
     suspend fun saveFavoriteMovie(movie: Movie): Long
     suspend fun deleteFavoriteMovie(movie: Movie): Int
@@ -39,8 +40,6 @@ interface MixedMovieRepository {
 class ExternalMovieRepositoryImpl @Inject constructor(
     private val apiService: TmdbApiService
 ) : ExternalMovieRepository {
-
-    override suspend fun getMovies(): MovieListResponse = apiService.getMovies()
 
     override suspend fun getMovieById(movieId: Int): MovieResponse =
         apiService.getMovieById(movieId)
@@ -58,7 +57,7 @@ class LocalMovieRepositoryImpl @Inject constructor(
     private val apiService: MovieDao
 ) : LocalMovieRepository {
 
-    override fun getFavoriteMovies(): Flow<List<Movie>> =
+    override fun getFavoriteMovies(): PagingSource<Int, Movie> =
         apiService.getFavoriteMovies()
 
     override suspend fun getFavoriteById(movieId: Int): Movie =

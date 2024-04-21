@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.data.services
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -14,7 +15,6 @@ import com.google.gson.reflect.TypeToken
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
@@ -37,7 +37,7 @@ class GenreConverter {
 }
 
 interface RoomService : LocalMovieRepository {
-    override fun getFavoriteMovies(): Flow<List<Movie>>
+    override fun getFavoriteMovies(): PagingSource<Int, Movie>
     override suspend fun getFavoriteById(movieId: Int): Movie
     override suspend fun saveFavoriteMovie(movie: Movie): Long
     override suspend fun deleteFavoriteMovie(movie: Movie): Int
@@ -46,8 +46,9 @@ interface RoomService : LocalMovieRepository {
 
 @Dao
 interface MovieDao : RoomService {
-    @Query("select * from movie")
-    override fun getFavoriteMovies(): Flow<List<Movie>>
+
+    @Query("select * from movie order by title asc")
+    override fun getFavoriteMovies(): PagingSource<Int, Movie>
 
     @Query("select * from movie where movieId = :movieId")
     override suspend fun getFavoriteById(movieId: Int): Movie

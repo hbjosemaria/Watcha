@@ -15,9 +15,6 @@ enum class TmdbApiUrl(val url: String) {
 //Fetching data from API with all their params and then Gson maps them to their DTO model
 interface TmdbApiService : ExternalMovieRepository {
 
-    @GET("movie/popular")
-    override suspend fun getMovies(): MovieListResponse
-
     @GET("movie/{movie_id}")
     override suspend fun getMovieById(
         @Path("movie_id") movieId: Int

@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        //TODO: add here loading conditions before HomeScreen appears
+        //TODO: add here loading conditions before HomeScreen disappears
         // splashScreen.setKeepOnScreenCondition(SplashScreen.KeepOnScreenCondition {  })
 
         setContent {
