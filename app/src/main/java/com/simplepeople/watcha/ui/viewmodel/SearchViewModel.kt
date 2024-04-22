@@ -25,8 +25,15 @@ class SearchViewModel @Inject constructor(
     var searchText = mutableStateOf("")
         private set
 
+    var searching = MutableStateFlow(false)
+        private set
+
     fun updateSearchText(text: String) {
         searchText.value = text
+    }
+
+    fun isSearching() {
+        searching.value = true
     }
 
     fun getMoviesByTitle(text: String) {
@@ -37,6 +44,7 @@ class SearchViewModel @Inject constructor(
                     .cachedIn(viewModelScope)
                     .collect {
                         movieList.value = it
+                        searching.value = false
                     }
             }
         }
@@ -45,6 +53,7 @@ class SearchViewModel @Inject constructor(
 
     fun cleanMovieSearch() {
         movieList.value = PagingData.empty()
+        searching.value = false
     }
 
 }

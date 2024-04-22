@@ -9,7 +9,7 @@ import com.simplepeople.watcha.ui.appscreen.common.MovieList
 import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(
+fun HomeScreen (
     homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToMovieDetails: (Int) -> Unit
 ) {

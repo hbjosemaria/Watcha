@@ -26,6 +26,8 @@ import androidx.navigation.NavController
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.viewmodel.AppNavigationViewModel
 
+//TODO: add a menu with a toggle option for changing between English and Spanish
+// in order to change the string locale and implement the query for language in the API
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTopBar(
@@ -51,7 +53,7 @@ fun SharedTopBar(
                 !showBackIcon -> {
                     Row {
                         Image(
-                            painter = painterResource(id = R.drawable.logo_main_screen_dark),
+                            painter = painterResource(id = R.drawable.logo_main_screen),
                             contentDescription = stringResource(id = R.string.app_name),
                             modifier = Modifier
                                 .size(160.dp)

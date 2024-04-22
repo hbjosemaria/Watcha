@@ -38,4 +38,7 @@
     <string name="search_label">Search movie</string>
     <string name="search_placeholder">What movie are we watching?</string>
     <string name="user_profile">User profile</string>
+    <string name="favorite_remove_success">Removed from favorites successfully.</string>
+    <string name="toast_close">Dimsmiss</string>
+    <string name="favorite_add_success">Added to favorites successfully.</string>
 </resources>

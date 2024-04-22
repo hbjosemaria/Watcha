@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.simplepeople.watcha.domain.core.Movie
 
+//TODO: scroll back to top automatically when new movie data is fetched
 @Composable
 fun MovieList(
     movieList : LazyPagingItems<Movie>,

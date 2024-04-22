@@ -94,7 +94,8 @@ fun AppNavigation(
         },
         bottomBar = {
             if (showBottomBar) {
-                SharedBottomBar(navController)
+                SharedBottomBar(
+                    navController = navController)
             }
         },
         modifier = Modifier

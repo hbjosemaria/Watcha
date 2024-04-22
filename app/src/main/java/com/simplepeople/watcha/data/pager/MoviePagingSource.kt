@@ -6,7 +6,6 @@ import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.domain.core.Movie
 import javax.inject.Inject
 
-//TODO: review this class again
 class ExternalDefaultMoviePagingSource @Inject constructor(
     private val repository : ExternalMovieRepository
 ) : PagingSource<Int, Movie>() {

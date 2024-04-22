@@ -37,5 +37,8 @@
     <string name="genre_not_specified">No especificado</string>
     <string name="search_label">Buscar película</string>
     <string name="search_placeholder">¿Qué peli vamos a ver?</string>
-    <string name="user_profile">User profile</string>
+    <string name="user_profile">Perfil de usuario</string>
+    <string name="favorite_remove_success">Eliminado de favoritos con éxito.</string>
+    <string name="toast_close">Quitar</string>
+    <string name="favorite_add_success">Añadido a favoritos con éxito.</string>
 </resources>
