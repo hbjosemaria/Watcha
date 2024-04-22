@@ -1,7 +1,10 @@
 package com.simplepeople.watcha.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,26 +19,32 @@ class SearchViewModel @Inject constructor(
     private val movieListUseCase: MovieListUseCase
 ): ViewModel()  {
 
-    var movieList = MutableStateFlow<List<Movie>>(listOf())
+    var movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
         private set
 
-    var textFieldText = MutableStateFlow("")
+    var searchText = mutableStateOf("")
         private set
 
-    fun onTextFieldChange(text: String) {
-        textFieldText.value = text
+    fun updateSearchText(text: String) {
+        searchText.value = text
     }
 
-    fun getMoviesByTitle(searchText: String) {
+    fun getMoviesByTitle(text: String) {
         viewModelScope.launch {
-            movieList.value = withContext(Dispatchers.IO) {
-                movieListUseCase.getByTitle(searchText)
+            withContext(Dispatchers.IO) {
+                movieListUseCase
+                    .getByTitle(text)
+                    .cachedIn(viewModelScope)
+                    .collect {
+                        movieList.value = it
+                    }
             }
         }
+
     }
 
     fun cleanMovieSearch() {
-        movieList.value = movieList.value.drop(movieList.value.size)
+        movieList.value = PagingData.empty()
     }
 
 }

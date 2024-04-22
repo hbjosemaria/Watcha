@@ -37,4 +37,5 @@
     <string name="genre_not_specified">No especificado</string>
     <string name="search_label">Buscar película</string>
     <string name="search_placeholder">¿Qué peli vamos a ver?</string>
+    <string name="user_profile">User profile</string>
 </resources>

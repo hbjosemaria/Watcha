@@ -32,7 +32,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         private set
 
     init {
-        getMovieDetails(movieId)
+        getMovieDetails()
     }
 
     fun toggleFavorite() {
@@ -40,8 +40,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
             withContext(Dispatchers.IO) {
                 if (!movie.value.isFavorite) {
                     favoriteUseCase.saveFavorite(movie.value)
-                }
-                else {
+                } else {
                     favoriteUseCase.deleteFavorite(movie.value)
                 }
                 movie.value = movie.value.copy(isFavorite = !movie.value.isFavorite)
@@ -49,10 +48,11 @@ class MovieDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun getMovieDetails(movieId: Int) {
+    private fun getMovieDetails() {
         viewModelScope.launch {
-            movie.value = withContext(Dispatchers.IO) {
-                movieUseCase.getMovieById(movieId)
+            withContext(Dispatchers.IO) {
+                val item = movieUseCase.getMovieById(movieId)
+                movie.value = item
             }
         }
     }

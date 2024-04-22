@@ -37,4 +37,5 @@
     <string name="genre_not_specified">Not specified</string>
     <string name="search_label">Search movie</string>
     <string name="search_placeholder">What movie are we watching?</string>
+    <string name="user_profile">User profile</string>
 </resources>

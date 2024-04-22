@@ -11,9 +11,6 @@ class AppNavigationViewModel @Inject constructor() : ViewModel() {
     var showBottomBar = MutableStateFlow(true)
         private set
 
-    var showTopBar = MutableStateFlow(true)
-        private set
-
     var showSearchIcon = MutableStateFlow( true)
         private set
 
@@ -23,23 +20,40 @@ class AppNavigationViewModel @Inject constructor() : ViewModel() {
     var bottomBarSelectedIndex = MutableStateFlow(0)
         private set
 
+    var showTextTitle = MutableStateFlow(false)
+        private set
+
+    var showTopBar = MutableStateFlow(true)
+        private set
+
     fun updateBottomBarSelectedIndex(index: Int) {
         bottomBarSelectedIndex.value = index
     }
 
-    fun toggleShoWSearchIcon(status: Boolean) {
-        showSearchIcon.value = status
+    //SearchScreen
+    fun navigatingToSearch() {
+        showSearchIcon.value = false
+        showBottomBar.value = false
+        showBackIcon.value = true
+        showTextTitle.value = true
+        showTopBar.value = true
     }
 
-    fun toggleShowTopBar(status: Boolean) {
-        showTopBar.value = status
+    //HomeScreen and FavoriteScreen
+    fun navigatingToMainScreen() {
+        showSearchIcon.value = true
+        showBottomBar.value = true
+        showBackIcon.value = false
+        showTextTitle.value = false
+        showTopBar.value = true
     }
 
-    fun toggleShowBottomBar(status: Boolean) {
-        showBottomBar.value = status
-    }
-
-    fun toggleShowBackIcon(status: Boolean) {
-        showBackIcon.value = status
+    //MovieDetailsScreen
+    fun navigatingToMovieDetails() {
+        showSearchIcon.value = false
+        showBottomBar.value = false
+        showBackIcon.value = true
+        showTextTitle.value = false
+        showTopBar.value = false
     }
 }

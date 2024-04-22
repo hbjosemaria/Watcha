@@ -15,7 +15,7 @@ import javax.inject.Inject
 interface ExternalMovieRepository {
 
     suspend fun getMovieById(movieId: Int): MovieResponse
-    suspend fun getMoviesByTitle(searchText: String): MovieListResponse
+    suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponse
     suspend fun getMoviesByPage(page: Int): MovieListResponse
 
 }
@@ -44,8 +44,8 @@ class ExternalMovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(movieId: Int): MovieResponse =
         apiService.getMovieById(movieId)
 
-    override suspend fun getMoviesByTitle(searchText: String): MovieListResponse =
-        apiService.getMoviesByTitle(searchText)
+    override suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponse =
+        apiService.getMoviesByTitle(searchText, page)
 
     override suspend fun getMoviesByPage(page: Int): MovieListResponse =
         apiService.getMoviesByPage(page)

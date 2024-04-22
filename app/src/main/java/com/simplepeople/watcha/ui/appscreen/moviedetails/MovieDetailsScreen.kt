@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.ui.appscreen.moviedetails
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -39,6 +41,7 @@ import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 
 @Composable
 fun MovieDetailsScreen (
+    navigateBack : () -> Unit,
     movieId: Int
 ) {
     val movieDetailsViewModel =
@@ -59,7 +62,7 @@ fun MovieDetailsScreen (
                 .fillMaxWidth()
         ) {
             AsyncImage(
-                model =ImageRequest.Builder(LocalContext.current)
+                model = ImageRequest.Builder(LocalContext.current)
                     .data(movie.picture)
                     .crossfade(true)
                     .build(),
@@ -67,16 +70,30 @@ fun MovieDetailsScreen (
                 contentScale = ContentScale.FillWidth,
                 placeholder = painterResource(id = R.drawable.movie_placeholder)
             )
-            Text(//TODO: make it a circle with the rating
-                text = movie.voteAverage ?: stringResource(id = R.string.movie_score_empty),
-                style = TextStyle(
-                    color = Color.Black
-                ),
+            Box(
                 modifier = Modifier
+                    .padding(0.dp, 30.dp, 30.dp, 0.dp)
                     .align(Alignment.TopEnd)
-                    .padding(0.dp, 20.dp, 20.dp, 0.dp)
-                    .background(Color.Gray)
-            )
+            ) {
+                Canvas(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                ) {
+                    drawCircle(
+                        color = Color.Black,
+                        radius = this.size.maxDimension
+                    )
+                }
+                Text(
+                    text = movie.voteAverage ?: stringResource(id = R.string.movie_score_empty),
+                    style = TextStyle(
+                        color = Color.White
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+            }
             IconButton(
                 onClick = {
                     movieDetailsViewModel.toggleFavorite()
@@ -90,6 +107,19 @@ fun MovieDetailsScreen (
                     contentDescription = stringResource(R.string.movie_mark_favorite),
                     modifier = Modifier
                         .fillMaxSize()
+                )
+            }
+            IconButton(
+                onClick = {navigateBack()},
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(16.dp)
+                    .size(24.dp)
+            ) {
+                Icon (
+                    Icons.Filled.ArrowBack,
+                    Icons.Filled.ArrowBack.name,
+                    tint = Color.Black
                 )
             }
         }

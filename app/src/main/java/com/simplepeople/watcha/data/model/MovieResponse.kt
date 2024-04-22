@@ -117,7 +117,7 @@ data class MovieResponse(
             picture = TmdbApiUrl.IMG_BASE_URL.url + this.posterPath,
             genres = this.genres.map { it.toDomain() },
             releaseDate = this.releaseDate,
-            voteAverage = this.voteAverage.toString(),
+            voteAverage = "%.1f".format(this.voteAverage),
             isFavorite = false
         )
     }
