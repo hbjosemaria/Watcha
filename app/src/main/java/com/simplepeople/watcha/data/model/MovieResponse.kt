@@ -77,7 +77,7 @@ data class MovieResponse(
         @SerializedName("name")
         val name: String = ""
     ) {
-        fun toDomain(): Genre = Genre.entries.find { it.name.lowercase() == this.name.lowercase() }
+        fun toDomain(): Genre = Genre.entries.find { it.id == this.id }
             ?: Genre.NOT_SPECIFIED
     }
 
