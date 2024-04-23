@@ -37,22 +37,20 @@ fun Content(
             }
         ) {
             appNavigationViewModel.navigatingToMainScreen()
-            HomeScreen(
-                navigateToMovieDetails = {movieId : Int ->
-                    navController.navigate(
-                        AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
-                    )
-                }
-            )
+            HomeScreen { movieId: Long ->
+                navController.navigate(
+                    AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                )
+            }
         }
         composable(
             AppScreens.MovieDetailsScreen.buildRoute(),
             arguments = listOf(navArgument("movieId") {
-                type = NavType.IntType
+                type = NavType.LongType
             })
         ) {
             appNavigationViewModel.navigatingToMovieDetails()
-            val movieId = it.arguments?.getInt("movieId") ?: 1
+            val movieId = it.arguments?.getLong("movieId") ?: 1
             MovieDetailsScreen(
                 movieId = movieId,
                 navigateBack = {navController.popBackStack()}
@@ -64,13 +62,11 @@ fun Content(
             exitTransition = { ExitTransition.None }
         ) {
             appNavigationViewModel.navigatingToMainScreen()
-            FavoriteScreen(
-                navigateToMovieDetails = {movieId : Int ->
-                    navController.navigate(
-                        AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
-                    )
-                }
-            )
+            FavoriteScreen { movieId: Long ->
+                navController.navigate(
+                    AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                )
+            }
         }
         composable(
             AppScreens.SearchScreen.route,
@@ -79,7 +75,7 @@ fun Content(
         ) {
             appNavigationViewModel.navigatingToSearch()
             SearchScreen(
-                navigateToMovieDetails = {movieId : Int ->
+                navigateToMovieDetails = {movieId : Long ->
                     navController.navigate(
                         AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
                     )

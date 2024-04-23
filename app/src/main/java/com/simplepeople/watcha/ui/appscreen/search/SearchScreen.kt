@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @OptIn(FlowPreview::class)
 @Composable
 fun SearchScreen(
-    navigateToMovieDetails: (Int) -> Unit,
+    navigateToMovieDetails: (Long) -> Unit,
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 

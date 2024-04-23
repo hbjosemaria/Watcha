@@ -14,13 +14,13 @@ data class MovieResponse(
     @SerializedName("belongs_to_collection")
     val belongsToCollection: BelongsToCollection? = null,
     @SerializedName("budget")
-    val budget: Int = 0,
+    val budget: Long = 0,
     @SerializedName("genres")
     val genres: ArrayList<Genres> = arrayListOf(),
     @SerializedName("homepage")
     val homepage: String = "",
     @SerializedName("id")
-    val id: Int = 1,
+    val id: Long = 1,
     @SerializedName("imdb_id")
     val imdbId: String = "",
     @SerializedName("origin_country")
@@ -42,7 +42,7 @@ data class MovieResponse(
     @SerializedName("release_date")
     val releaseDate: String = "",
     @SerializedName("revenue")
-    val revenue: Int = 0,
+    val revenue: Long = 0,
     @SerializedName("runtime")
     val runtime: Int = 0,
     @SerializedName("spoken_languages")

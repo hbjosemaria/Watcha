@@ -42,7 +42,7 @@ import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 @Composable
 fun MovieDetailsScreen (
     navigateBack : () -> Unit,
-    movieId: Int
+    movieId: Long
 ) {
     val movieDetailsViewModel =
         hiltViewModel<MovieDetailsViewModel, MovieDetailsViewModel.MovieDetailsViewModelFactory>(

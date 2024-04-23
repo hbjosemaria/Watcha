@@ -17,7 +17,7 @@ interface TmdbApiService : ExternalMovieRepository {
 
     @GET("movie/{movie_id}")
     override suspend fun getMovieById(
-        @Path("movie_id") movieId: Int
+        @Path("movie_id") movieId: Long
     ): MovieResponse
 
     @GET("search/movie")

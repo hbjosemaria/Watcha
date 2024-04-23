@@ -22,12 +22,12 @@ import kotlinx.coroutines.withContext
 class MovieDetailsViewModel @AssistedInject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val movieUseCase: MovieUseCase,
-    @Assisted private val movieId: Int
+    @Assisted private val movieId: Long
 ) : ViewModel() {
 
     @AssistedFactory
     interface MovieDetailsViewModelFactory {
-        fun create(movieId: Int): MovieDetailsViewModel
+        fun create(movieId: Long): MovieDetailsViewModel
     }
 
     var movie = MutableStateFlow(Movie())
@@ -44,7 +44,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
                     if (!movie.value.isFavorite) {
                         favoriteUseCase.saveFavorite(movie.value)
                     } else {
-                        favoriteUseCase.deleteFavorite(movie.value)
+                        favoriteUseCase.deleteFavorite(movie.value.movieId)
                     }
                 }
                 catch (e : IllegalStateException) {

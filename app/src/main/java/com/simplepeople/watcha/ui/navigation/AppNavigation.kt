@@ -27,7 +27,7 @@ sealed class AppScreens(
 ) {
     data object HomeScreen : AppScreens("home", R.string.home)
     data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details) {
-        fun buildArgRoute(value: Int) : String {
+        fun buildArgRoute(value: Long) : String {
             return "$route/${value}"
         }
         fun buildRoute() : String {

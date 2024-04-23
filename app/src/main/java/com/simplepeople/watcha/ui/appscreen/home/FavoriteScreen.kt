@@ -11,7 +11,7 @@ import com.simplepeople.watcha.ui.viewmodel.FavoriteViewModel
 @Composable
 fun FavoriteScreen(
     favoriteViewModel: FavoriteViewModel = hiltViewModel(),
-    navigateToMovieDetails : (Int) -> Unit
+    navigateToMovieDetails: (Long) -> Unit
 ) {
 
     val movieList: LazyPagingItems<Movie> = favoriteViewModel.movieList.collectAsLazyPagingItems()

@@ -11,7 +11,7 @@ import com.simplepeople.watcha.ui.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen (
     homeViewModel: HomeViewModel = hiltViewModel(),
-    navigateToMovieDetails: (Int) -> Unit
+    navigateToMovieDetails: (Long) -> Unit
 ) {
     val movieList: LazyPagingItems<Movie> = homeViewModel.movieList.collectAsLazyPagingItems()
 

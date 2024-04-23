@@ -15,7 +15,7 @@ data class MovieListResponse(
         @SerializedName("adult") var adult: Boolean = false,
         @SerializedName("backdrop_path") var backdropPath: String = "",
         @SerializedName("genre_ids") var genreIds: ArrayList<Int> = arrayListOf(),
-        @SerializedName("id") var id: Int = 1,
+        @SerializedName("id") var id: Long = 1,
         @SerializedName("original_language") var originalLanguage: String = "",
         @SerializedName("original_title") var originalTitle: String = "",
         @SerializedName("overview") var overview: String = "",

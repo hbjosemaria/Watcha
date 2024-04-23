@@ -15,7 +15,7 @@ import com.simplepeople.watcha.domain.core.Movie
 @Composable
 fun MovieList(
     movieList : LazyPagingItems<Movie>,
-    navigateToMovieDetails: (Int) -> Unit
+    navigateToMovieDetails: (Long) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 125.dp),
