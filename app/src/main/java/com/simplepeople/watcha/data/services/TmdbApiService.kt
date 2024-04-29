@@ -26,8 +26,23 @@ interface TmdbApiService : ExternalMovieRepository {
         @Query("page") page: Int
     ): MovieListResponse
 
+    @GET("movie/now_playing")
+    override suspend fun getNowPlayingByPage(
+        @Query("page") page: Int
+    ): MovieListResponse
+
     @GET("movie/popular")
-    override suspend fun getMoviesByPage(
+    override suspend fun getPopularByPage(
+        @Query("page") page: Int
+    ): MovieListResponse
+
+    @GET("movie/top_rated")
+    override suspend fun getTopRatedByPage(
+        @Query("page") page: Int
+    ): MovieListResponse
+
+    @GET("movie/upcoming")
+    override suspend fun getUpcomingByPage(
         @Query("page") page: Int
     ): MovieListResponse
 }

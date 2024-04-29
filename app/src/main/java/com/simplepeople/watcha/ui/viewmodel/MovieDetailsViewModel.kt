@@ -1,11 +1,12 @@
 package com.simplepeople.watcha.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
 import com.simplepeople.watcha.domain.usecase.MovieUseCase
+import com.simplepeople.watcha.ui.appscreen.common.clases.SharedFavoriteEventFlow
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 class MovieDetailsViewModel @AssistedInject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val movieUseCase: MovieUseCase,
+    private val favoriteEventFlow: SharedFavoriteEventFlow.Instance,
     @Assisted private val movieId: Long
 ) : ViewModel() {
 
@@ -40,18 +42,26 @@ class MovieDetailsViewModel @AssistedInject constructor(
     fun toggleFavorite() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                movie.value = movie.value.copy(isFavorite = !movie.value.isFavorite)
+
                 try {
-                    if (!movie.value.isFavorite) {
+                    if (movie.value.isFavorite) {
                         favoriteUseCase.saveFavorite(movie.value)
+                        favoriteEventFlow.emitFavoriteEvent(
+                            R.string.favorite_add_success
+                        )
                     } else {
                         favoriteUseCase.deleteFavorite(movie.value.movieId)
+                        favoriteEventFlow.emitFavoriteEvent(
+                            R.string.favorite_remove_success
+                        )
                     }
                 }
                 catch (e : IllegalStateException) {
-                    Log.i("Error de inserción a favoritos:", e.message ?: "Error")
+                    favoriteEventFlow.emitFavoriteEvent(
+                        R.string.favorite_error
+                    )
                 }
-
-                movie.value = movie.value.copy(isFavorite = !movie.value.isFavorite)
             }
         }
     }
@@ -59,8 +69,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
     private fun getMovieDetails() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val item = movieUseCase.getMovieById(movieId)
-                movie.value = item
+                movie.value = movieUseCase.getMovieById(movieId)
             }
         }
     }

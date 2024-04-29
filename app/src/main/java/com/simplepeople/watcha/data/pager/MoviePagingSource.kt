@@ -4,16 +4,23 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.ui.appscreen.common.clases.HomeFilterOptions
 import javax.inject.Inject
 
-class ExternalDefaultMoviePagingSource @Inject constructor(
-    private val repository : ExternalMovieRepository
+class ExternalMoviePagingSource @Inject constructor(
+    private val repository : ExternalMovieRepository,
+    private val filterOption : HomeFilterOptions
 ) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val position = params.key ?: 1
-            val response = repository.getMoviesByPage(position)
+            val response = when (filterOption) {
+                HomeFilterOptions.NowPlaying -> repository.getNowPlayingByPage(position)
+                HomeFilterOptions.Popular -> repository.getPopularByPage(position)
+                HomeFilterOptions.TopRated -> repository.getTopRatedByPage(position)
+                HomeFilterOptions.Upcoming -> repository.getUpcomingByPage(position)
+            }
 
             if (response.results.isNotEmpty()) {
                 LoadResult.Page(

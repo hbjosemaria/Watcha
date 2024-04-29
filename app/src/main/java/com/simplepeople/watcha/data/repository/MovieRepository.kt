@@ -16,7 +16,10 @@ interface ExternalMovieRepository {
 
     suspend fun getMovieById(movieId: Long): MovieResponse
     suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponse
-    suspend fun getMoviesByPage(page: Int): MovieListResponse
+    suspend fun getNowPlayingByPage(page: Int): MovieListResponse
+    suspend fun getPopularByPage(page: Int): MovieListResponse
+    suspend fun getTopRatedByPage(page: Int): MovieListResponse
+    suspend fun getUpcomingByPage(page: Int): MovieListResponse
 
 }
 
@@ -47,8 +50,18 @@ class ExternalMovieRepositoryImpl @Inject constructor(
     override suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponse =
         apiService.getMoviesByTitle(searchText, page)
 
-    override suspend fun getMoviesByPage(page: Int): MovieListResponse =
-        apiService.getMoviesByPage(page)
+    override suspend fun getNowPlayingByPage(page: Int): MovieListResponse =
+        apiService.getNowPlayingByPage(page)
+
+    override suspend fun getPopularByPage(page: Int): MovieListResponse =
+        apiService.getPopularByPage(page)
+
+    override suspend fun getTopRatedByPage(page: Int): MovieListResponse =
+        apiService.getTopRatedByPage(page)
+
+    override suspend fun getUpcomingByPage(page: Int): MovieListResponse =
+        apiService.getUpcomingByPage(page)
+
 
 }
 

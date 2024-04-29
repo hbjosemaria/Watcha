@@ -1,6 +1,5 @@
 package com.simplepeople.watcha.ui.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -22,10 +21,13 @@ class SearchViewModel @Inject constructor(
     var movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
         private set
 
-    var searchText = mutableStateOf("")
+    var searchText = MutableStateFlow("")
         private set
 
     var searching = MutableStateFlow(false)
+        private set
+
+    var scrollToTop = MutableStateFlow(false)
         private set
 
     fun updateSearchText(text: String) {
@@ -34,6 +36,7 @@ class SearchViewModel @Inject constructor(
 
     fun isSearching() {
         searching.value = true
+        scrollToTop.value = false
     }
 
     fun getMoviesByTitle(text: String) {
@@ -45,6 +48,7 @@ class SearchViewModel @Inject constructor(
                     .collect {
                         movieList.value = it
                         searching.value = false
+                        scrollToTop.value = true
                     }
             }
         }

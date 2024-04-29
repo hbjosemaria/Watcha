@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen.common
+package com.simplepeople.watcha.ui.appscreen.common.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
@@ -37,6 +38,12 @@ fun MovieItem(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(movie.picture)
                 .crossfade(true)
+                .memoryCacheKey(movie.picture)
+                .diskCacheKey(movie.picture)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .memoryCachePolicy(CachePolicy.ENABLED)
+                .fallback(R.drawable.movie_placeholder)
+                .placeholder(R.drawable.movie_placeholder)
                 .build(),
             contentDescription = movie.title,
             contentScale = ContentScale.Fit,

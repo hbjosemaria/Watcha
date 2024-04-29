@@ -3,6 +3,8 @@ package com.simplepeople.watcha.ui.appscreen.search
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,7 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.ui.appscreen.common.MovieList
+import com.simplepeople.watcha.ui.appscreen.common.composables.MovieList
 import com.simplepeople.watcha.ui.viewmodel.SearchViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -33,13 +35,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun SearchScreen(
     navigateToMovieDetails: (Long) -> Unit,
+    lazyGridState: LazyGridState = rememberLazyGridState(),
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
     val movieList : LazyPagingItems<Movie> = searchViewModel.movieList.collectAsLazyPagingItems()
     val searching by searchViewModel.searching.collectAsState()
-    val searchText by searchViewModel.searchText
-
+    val searchText by searchViewModel.searchText.collectAsState()
+    val scrollToTop by searchViewModel.scrollToTop.collectAsState()
 
     LaunchedEffect(searchText) {
         snapshotFlow {
@@ -55,6 +58,18 @@ fun SearchScreen(
                     searchViewModel.cleanMovieSearch()
                 }
             }
+    }
+
+    LaunchedEffect (scrollToTop) {
+        snapshotFlow {
+            scrollToTop
+        }
+            .collectLatest {scrollingToTop ->
+                if (scrollingToTop) {
+                    lazyGridState.animateScrollToItem(0)
+                }
+            }
+
     }
 
     Column(

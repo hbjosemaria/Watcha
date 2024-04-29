@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -41,7 +40,6 @@ import com.simplepeople.watcha.ui.viewmodel.MovieDetailsViewModel
 
 @Composable
 fun MovieDetailsScreen (
-    navigateBack : () -> Unit,
     movieId: Long
 ) {
     val movieDetailsViewModel =
@@ -107,19 +105,6 @@ fun MovieDetailsScreen (
                     contentDescription = stringResource(R.string.movie_mark_favorite),
                     modifier = Modifier
                         .fillMaxSize()
-                )
-            }
-            IconButton(
-                onClick = {navigateBack()},
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .size(24.dp)
-            ) {
-                Icon (
-                    Icons.Filled.ArrowBack,
-                    Icons.Filled.ArrowBack.name,
-                    tint = Color.Black
                 )
             }
         }

@@ -41,4 +41,9 @@
     <string name="favorite_remove_success">Removed from favorites successfully.</string>
     <string name="toast_close">Dimsmiss</string>
     <string name="favorite_add_success">Added to favorites successfully.</string>
+    <string name="home_now_playing">Now Playing</string>
+    <string name="home_popular">Popular</string>
+    <string name="home_top_rated">Top Rated</string>
+    <string name="home_upcoming">Upcoming</string>
+    <string name="favorite_error">An error ocurred. Please, try again later.</string>
 </resources>
