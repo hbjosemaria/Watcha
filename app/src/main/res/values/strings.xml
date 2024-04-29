@@ -38,10 +38,10 @@
     <string name="search_label">Search movie</string>
     <string name="search_placeholder">What movie are we watching?</string>
     <string name="user_profile">User profile</string>
-    <string name="favorite_add_success">Added to favorites successfully.</string>
-    <string name="favorite_remove_success">Removed from favorites successfully.</string>
+    <string name="favorite_add_success">Added to favorites.</string>
+    <string name="favorite_remove_success">Removed from favorites.</string>
     <string name="toast_close">Dimsmiss</string>
-    <string name="empty_text" translatable="false"></string>
+    <string name="empty_text" translatable="false" />
     <string name="home_now_playing">Now Playing</string>
     <string name="home_popular">Popular</string>
     <string name="home_top_rated">Top Rated</string>

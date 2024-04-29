@@ -9,6 +9,9 @@ data class AppNavigationUiState (
     var scrollToTop : Boolean = false,
     var selectedBottomItemIndex : Int = 0,
     var screenTitle : Int = 0,
+)
+
+data class SnackBarItem (
     var showSnackbar : Boolean = false,
     var textSnackbar : Int = R.string.empty_text
 )

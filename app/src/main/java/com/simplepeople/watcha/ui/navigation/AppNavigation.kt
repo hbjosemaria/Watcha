@@ -9,7 +9,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,16 +25,17 @@ fun AppNavigation(
 ) {
 
     val navController = rememberNavController()
-    val appNavigationUiState by appNavigationViewModel.appNavigationUiState.collectAsState()
+    val appNavigationUiState by appNavigationViewModel.appNavigationUiState
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarItem by appNavigationViewModel.snackBarItem
     val context = LocalContext.current
 
-    LaunchedEffect (appNavigationUiState.showSnackbar) {
-        if (appNavigationUiState.showSnackbar) {
+    LaunchedEffect (snackBarItem) {
+        if (snackBarItem.showSnackbar) {
             snackbarHostState.currentSnackbarData?.dismiss()
             snackbarHostState.showSnackbar(
-                message = context.getString(appNavigationUiState.textSnackbar),
+                message = context.getString(snackBarItem.textSnackbar),
                 duration = SnackbarDuration.Short
             )
             appNavigationViewModel.resetSnackbar()

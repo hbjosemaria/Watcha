@@ -4,7 +4,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
@@ -22,7 +21,7 @@ fun HomeScreen (
     //TODO: Create an UIState class for movie and api call status
     val movieList: LazyPagingItems<Movie> = homeViewModel.movieList.collectAsLazyPagingItems()
 
-    val scrollToTop by homeViewModel.scrollToTop.collectAsState()
+    val scrollToTop by homeViewModel.scrollToTop
 
     LaunchedEffect (scrollToTop) {
         if (scrollToTop) {

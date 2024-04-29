@@ -38,9 +38,9 @@
     <string name="search_label">Buscar película</string>
     <string name="search_placeholder">¿Qué peli vamos a ver?</string>
     <string name="user_profile">Perfil de usuario</string>
-    <string name="favorite_remove_success">Eliminado de favoritos con éxito.</string>
+    <string name="favorite_remove_success">Eliminado de favoritos.</string>
     <string name="toast_close">Quitar</string>
-    <string name="favorite_add_success">Añadido a favoritos con éxito.</string>
+    <string name="favorite_add_success">Añadido a favoritos.</string>
     <string name="home_now_playing">En cartelera hoy</string>
     <string name="home_popular">Popular</string>
     <string name="home_top_rated">Mejor puntuadas</string>

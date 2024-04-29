@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+//TODO: refactor to UiState
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val movieListUseCase: MovieListUseCase
@@ -21,13 +23,13 @@ class SearchViewModel @Inject constructor(
     var movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
         private set
 
-    var searchText = MutableStateFlow("")
+    var searchText = mutableStateOf("")
         private set
 
-    var searching = MutableStateFlow(false)
+    var searching = mutableStateOf(false)
         private set
 
-    var scrollToTop = MutableStateFlow(false)
+    var scrollToTop = mutableStateOf(false)
         private set
 
     fun updateSearchText(text: String) {

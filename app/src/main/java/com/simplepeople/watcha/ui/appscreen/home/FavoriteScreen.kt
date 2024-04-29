@@ -4,7 +4,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +22,7 @@ fun FavoriteScreen(
 ) {
 
     val movieList: LazyPagingItems<Movie> = favoriteViewModel.movieList.collectAsLazyPagingItems()
-    val scrollToTop by favoriteViewModel.scrollToTop.collectAsState()
+    val scrollToTop by favoriteViewModel.scrollToTop
 
     LaunchedEffect (scrollToTop) {
         snapshotFlow {

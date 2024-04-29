@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.R
@@ -12,7 +13,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,7 +32,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         fun create(movieId: Long): MovieDetailsViewModel
     }
 
-    var movie = MutableStateFlow(Movie())
+    var movie = mutableStateOf(Movie())
         private set
 
     init {

@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -40,9 +39,9 @@ fun SearchScreen(
 ) {
 
     val movieList : LazyPagingItems<Movie> = searchViewModel.movieList.collectAsLazyPagingItems()
-    val searching by searchViewModel.searching.collectAsState()
-    val searchText by searchViewModel.searchText.collectAsState()
-    val scrollToTop by searchViewModel.scrollToTop.collectAsState()
+    val searching by searchViewModel.searching
+    val searchText by searchViewModel.searchText
+    val scrollToTop by searchViewModel.scrollToTop
 
     LaunchedEffect(searchText) {
         snapshotFlow {

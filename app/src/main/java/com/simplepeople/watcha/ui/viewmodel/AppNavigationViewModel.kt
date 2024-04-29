@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.ui.appscreen.common.clases.HomeFilterOptions
@@ -9,9 +10,8 @@ import com.simplepeople.watcha.ui.appscreen.common.clases.SharedScrollToTopFlow
 import com.simplepeople.watcha.ui.navigation.AppBarOption
 import com.simplepeople.watcha.ui.navigation.AppScreens
 import com.simplepeople.watcha.ui.stateholder.AppNavigationUiState
+import com.simplepeople.watcha.ui.stateholder.SnackBarItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,13 +22,15 @@ class AppNavigationViewModel @Inject constructor(
     private val favoriteEventFlow: SharedFavoriteEventFlow.Instance
 ) : ViewModel() {
 
-    val _appNavigationUiState = MutableStateFlow(AppNavigationUiState())
-    val appNavigationUiState = _appNavigationUiState.asStateFlow()
+    val _appNavigationUiState = mutableStateOf(AppNavigationUiState())
+    val appNavigationUiState = _appNavigationUiState
+
+    val snackBarItem = mutableStateOf(SnackBarItem())
 
     init {
         viewModelScope.launch {
             favoriteEventFlow.favoriteEventFlow.collect {snackbarMessage ->
-                _appNavigationUiState.value = _appNavigationUiState.value.copy(
+                snackBarItem.value = snackBarItem.value.copy(
                     showSnackbar = true,
                     textSnackbar = snackbarMessage
                 )
@@ -37,7 +39,7 @@ class AppNavigationViewModel @Inject constructor(
     }
 
     fun resetSnackbar() {
-        _appNavigationUiState.value = _appNavigationUiState.value.copy(
+        snackBarItem.value = snackBarItem.value.copy(
             showSnackbar = false
         )
     }

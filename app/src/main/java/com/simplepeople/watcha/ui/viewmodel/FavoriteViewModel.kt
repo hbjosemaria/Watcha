@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -26,7 +27,7 @@ class FavoriteViewModel @Inject constructor(
     var movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
         private set
 
-    var scrollToTop = MutableStateFlow(false)
+    var scrollToTop = mutableStateOf(false)
         private set
 
     init {
