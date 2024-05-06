@@ -20,7 +20,6 @@ fun HomeScreen (
 ) {
     //TODO: Create an UIState class for movie and api call status
     val movieList: LazyPagingItems<Movie> = homeViewModel.movieList.collectAsLazyPagingItems()
-
     val scrollToTop by homeViewModel.scrollToTop
 
     LaunchedEffect (scrollToTop) {

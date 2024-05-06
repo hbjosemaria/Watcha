@@ -18,7 +18,7 @@ class MovieListUseCase @Inject constructor(
     fun getMovies(filterOption: HomeFilterOptions) : Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = 40,
                 maxSize = 200
             ),
             pagingSourceFactory = {ExternalMoviePagingSource(repository, filterOption)}
@@ -27,7 +27,7 @@ class MovieListUseCase @Inject constructor(
     fun getByTitle(searchText: String): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = 40,
                 maxSize = 200
             ),
             pagingSourceFactory = { ExternalFilteredMoviePagingSource(repository, searchText) }

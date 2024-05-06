@@ -11,6 +11,7 @@ import com.simplepeople.watcha.ui.navigation.AppBarOption
 import com.simplepeople.watcha.ui.navigation.AppScreens
 import com.simplepeople.watcha.ui.stateholder.AppNavigationUiState
 import com.simplepeople.watcha.ui.stateholder.SnackBarItem
+import com.simplepeople.watcha.ui.stateholder.TopBarItemOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,9 +23,7 @@ class AppNavigationViewModel @Inject constructor(
     private val favoriteEventFlow: SharedFavoriteEventFlow.Instance
 ) : ViewModel() {
 
-    val _appNavigationUiState = mutableStateOf(AppNavigationUiState())
-    val appNavigationUiState = _appNavigationUiState
-
+    val appNavigationUiState = mutableStateOf(AppNavigationUiState())
     val snackBarItem = mutableStateOf(SnackBarItem())
 
     init {
@@ -44,56 +43,69 @@ class AppNavigationViewModel @Inject constructor(
         )
     }
 
-    fun updateBottomBarSelectedIndex(index: Int) {
-        _appNavigationUiState.value =
-            _appNavigationUiState.value.copy(selectedBottomItemIndex = index)
+    fun updateNavigationBarSelectedIndex(index: Int) {
+        appNavigationUiState.value =
+            appNavigationUiState.value.copy(selectedNavigationItemIndex = index)
     }
 
     fun emitScrollToTopEvent() {
         scrollToTopFlow.emitTopScrollEvent()
     }
 
+
     fun emitFilterNowPlayingEvent() {
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            selectedTopBarItem = TopBarItemOption.NOW_PLAYING
+        )
         homeFilterFlow.emitFilterEvent(HomeFilterOptions.NowPlaying)
     }
 
     fun emitFilterPopularEvent() {
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            selectedTopBarItem = TopBarItemOption.POPULAR
+        )
         homeFilterFlow.emitFilterEvent(HomeFilterOptions.Popular)
     }
 
     fun emitFilterTopRatedEvent() {
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            selectedTopBarItem = TopBarItemOption.TOP_RATED
+        )
         homeFilterFlow.emitFilterEvent(HomeFilterOptions.TopRated)
     }
 
     fun emitFilterUpcomingEvent() {
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            selectedTopBarItem = TopBarItemOption.UPCOMING
+        )
         homeFilterFlow.emitFilterEvent(HomeFilterOptions.Upcoming)
     }
 
     fun navigatingToSearch() {
-        _appNavigationUiState.value = _appNavigationUiState.value.copy(
+        appNavigationUiState.value = appNavigationUiState.value.copy(
             screenTitle = AppScreens.SearchScreen.name,
-            showBottomBar = false,
+            showNavigationBar = false,
             appBarOption = AppBarOption.SEARCH
         )
     }
 
     fun navigatingToHomeScreen() {
-        _appNavigationUiState.value = _appNavigationUiState.value.copy(
-            showBottomBar = true,
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            showNavigationBar = true,
             appBarOption = AppBarOption.HOME,
         )
     }
 
     fun navigatingToFavoritesScreen() {
-        _appNavigationUiState.value = _appNavigationUiState.value.copy(
-            showBottomBar = true,
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            showNavigationBar = true,
             appBarOption = AppBarOption.FAVORITE,
         )
     }
 
     fun navigatingToMovieDetails() {
-        _appNavigationUiState.value = _appNavigationUiState.value.copy(
-            showBottomBar = false,
+        appNavigationUiState.value = appNavigationUiState.value.copy(
+            showNavigationBar = false,
             appBarOption = AppBarOption.MOVIE_DETAILS,
         )
     }

@@ -13,6 +13,7 @@ import com.simplepeople.watcha.ui.appscreen.common.clases.SharedScrollToTopFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -29,11 +30,9 @@ class HomeViewModel @Inject constructor(
     private val homeFilterFlow: SharedHomeFilterFlow.Instance
 ) : ViewModel() {
 
-    var movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
-        private set
-
-    var scrollToTop = mutableStateOf(false)
-        private set
+    private val _movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
+    val movieList = _movieList.asStateFlow()
+    val scrollToTop = mutableStateOf(false)
 
     init {
         //Movies loaded by default from Now Playing
@@ -63,7 +62,7 @@ class HomeViewModel @Inject constructor(
                     .onCompletion { }
                     .catch { }
                     .collect {
-                        movieList.value = it
+                        _movieList.value = it
                     }
             }
         }

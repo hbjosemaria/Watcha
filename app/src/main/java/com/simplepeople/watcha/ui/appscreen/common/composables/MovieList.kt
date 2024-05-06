@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.simplepeople.watcha.domain.core.Movie
 
-//TODO: scroll back to top automatically when new movie data is fetched
 @Composable
 fun MovieList(
     movieList : LazyPagingItems<Movie>,
@@ -21,9 +20,9 @@ fun MovieList(
     navigateToMovieDetails: (Long) -> Unit,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 125.dp),
+        columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(10.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         state = lazyGridState,
         modifier = Modifier

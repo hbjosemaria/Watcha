@@ -67,9 +67,10 @@ fun MovieDetailsScreen (
                 contentScale = ContentScale.FillWidth,
                 placeholder = painterResource(id = R.drawable.movie_placeholder)
             )
+            //TODO: Improve this UI element
             Box(
                 modifier = Modifier
-                    .padding(0.dp, 30.dp, 30.dp, 0.dp)
+                    .padding(0.dp, 52.dp, 30.dp, 0.dp)
                     .align(Alignment.TopEnd)
             ) {
                 Canvas(

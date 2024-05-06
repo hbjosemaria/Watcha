@@ -32,8 +32,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         fun create(movieId: Long): MovieDetailsViewModel
     }
 
-    var movie = mutableStateOf(Movie())
-        private set
+    val movie = mutableStateOf(Movie())
 
     init {
         getMovieDetails()

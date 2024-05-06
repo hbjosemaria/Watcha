@@ -1,4 +1,7 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.simplepeople.watcha.ui.navigation
 
@@ -14,13 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -30,8 +34,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.compose.primaryContainerDark
+import com.example.compose.primaryDark
 import com.simplepeople.watcha.R
+import com.simplepeople.watcha.ui.stateholder.TopBarItemOption
 
 //TODO: add a menu with a toggle option for changing between English and Spanish
 // in order to change the string locale and implement the query for language in the API
@@ -39,6 +49,7 @@ import com.simplepeople.watcha.R
 @Composable
 fun SharedTopBar(
     appBarOption: AppBarOption,
+    selectedTopBarItem: TopBarItemOption,
     navigateToSearchScreen: () -> Unit,
     filterNowPlaying: () -> Unit,
     filterPopular: () -> Unit,
@@ -47,7 +58,6 @@ fun SharedTopBar(
     navigateBack: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-
     when (appBarOption) {
         AppBarOption.HOME -> {
             HomeTopAppBar(
@@ -57,6 +67,7 @@ fun SharedTopBar(
                 filterPopular = filterPopular,
                 filterTopRated = filterTopRated,
                 filterUpcoming = filterUpcoming,
+                selectedTopBarItem = selectedTopBarItem
             )
         }
 
@@ -93,10 +104,10 @@ enum class AppBarOption {
 }
 
 
-
 //Screens in MainScreen (Home and Favorites)
 @Composable
 fun HomeTopAppBar(
+    selectedTopBarItem: TopBarItemOption,
     navigateToSearchScreen: () -> Unit,
     filterNowPlaying: () -> Unit,
     filterPopular: () -> Unit,
@@ -104,75 +115,88 @@ fun HomeTopAppBar(
     filterUpcoming: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    Column() {
-        TopAppBar(
-            title = {
-                Row {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_main_screen),
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = Modifier
-                            .size(160.dp)
-                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
-                    )
-                }
-            },
-            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-            actions = {
-                IconButton(
-                    onClick = {
-                        navigateToSearchScreen()
-                    },
-                    modifier = Modifier
-                        .size(46.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = Icons.Default.Search.name,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(6.dp)
-                    )
-                }
+    MediumTopAppBar(
+        scrollBehavior = scrollBehavior,
+//        windowInsets = WindowInsets(0.dp, 16.dp, 0.dp, 0.dp),
+        title = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                HomeTopAppBarButton(
+                    topBarItemOption = TopBarItemOption.NOW_PLAYING,
+                    selectedTopBarItem = selectedTopBarItem,
+                    text = R.string.home_now_playing,
+                    action = {
+                        filterNowPlaying()
+                    }
+                )
+                HomeTopAppBarButton(
+                    topBarItemOption = TopBarItemOption.POPULAR,
+                    selectedTopBarItem = selectedTopBarItem,
+                    text = R.string.home_popular,
+                    action = {
+                        filterPopular()
+                    }
+                )
+                HomeTopAppBarButton(
+                    topBarItemOption = TopBarItemOption.TOP_RATED,
+                    selectedTopBarItem = selectedTopBarItem,
+                    text = R.string.home_top_rated,
+                    action = {
+                        filterTopRated()
+                    }
+                )
+                HomeTopAppBarButton(
+                    topBarItemOption = TopBarItemOption.UPCOMING,
+                    selectedTopBarItem = selectedTopBarItem,
+                    text = R.string.home_upcoming,
+                    action = {
+                        filterUpcoming()
+                    }
+                )
             }
-        )
-        CenterAlignedTopAppBar(
-            title = {
-                Row(
+
+        },
+        navigationIcon = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo_main_screen),
+                    contentDescription = stringResource(id = R.string.app_name),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                ) {
-                    MainTopBarButton(
-                        action = {
-                            filterNowPlaying()
-                        },
-                        text = stringResource(id = R.string.home_now_playing)
-                    )
-                    MainTopBarButton(
-                        action = {
-                            filterPopular()
-                        },
-                        text = stringResource(id = R.string.home_popular)
-                    )
-                    MainTopBarButton(
-                        action = {
-                            filterTopRated()
-                        },
-                        text = stringResource(id = R.string.home_top_rated)
-                    )
-                    MainTopBarButton(
-                        action = {
-                            filterUpcoming()
-                        },
-                        text = stringResource(id = R.string.home_upcoming)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior,
-        )
-    }
+                        .size(120.dp)
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {
+                    navigateToSearchScreen()
+                },
+                modifier = Modifier
+                    .size(36.dp)
+                    .padding(0.dp, 0.dp, 3.dp, 0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = Icons.Default.Search.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+        },
+//        colors = TopAppBarDefaults.mediumTopAppBarColors(
+//            containerColor = Color.Transparent.copy(
+//                alpha = .75f
+//            )
+//        )
+    )
+
 }
 
 @Composable
@@ -182,14 +206,17 @@ fun MainTopAppBar(
 ) {
     Column() {
         TopAppBar(
-            title = {
-                Row {
+            title = {},
+            navigationIcon = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.logo_main_screen),
                         contentDescription = stringResource(id = R.string.app_name),
                         modifier = Modifier
-                            .size(160.dp)
-                            .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                            .size(120.dp)
                     )
                 }
             },
@@ -200,14 +227,14 @@ fun MainTopAppBar(
                         navigateToSearchScreen()
                     },
                     modifier = Modifier
-                        .size(46.dp)
+                        .size(36.dp)
+                        .padding(0.dp, 0.dp, 3.dp, 0.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = Icons.Default.Search.name,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(6.dp)
                     )
                 }
             }
@@ -274,19 +301,31 @@ fun TransparentTopAppBar(
 }
 
 @Composable
-fun MainTopBarButton(
-    text: String,
+fun HomeTopAppBarButton(
+    topBarItemOption: TopBarItemOption,
+    selectedTopBarItem: TopBarItemOption,
+    text: Int,
     action: () -> Unit
 ) {
-    TextButton(
+    Button(
         onClick = {
             action()
         },
-        border = ButtonDefaults.outlinedButtonBorder,
         contentPadding = ButtonDefaults.TextButtonContentPadding,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (topBarItemOption == selectedTopBarItem) primaryDark else primaryContainerDark,
+            contentColor = if (topBarItemOption == selectedTopBarItem) primaryContainerDark else primaryDark,
+        ),
         modifier = Modifier
             .clip(RoundedCornerShape(3.dp))
+            .padding(2.dp, 0.dp, 2.dp, 0.dp)
     ) {
-        Text(text = text)
+        Text(
+            text = stringResource(id = text),
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        )
     }
 }

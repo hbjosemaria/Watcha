@@ -39,13 +39,11 @@ fun SearchScreen(
 ) {
 
     val movieList : LazyPagingItems<Movie> = searchViewModel.movieList.collectAsLazyPagingItems()
-    val searching by searchViewModel.searching
-    val searchText by searchViewModel.searchText
-    val scrollToTop by searchViewModel.scrollToTop
+    val searchScreenUiState by searchViewModel.searchScreenUiState
 
-    LaunchedEffect(searchText) {
+    LaunchedEffect(searchScreenUiState.searchText) {
         snapshotFlow {
-            searchText
+            searchScreenUiState.searchText
         }
             .distinctUntilChanged()
             .debounce(500L)
@@ -59,9 +57,9 @@ fun SearchScreen(
             }
     }
 
-    LaunchedEffect (scrollToTop) {
+    LaunchedEffect (searchScreenUiState.scrollToTop) {
         snapshotFlow {
-            scrollToTop
+            searchScreenUiState.scrollToTop
         }
             .collectLatest {scrollingToTop ->
                 if (scrollingToTop) {
@@ -76,7 +74,7 @@ fun SearchScreen(
             .fillMaxWidth()
     ) {
         TextField(
-            value = searchText,
+            value = searchScreenUiState.searchText,
             onValueChange = {newText ->
                 searchViewModel.isSearching()
                 searchViewModel.updateSearchText(newText)
@@ -93,7 +91,7 @@ fun SearchScreen(
                 )
             },
             trailingIcon = {
-                if (searching) {
+                if (searchScreenUiState.searching) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.ui.appscreen.home.FavoriteScreen
+import com.simplepeople.watcha.ui.appscreen.favorite.FavoriteScreen
 import com.simplepeople.watcha.ui.appscreen.home.HomeScreen
 import com.simplepeople.watcha.ui.appscreen.moviedetails.MovieDetailsScreen
 import com.simplepeople.watcha.ui.appscreen.search.SearchScreen
@@ -28,7 +28,6 @@ fun Content(
     appBarOption: AppBarOption,
     appNavigationViewModel : AppNavigationViewModel = hiltViewModel()
 ) {
-
     NavHost(
         navController = navController,
         startDestination = AppScreens.HomeScreen.route,

@@ -26,7 +26,7 @@ fun AppNavigation(
 
     val navController = rememberNavController()
     val appNavigationUiState by appNavigationViewModel.appNavigationUiState
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     val snackBarItem by appNavigationViewModel.snackBarItem
     val context = LocalContext.current
@@ -67,16 +67,17 @@ fun AppNavigation(
                 filterUpcoming = {
                     appNavigationViewModel.emitFilterUpcomingEvent()
                 },
-                appBarOption = appNavigationUiState.appBarOption
+                appBarOption = appNavigationUiState.appBarOption,
+                selectedTopBarItem = appNavigationUiState.selectedTopBarItem
             )
         },
         bottomBar = {
-            SharedBottomBar(
+            SharedNavigationBar(
                 navController = navController,
-                selectedBottomItemIndex = appNavigationUiState.selectedBottomItemIndex,
-                showBottomBar = appNavigationUiState.showBottomBar,
-                updateBottomBarSelectedIndex = { index ->
-                    appNavigationViewModel.updateBottomBarSelectedIndex(index)
+                selectedNavigationItemIndex = appNavigationUiState.selectedNavigationItemIndex,
+                showNavigationBar = appNavigationUiState.showNavigationBar,
+                updateNavigationBarSelectedIndex = { index ->
+                    appNavigationViewModel.updateNavigationBarSelectedIndex(index)
                 },
                 emitScrollToTopEvent = {
                     appNavigationViewModel.emitScrollToTopEvent()

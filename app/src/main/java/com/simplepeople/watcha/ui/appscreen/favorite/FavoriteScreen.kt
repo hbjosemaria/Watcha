@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.appscreen.home
+package com.simplepeople.watcha.ui.appscreen.favorite
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
