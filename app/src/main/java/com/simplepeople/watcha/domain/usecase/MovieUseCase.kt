@@ -7,7 +7,7 @@ import javax.inject.Inject
 class MovieUseCase @Inject constructor(
     private val mixedRepository: MixedMovieRepository
 ) {
-    suspend fun getMovieById(movieId: Int): Movie {
+    suspend fun getMovieById(movieId: Long): Movie {
         val mixedResponse = mixedRepository.getMovieById(movieId)
         return mixedResponse.first.toDomain().copy(isFavorite = mixedResponse.second > 0L)
     }

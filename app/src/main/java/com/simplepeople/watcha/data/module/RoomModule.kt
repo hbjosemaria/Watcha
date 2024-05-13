@@ -3,6 +3,7 @@ package com.simplepeople.watcha.data.module
 import android.content.Context
 import androidx.room.Room
 import com.simplepeople.watcha.data.services.MovieDao
+import com.simplepeople.watcha.data.services.SearchLogDao
 import com.simplepeople.watcha.data.services.WatchaDatabase
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,11 @@ object RoomModule {
     @Provides
     fun provideMovieDao(database: WatchaDatabase): MovieDao {
         return database.movieDao()
+    }
+
+    @Provides
+    fun provideSearchItemDao(database: WatchaDatabase) : SearchLogDao {
+        return database.searchLogDao()
     }
 
 }
