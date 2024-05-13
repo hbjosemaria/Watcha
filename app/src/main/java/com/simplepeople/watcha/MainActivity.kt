@@ -20,7 +20,6 @@ class MainActivity : ComponentActivity() {
             WatchaTheme (
                 darkTheme = true
             ) {
-
                 AppNavigation()
             }
         }

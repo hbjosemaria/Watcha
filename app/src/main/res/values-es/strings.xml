@@ -46,4 +46,5 @@
     <string name="home_top_rated">Mejor puntuadas</string>
     <string name="home_upcoming">Próximamente</string>
     <string name="favorite_error">Ha ocuriddo un error. Por favor, inténtalo más tarde.</string>
+    <string name="search_clean_log">Limpiar historial</string>
 </resources>

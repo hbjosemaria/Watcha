@@ -6,7 +6,10 @@ import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepositoryImpl
 import com.simplepeople.watcha.data.repository.MixedMovieRepository
 import com.simplepeople.watcha.data.repository.MixedMovieRepositoryImpl
+import com.simplepeople.watcha.data.repository.SearchRepository
+import com.simplepeople.watcha.data.repository.SearchRepositoryImpl
 import com.simplepeople.watcha.data.services.MovieDao
+import com.simplepeople.watcha.data.services.SearchLogDao
 import com.simplepeople.watcha.data.services.TmdbApiService
 import dagger.Module
 import dagger.Provides
@@ -34,6 +37,12 @@ object RepoModule {
     @Singleton
     fun provideMixedMovieRepository(roomService: MovieDao, apiService: TmdbApiService): MixedMovieRepository {
         return MixedMovieRepositoryImpl(roomService, apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(roomService: SearchLogDao): SearchRepository {
+        return SearchRepositoryImpl(roomService)
     }
 
 }

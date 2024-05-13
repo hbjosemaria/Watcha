@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.services
 
-import com.simplepeople.watcha.data.model.MovieListResponse
-import com.simplepeople.watcha.data.model.MovieResponse
+import com.simplepeople.watcha.data.model.MovieListResponseModel
+import com.simplepeople.watcha.data.model.MovieResponseModel
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,31 +18,31 @@ interface TmdbApiService : ExternalMovieRepository {
     @GET("movie/{movie_id}")
     override suspend fun getMovieById(
         @Path("movie_id") movieId: Long
-    ): MovieResponse
+    ): MovieResponseModel
 
     @GET("search/movie")
     override suspend fun getMoviesByTitle(
         @Query("query") searchText: String,
         @Query("page") page: Int
-    ): MovieListResponse
+    ): MovieListResponseModel
 
     @GET("movie/now_playing")
     override suspend fun getNowPlayingByPage(
         @Query("page") page: Int
-    ): MovieListResponse
+    ): MovieListResponseModel
 
     @GET("movie/popular")
     override suspend fun getPopularByPage(
         @Query("page") page: Int
-    ): MovieListResponse
+    ): MovieListResponseModel
 
     @GET("movie/top_rated")
     override suspend fun getTopRatedByPage(
         @Query("page") page: Int
-    ): MovieListResponse
+    ): MovieListResponseModel
 
     @GET("movie/upcoming")
     override suspend fun getUpcomingByPage(
         @Query("page") page: Int
-    ): MovieListResponse
+    ): MovieListResponseModel
 }

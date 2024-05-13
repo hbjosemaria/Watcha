@@ -16,63 +16,57 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 
 @Composable
 fun SharedNavigationBar(
-    navController: NavController,
+//    navController: NavController,
     selectedNavigationItemIndex : Int,
-    showNavigationBar : Boolean,
+    navigateToNavigationBarItem : (String) -> Unit,
+//    showNavigationBar : Boolean,
     updateNavigationBarSelectedIndex : (Int) -> Unit,
-    emitScrollToTopEvent : () -> Unit
+    scrollToTopAction : () -> Unit
 ) {
-    if (showNavigationBar) {
-        NavigationBar (
-            windowInsets = WindowInsets(47.dp, 0.dp, 47.dp, 6.dp)
-        ){
-            BottomNavigationItemProvider.navigationItemLists.forEachIndexed { index, item ->
-                val itemLabel = stringResource(item.itemLabel)
-                NavigationBarItem(
-                    selected = selectedNavigationItemIndex == index,
-                    onClick = {
-                        updateNavigationBarSelectedIndex(index)
-                        if (selectedNavigationItemIndex != index) {
-                            navController.navigate(item.navigationRoute) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                        else emitScrollToTopEvent()
-                    },
-                    icon = {
-                        if (selectedNavigationItemIndex == index) {
-                            Icon(
-                                imageVector = item.itemSelectedIcon,
-                                contentDescription = itemLabel
-                            )
-                        } else {
-                            Icon(
-                                imageVector = item.itemNotSelectedIcon,
-                                contentDescription = itemLabel
-                            )
-                        }
-                    },
-                    label = {
-                        Text(
-                            text = itemLabel,
-                            style = TextStyle (
-                                fontWeight = FontWeight.Bold
-                            )
+    NavigationBar (
+        windowInsets = WindowInsets(47.dp, 0.dp, 47.dp, 6.dp)
+    ){
+        BottomNavigationItemProvider.navigationItemLists.forEachIndexed { index, item ->
+            val itemLabel = stringResource(item.itemLabel)
+            NavigationBarItem(
+//                selected = selectedNavigationItemIndex == index,
+                selected = selectedNavigationItemIndex == index,
+                onClick = {
+                    updateNavigationBarSelectedIndex(index)
+                    if (selectedNavigationItemIndex != index) {
+                        navigateToNavigationBarItem(item.navigationRoute)
+                    }
+//                    else emitScrollToTopEvent()
+                    else scrollToTopAction()
+                },
+                icon = {
+                    if (selectedNavigationItemIndex == index) {
+                        Icon(
+                            imageVector = item.itemSelectedIcon,
+                            contentDescription = itemLabel
+                        )
+                    } else {
+                        Icon(
+                            imageVector = item.itemNotSelectedIcon,
+                            contentDescription = itemLabel
                         )
                     }
-                )
-            }
+                },
+                label = {
+                    Text(
+                        text = itemLabel,
+                        style = TextStyle (
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+            )
         }
     }
+
 }
 
 data class NavigationItem(
@@ -98,5 +92,11 @@ class BottomNavigationItemProvider {
                 AppScreens.FavoriteScreen.name
             )
         )
+    }
+}
+
+class NavigationBarItemSelection  {
+    companion object {
+        var selectedNavigationItemIndex : Int = 0
     }
 }

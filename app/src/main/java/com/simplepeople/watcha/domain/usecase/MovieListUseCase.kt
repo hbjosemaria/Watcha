@@ -7,7 +7,7 @@ import com.simplepeople.watcha.data.pager.ExternalFilteredMoviePagingSource
 import com.simplepeople.watcha.data.pager.ExternalMoviePagingSource
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.ui.appscreen.common.clases.HomeFilterOptions
+import com.simplepeople.watcha.ui.home.HomeFilterOptions
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class MovieListUseCase @Inject constructor(
     fun getMovies(filterOption: HomeFilterOptions) : Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
-                pageSize = 40,
+                pageSize = 20,
                 maxSize = 200
             ),
             pagingSourceFactory = {ExternalMoviePagingSource(repository, filterOption)}
@@ -27,7 +27,7 @@ class MovieListUseCase @Inject constructor(
     fun getByTitle(searchText: String): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 40,
+                pageSize = 20,
                 maxSize = 200
             ),
             pagingSourceFactory = { ExternalFilteredMoviePagingSource(repository, searchText) }

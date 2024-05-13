@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.ui.appscreen.common.clases.HomeFilterOptions
+import com.simplepeople.watcha.ui.home.HomeFilterOptions
 import javax.inject.Inject
 
 class ExternalMoviePagingSource @Inject constructor(

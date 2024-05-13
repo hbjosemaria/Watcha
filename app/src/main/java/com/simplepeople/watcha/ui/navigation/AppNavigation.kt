@@ -1,104 +1,129 @@
 package com.simplepeople.watcha.ui.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.simplepeople.watcha.ui.viewmodel.AppNavigationViewModel
+import androidx.navigation.navArgument
+import com.simplepeople.watcha.R
+import com.simplepeople.watcha.ui.favorite.FavoriteScreen
+import com.simplepeople.watcha.ui.home.HomeScreen
+import com.simplepeople.watcha.ui.moviedetails.MovieDetailsScreen
+import com.simplepeople.watcha.ui.search.SearchScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavigation(
-    appNavigationViewModel: AppNavigationViewModel = hiltViewModel()
-) {
+fun AppNavigation() {
 
     val navController = rememberNavController()
-    val appNavigationUiState by appNavigationViewModel.appNavigationUiState
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackBarItem by appNavigationViewModel.snackBarItem
-    val context = LocalContext.current
 
-    LaunchedEffect (snackBarItem) {
-        if (snackBarItem.showSnackbar) {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(
-                message = context.getString(snackBarItem.textSnackbar),
-                duration = SnackbarDuration.Short
-            )
-            appNavigationViewModel.resetSnackbar()
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            SharedTopBar(
-                navigateToSearchScreen = {
-                    navController.navigate(AppScreens.SearchScreen.route) {
+    NavHost(
+        navController = navController,
+        startDestination = AppScreens.HomeScreen.route
+    ) {
+        composable(
+            AppScreens.HomeScreen.route,
+            enterTransition = {
+                EnterTransition.None
+            }
+        ) {
+            HomeScreen(
+                navigateToMovieDetails = { movieId: Long ->
+                    navController.navigate(
+                        AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                    )
+                },
+                navigateToNavigationBarItem = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
                         launchSingleTop = true
                         restoreState = true
                     }
                 },
-                navigateBack = {
-                    navController.popBackStack()
-                },
-                scrollBehavior = scrollBehavior,
-                filterNowPlaying = {
-                    appNavigationViewModel.emitFilterNowPlayingEvent()
-                },
-                filterPopular = {
-                    appNavigationViewModel.emitFilterPopularEvent()
-                },
-                filterTopRated = {
-                    appNavigationViewModel.emitFilterTopRatedEvent()
-                },
-                filterUpcoming = {
-                    appNavigationViewModel.emitFilterUpcomingEvent()
-                },
-                appBarOption = appNavigationUiState.appBarOption,
-                selectedTopBarItem = appNavigationUiState.selectedTopBarItem
-            )
-        },
-        bottomBar = {
-            SharedNavigationBar(
-                navController = navController,
-                selectedNavigationItemIndex = appNavigationUiState.selectedNavigationItemIndex,
-                showNavigationBar = appNavigationUiState.showNavigationBar,
-                updateNavigationBarSelectedIndex = { index ->
-                    appNavigationViewModel.updateNavigationBarSelectedIndex(index)
-                },
-                emitScrollToTopEvent = {
-                    appNavigationViewModel.emitScrollToTopEvent()
+                navigateToSearchScreen = {
+                    navController.navigate(AppScreens.SearchScreen.route)
                 }
             )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState
+        }
+        composable(
+            AppScreens.MovieDetailsScreen.buildRoute(),
+            arguments = listOf(navArgument("movieId") {
+                type = NavType.LongType
+            })
+        ) {
+            val movieId = it.arguments?.getLong("movieId") ?: 1
+            MovieDetailsScreen(
+                movieId = movieId,
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-    ) { innerPadding ->
-        Content(
-            innerPadding = innerPadding,
-            navController = navController,
-            appBarOption = appNavigationUiState.appBarOption
-        )
+        }
+        composable(
+            AppScreens.FavoriteScreen.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
+            FavoriteScreen(
+                navigateToMovieDetails = { movieId: Long ->
+                    navController.navigate(
+                        AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                    )
+                },
+                navigateToNavigationBarItem = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                navigateToSearchScreen = {
+                    navController.navigate(AppScreens.SearchScreen.route)
+                }
+            )
+        }
+        composable(
+            AppScreens.SearchScreen.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
+            SearchScreen(navigateBack = {
+                navController.popBackStack()
+            },
+                navigateToMovieDetails = { movieId: Long ->
+                    navController.navigate(
+                        AppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                    )
+                }
+            )
+        }
     }
+}
+
+sealed class AppScreens(
+    val route: String,
+    val name: Int
+) {
+    data object HomeScreen : AppScreens("home", R.string.home)
+    data object MovieDetailsScreen : AppScreens("movie_details", R.string.movie_details) {
+        fun buildArgRoute(value: Long): String {
+            return "$route/${value}"
+        }
+
+        fun buildRoute(): String {
+            return "$route/{movieId}"
+        }
+    }
+
+    data object FavoriteScreen : AppScreens("favorites", R.string.list_favorites)
+    data object SearchScreen : AppScreens("search", R.string.search)
 }
 
 

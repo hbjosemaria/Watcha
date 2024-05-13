@@ -17,7 +17,7 @@ class FavoriteUseCase @Inject constructor (
     fun getFavorites() : Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
-                pageSize = 40,
+                pageSize = 20,
                 maxSize = 200
             ),
             pagingSourceFactory = {repository.getFavoriteMovies()}
