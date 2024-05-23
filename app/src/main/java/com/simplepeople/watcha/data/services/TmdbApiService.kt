@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.services
 
-import com.simplepeople.watcha.data.model.MovieListResponseModel
-import com.simplepeople.watcha.data.model.MovieResponseModel
+import com.simplepeople.watcha.data.model.external.MovieListResponseModel
+import com.simplepeople.watcha.data.model.external.MovieResponseModel
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import retrofit2.http.GET
 import retrofit2.http.Path

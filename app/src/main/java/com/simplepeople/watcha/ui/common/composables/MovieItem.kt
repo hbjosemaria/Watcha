@@ -11,25 +11,29 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.Movie
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun MovieItem(
     movie: Movie,
-    modifier : Modifier
+    modifier: Modifier
 ) {
     Column(
         modifier = modifier
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
+                .dispatcher(Dispatchers.IO)
                 .data(movie.picture)
+                .placeholder(R.drawable.movie_placeholder)
+                .fallback(R.drawable.movie_placeholder)
+                .error(R.drawable.movie_placeholder)
+                .allowConversionToBitmap(true)
                 .crossfade(true)
                 .memoryCacheKey(movie.picture)
                 .diskCacheKey(movie.picture)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .memoryCachePolicy(CachePolicy.ENABLED)
-                .fallback(R.drawable.movie_placeholder)
-                .placeholder(R.drawable.movie_placeholder)
                 .build(),
             contentDescription = movie.title,
             contentScale = ContentScale.Fit,

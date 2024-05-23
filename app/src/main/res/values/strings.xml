@@ -48,4 +48,10 @@
     <string name="home_upcoming">Upcoming</string>
     <string name="favorite_error">An error occurred. Please, try again later.</string>
     <string name="search_clean_log">Clean search log</string>
+    <string name="movie_list_error">An error has occurred.</string>
+    <string name="retry">Retry</string>
+    <string name="movie_list_loading">Loading data.</string>
+    <string name="movie_list_connection_lost">It seems that connection has been lost...</string>
+    <string name="favorite_list_empty">Why so empty? Go add some movie bangers!</string>
+    <string name="search_no_result">We couldn\'t find anything</string>
 </resources>

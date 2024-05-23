@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.navigation
+package com.simplepeople.watcha.ui.common.composables
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
@@ -16,31 +16,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.simplepeople.watcha.ui.navigation.AppScreens
 
 @Composable
 fun SharedNavigationBar(
-//    navController: NavController,
-    selectedNavigationItemIndex : Int,
-    navigateToNavigationBarItem : (String) -> Unit,
-//    showNavigationBar : Boolean,
-    updateNavigationBarSelectedIndex : (Int) -> Unit,
-    scrollToTopAction : () -> Unit
+    selectedNavigationItemIndex: Int,
+    navigateToNavigationBarItem: (String) -> Unit,
+    updateNavigationBarSelectedIndex: (Int) -> Unit,
+    scrollToTopAction: () -> Unit
 ) {
-    NavigationBar (
+    NavigationBar(
         windowInsets = WindowInsets(47.dp, 0.dp, 47.dp, 6.dp)
-    ){
+    ) {
         BottomNavigationItemProvider.navigationItemLists.forEachIndexed { index, item ->
             val itemLabel = stringResource(item.itemLabel)
             NavigationBarItem(
-//                selected = selectedNavigationItemIndex == index,
                 selected = selectedNavigationItemIndex == index,
                 onClick = {
                     updateNavigationBarSelectedIndex(index)
                     if (selectedNavigationItemIndex != index) {
                         navigateToNavigationBarItem(item.navigationRoute)
-                    }
-//                    else emitScrollToTopEvent()
-                    else scrollToTopAction()
+                    } else scrollToTopAction()
                 },
                 icon = {
                     if (selectedNavigationItemIndex == index) {
@@ -58,7 +54,7 @@ fun SharedNavigationBar(
                 label = {
                     Text(
                         text = itemLabel,
-                        style = TextStyle (
+                        style = TextStyle(
                             fontWeight = FontWeight.Bold
                         )
                     )
@@ -95,8 +91,8 @@ class BottomNavigationItemProvider {
     }
 }
 
-class NavigationBarItemSelection  {
+class NavigationBarItemSelection {
     companion object {
-        var selectedNavigationItemIndex : Int = 0
+        var selectedNavigationItemIndex: Int = 0
     }
 }

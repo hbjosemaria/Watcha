@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.model
+package com.simplepeople.watcha.data.model.external
 
 import com.google.gson.annotations.SerializedName
 import com.simplepeople.watcha.data.services.TmdbApiUrl

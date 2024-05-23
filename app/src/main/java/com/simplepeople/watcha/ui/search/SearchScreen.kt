@@ -17,9 +17,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -37,15 +36,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.domain.core.Movie
-import com.simplepeople.watcha.domain.core.SearchLogItem
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataImageDisplay
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataLoadingDisplay
 import com.simplepeople.watcha.ui.common.composables.MovieList
-import com.simplepeople.watcha.ui.navigation.topbar.SearchTopAppBar
+import com.simplepeople.watcha.ui.common.composables.topbar.SearchTopAppBar
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -60,10 +59,8 @@ fun SearchScreen(
     navigateBack: () -> Unit
 ) {
 
-    val movieList: LazyPagingItems<Movie> = searchViewModel.movieList.collectAsLazyPagingItems()
-    val searchLog: LazyPagingItems<SearchLogItem> =
-        searchViewModel.searchLog.collectAsLazyPagingItems()
-    val searchScreenUiState by searchViewModel.searchScreenUiState
+    val searchScreenUiState by searchViewModel.searchScreenUiState.collectAsState()
+    val searchLog = searchScreenUiState.searchLog.collectAsLazyPagingItems()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     LaunchedEffect(searchScreenUiState.searchText) {
@@ -103,8 +100,7 @@ fun SearchScreen(
                 scrollBehavior = scrollBehavior,
                 searchText = searchScreenUiState.searchText,
                 onValueChange = { newText: String ->
-                    searchViewModel.isSearching()
-                    searchViewModel.updateSearchText(newText)
+                    searchViewModel.isSearching(newText)
                 },
                 cleanSearch = {
                     searchViewModel.cleanMovieSearch()
@@ -116,16 +112,11 @@ fun SearchScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding( innerPadding)
+                .padding(innerPadding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
-            //TODO: create a recent search list and display it when user touches the search box
-            // Also, if user touches one of the list item, add the text to the search bar and execute the query to fetch into the movie list
-            // And if user touches the X in the end of the item, clear that register
-
             if (searchScreenUiState.searchText.isBlank()) {
                 LazyColumn(
-//                    contentPadding = WindowInsets.safeContent.asPaddingValues(),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     if (searchLog.itemCount > 0) {
@@ -143,11 +134,6 @@ fun SearchScreen(
                                     },
                                 ) {
                                     Text(text = stringResource(id = R.string.search_clean_log))
-                                    //TODO: get a proper icon for this
-                                    Icon(
-                                        imageVector = Icons.Filled.Delete,
-                                        contentDescription = Icons.Filled.Delete.name
-                                    )
                                 }
                             }
                         }
@@ -161,8 +147,7 @@ fun SearchScreen(
                         SearchLogItem(
                             searchText = searchLogItem.searchedText,
                             applySearch = {
-                                searchViewModel.isSearching()
-                                searchViewModel.updateSearchText(searchLogItem.searchedText)
+                                searchViewModel.isSearching(searchLogItem.searchedText)
                             },
                             removeSearch = {
                                 searchViewModel.removeSearch(searchLogItem)
@@ -172,11 +157,63 @@ fun SearchScreen(
                 }
             }
 
-            MovieList(
-                movieList = movieList,
-                navigateToMovieDetails = navigateToMovieDetails,
-                paddingValues = PaddingValues(10.dp)
-            )
+            when (val state = searchScreenUiState.movieListState) {
+                is SearchScreenMovieListState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        LoadingMovieDataImageDisplay(
+                            modifier = Modifier
+                                .align(Alignment.Center),
+                            image = R.drawable.favorite_empty,
+                            message = state.message
+                        )
+                    }
+                }
+
+                is SearchScreenMovieListState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        LoadingMovieDataLoadingDisplay(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+
+                is SearchScreenMovieListState.Success -> {
+                    val movieList = state.movieList.collectAsLazyPagingItems()
+                    when {
+                        movieList.itemCount > 0 -> {
+                            MovieList(
+                                movieList = movieList,
+                                navigateToMovieDetails = navigateToMovieDetails,
+                                paddingValues = PaddingValues(10.dp)
+                            )
+                        }
+
+                        movieList.itemCount == 0 &&
+                                movieList.loadState.source.append == LoadState.NotLoading(
+                            endOfPaginationReached = true
+                        ) -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
+                                LoadingMovieDataImageDisplay(
+                                    modifier = Modifier
+                                        .align(Alignment.Center),
+                                    image = R.drawable.search_no_result,
+                                    message = R.string.search_no_result
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -223,6 +260,5 @@ fun SearchLogItem(
                 .size(24.dp)
                 .weight(2f)
         )
-
     }
 }

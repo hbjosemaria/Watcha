@@ -1,9 +1,11 @@
 package com.simplepeople.watcha.data.repository
 
 import androidx.paging.PagingSource
-import com.simplepeople.watcha.data.model.MovieListResponseModel
-import com.simplepeople.watcha.data.model.MovieResponseModel
+import com.simplepeople.watcha.data.model.external.MovieListResponseModel
+import com.simplepeople.watcha.data.model.external.MovieResponseModel
+import com.simplepeople.watcha.data.model.local.MovieModel
 import com.simplepeople.watcha.data.services.MovieDao
+import com.simplepeople.watcha.data.services.MovieFavoriteDao
 import com.simplepeople.watcha.data.services.TmdbApiService
 import javax.inject.Inject
 
@@ -12,25 +14,24 @@ import javax.inject.Inject
 
 //Model interface guide for function implementation
 interface ExternalMovieRepository {
-
     suspend fun getMovieById(movieId: Long): MovieResponseModel
     suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponseModel
     suspend fun getNowPlayingByPage(page: Int): MovieListResponseModel
     suspend fun getPopularByPage(page: Int): MovieListResponseModel
     suspend fun getTopRatedByPage(page: Int): MovieListResponseModel
     suspend fun getUpcomingByPage(page: Int): MovieListResponseModel
-
 }
 
 //Model interface function for function implementation
 interface LocalMovieRepository {
-
     //Added Paging loading with Room for favorite movies. PagingSource is responsible for fetching new data when needed
-    fun getFavoriteMovies(): PagingSource<Int, com.simplepeople.watcha.data.model.MovieModel>
-    suspend fun getFavoriteById(movieId: Long): com.simplepeople.watcha.data.model.MovieModel
-    suspend fun saveFavoriteMovie(movie: com.simplepeople.watcha.data.model.MovieModel): Long
-    suspend fun deleteFavoriteMovie(movieId: Long): Int
-    suspend fun checkIfMovieIsFavorite(movieId: Long): Int
+    fun getAllMovies(): PagingSource<Int, MovieModel>
+    fun getByCategory(category: Int): PagingSource<Int, MovieModel>
+    suspend fun getMovieById(movieId: Long): MovieModel
+    suspend fun addMovie(movie: MovieModel): Long
+    suspend fun deleteMovie(movieId: Long): Int
+    suspend fun insertAllMovies(movieList: List<MovieModel>)
+    suspend fun clearCachedMovies(): Int
 }
 
 //Model interface function for function implementation
@@ -69,26 +70,31 @@ class LocalMovieRepositoryImpl @Inject constructor(
     private val apiService: MovieDao
 ) : LocalMovieRepository {
 
-    override fun getFavoriteMovies(): PagingSource<Int, com.simplepeople.watcha.data.model.MovieModel> =
-        apiService.getFavoriteMovies()
+    override fun getAllMovies(): PagingSource<Int, MovieModel> =
+        apiService.getAllMovies()
 
-    override suspend fun getFavoriteById(movieId: Long): com.simplepeople.watcha.data.model.MovieModel =
-        apiService.getFavoriteById(movieId)
+    override fun getByCategory(category: Int): PagingSource<Int, MovieModel> =
+        apiService.getByCategory(category)
 
-    override suspend fun saveFavoriteMovie(movie: com.simplepeople.watcha.data.model.MovieModel): Long =
-        apiService.saveFavoriteMovie(movie)
+    override suspend fun getMovieById(movieId: Long): MovieModel =
+        apiService.getMovieById(movieId)
 
-    override suspend fun deleteFavoriteMovie(movieId: Long): Int =
-        apiService.deleteFavoriteMovie(movieId)
+    override suspend fun addMovie(movie: MovieModel): Long =
+        apiService.addMovie(movie)
 
-    override suspend fun checkIfMovieIsFavorite(movieId: Long): Int =
-        apiService.checkIfMovieIsFavorite(movieId)
+    override suspend fun deleteMovie(movieId: Long): Int =
+        apiService.deleteMovie(movieId)
 
+    override suspend fun insertAllMovies(movieList: List<MovieModel>) =
+        apiService.insertAllMovies(movieList)
+
+    override suspend fun clearCachedMovies(): Int =
+        apiService.clearCachedMovies()
 }
 
 //Implementation of repo
 class MixedMovieRepositoryImpl @Inject constructor(
-    private val roomService: MovieDao,
+    private val roomService: MovieFavoriteDao,
     private val apiService: TmdbApiService
 ) : MixedMovieRepository {
     override suspend fun getMovieById(movieId: Long): Pair<MovieResponseModel, Int> {
@@ -97,5 +103,4 @@ class MixedMovieRepositoryImpl @Inject constructor(
             roomService.checkIfMovieIsFavorite(movieId)
         )
     }
-
 }

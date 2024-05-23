@@ -47,4 +47,10 @@
     <string name="home_upcoming">Próximamente</string>
     <string name="favorite_error">Ha ocuriddo un error. Por favor, inténtalo más tarde.</string>
     <string name="search_clean_log">Limpiar historial</string>
+    <string name="movie_list_error">Ha ocurrido un error.</string>
+    <string name="retry">Reintentar</string>
+    <string name="movie_list_loading">Cargando datos.</string>
+    <string name="movie_list_connection_lost">Parece ser que no hay conexión...</string>
+    <string name="favorite_list_empty">¿Por qué está vacío? Añade algunas películas top.</string>
+    <string name="search_no_result">No pudimos encontrar nada</string>
 </resources>

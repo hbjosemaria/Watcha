@@ -1,11 +1,10 @@
 package com.simplepeople.watcha.ui.search
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.SearchLogItem
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.domain.usecase.SearchLogUseCase
@@ -13,107 +12,116 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val movieListUseCase: MovieListUseCase,
     private val searchLogUseCase: SearchLogUseCase
-): ViewModel()  {
+) : ViewModel() {
 
-    private val _movieList = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
-    val movieList = _movieList.asStateFlow()
-    private val _searchLog = MutableStateFlow<PagingData<SearchLogItem>>(PagingData.empty())
-    val searchLog = _searchLog.asStateFlow()
-    val searchScreenUiState = mutableStateOf(SearchScreenUiState())
+    private val _searchScreenUiState = MutableStateFlow(SearchScreenUiState())
+    val searchScreenUiState = _searchScreenUiState.asStateFlow()
 
     init {
         loadRecentSearchLog()
     }
 
-    fun updateSearchText(text: String) {
-        searchScreenUiState.value = searchScreenUiState.value.copy(
-            searchText = text
-        )
-    }
-
-    fun isSearching() {
-        searchScreenUiState.value = searchScreenUiState.value.copy(
+    fun isSearching(text: String) {
+        _searchScreenUiState.value = searchScreenUiState.value.copy(
             searching = true,
-            scrollToTop = false
+            scrollToTop = false,
+            searchText = text,
+            movieListState = SearchScreenMovieListState.Loading
         )
     }
 
     private fun loadRecentSearchLog() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                searchLogUseCase
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            _searchScreenUiState.value = searchScreenUiState.value.copy(
+                searchLog = searchLogUseCase
                     .getRecentSearch()
-                    .cachedIn(viewModelScope)
-                    .collect {
-                        _searchLog.value = it
+                    .catch { exception ->
+                        _searchScreenUiState.value = _searchScreenUiState.value.copy(
+                            searchLog = MutableStateFlow(PagingData.empty())
+                        )
                     }
-            }
+                    .cachedIn(viewModelScope)
+            )
         }
     }
 
     fun cleanSearchLog() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                searchLogUseCase.cleanSearchLog()
-            }
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            searchLogUseCase.cleanSearchLog()
         }
     }
 
-    fun addNewSearch(searchedText : String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                searchLogUseCase.addNewSearch(searchedText)
-            }
+    fun addNewSearch(searchedText: String) {
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            searchLogUseCase.addNewSearch(searchedText)
         }
     }
 
-    fun removeSearch(searchLogItem : SearchLogItem) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                searchLogUseCase.removeSearch(searchLogItem)
-            }
+    fun removeSearch(searchLogItem: SearchLogItem) {
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            searchLogUseCase.removeSearch(searchLogItem)
         }
-    }
-
-    fun getMoviesByTitle(text: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                movieListUseCase
-                    .getByTitle(text)
-                    .cachedIn(viewModelScope)
-                    .collect {
-                        _movieList.value = it
-                        resetAfterSearch()
-                    }
-            }
-        }
-    }
-
-    private fun resetAfterSearch() {
-        searchScreenUiState.value = searchScreenUiState.value.copy(
-            searching = false,
-            scrollToTop = true
-        )
-    }
-
-    fun cleanMovieSearch() {
-        _movieList.value = PagingData.empty()
-        searchScreenUiState.value = searchScreenUiState.value.copy(
-            searching = false
-        )
     }
 
     fun cleanSearchText() {
-        searchScreenUiState.value = searchScreenUiState.value.copy(
+        _searchScreenUiState.value = searchScreenUiState.value.copy(
             searchText = ""
+        )
+    }
+
+    fun getMoviesByTitle(text: String) {
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            _searchScreenUiState.value = searchScreenUiState.value.copy(
+                movieListState = SearchScreenMovieListState.Success(
+                    movieList = movieListUseCase
+                        .getByTitle(text)
+                        .catch { exception ->
+                            _searchScreenUiState.value = searchScreenUiState.value.copy(
+                                movieListState = SearchScreenMovieListState.Error(
+                                    message = R.string.movie_list_error
+                                )
+                            )
+                        }
+                        .cachedIn(viewModelScope)
+                )
+            )
+
+            resetAfterSearch()
+        }
+    }
+
+    fun cleanMovieSearch() {
+        _searchScreenUiState.value = searchScreenUiState.value.copy(
+            searching = false,
+            movieListState = SearchScreenMovieListState.Success(
+                movieList = emptyFlow(),
+            )
+        )
+    }
+
+    private fun resetAfterSearch() {
+        _searchScreenUiState.value = searchScreenUiState.value.copy(
+            searching = false,
+            scrollToTop = true
         )
     }
 

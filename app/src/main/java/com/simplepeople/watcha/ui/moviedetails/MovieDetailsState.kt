@@ -1,8 +1,15 @@
 package com.simplepeople.watcha.ui.moviedetails
 
+import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.ui.common.utils.SnackbarItem
 
-data class MovieDetailsUiState (
-    var snackBarItem: SnackbarItem = SnackbarItem(),
-    var rating : Float = 0f
+data class MovieDetailsUiState(
+    val snackBarItem: SnackbarItem = SnackbarItem(),
+    val movieState: MovieDetailsMovieState = MovieDetailsMovieState.Loading
 )
+
+sealed class MovieDetailsMovieState {
+    data object Loading : MovieDetailsMovieState()
+    data class Success(val movie: Movie) : MovieDetailsMovieState()
+    data class Error(val message: Int) : MovieDetailsMovieState()
+}

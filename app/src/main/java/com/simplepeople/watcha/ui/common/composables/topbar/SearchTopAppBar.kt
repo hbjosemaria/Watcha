@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.navigation.topbar
+package com.simplepeople.watcha.ui.common.composables.topbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 
-//TODO: implement a variation where it displays a textbox for searching on SearchScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopAppBar(

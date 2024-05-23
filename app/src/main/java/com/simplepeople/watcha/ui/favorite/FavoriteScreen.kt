@@ -13,22 +13,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.R
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataImageDisplay
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataLoadingDisplay
 import com.simplepeople.watcha.ui.common.composables.MovieList
-import com.simplepeople.watcha.ui.navigation.NavigationBarItemSelection
-import com.simplepeople.watcha.ui.navigation.SharedNavigationBar
-import com.simplepeople.watcha.ui.navigation.topbar.MainTopAppBar
-import com.simplepeople.watcha.ui.navigation.topbar.common.TopBarDynamicParamCalc
+import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
+import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
+import com.simplepeople.watcha.ui.common.composables.topbar.MainTopAppBar
+import com.simplepeople.watcha.ui.common.composables.topbar.common.TopBarDynamicParamCalc
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,9 +46,8 @@ fun FavoriteScreen(
     navigateToSearchScreen: () -> Unit
 ) {
 
-    val movieList: LazyPagingItems<Movie> = favoriteViewModel.movieList.collectAsLazyPagingItems()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val favoriteScreenUiState by favoriteViewModel.favoriteScreenUiState
+    val favoriteScreenUiState by favoriteViewModel.favoriteScreenUiState.collectAsState()
 
     val topBarAlpha = remember {
         mutableFloatStateOf(
@@ -60,7 +64,7 @@ fun FavoriteScreen(
             scrollBehavior.state.overlappedFraction
         }
             .distinctUntilChanged()
-            .collect {
+            .collectLatest {
                 topBarAlpha.floatValue = TopBarDynamicParamCalc(
                     minValue = .5f,
                     maxValue = .75f,
@@ -71,7 +75,7 @@ fun FavoriteScreen(
 
     LaunchedEffect(favoriteScreenUiState.scrollToTop) {
         if (favoriteScreenUiState.scrollToTop) {
-            lazyGridState.animateScrollToItem(0)
+            lazyGridState.scrollToItem(0)
             favoriteViewModel.scrollingToTop(false)
         }
     }
@@ -97,17 +101,56 @@ fun FavoriteScreen(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize()
         ) {
-            MovieList(
-                movieList = movieList,
-                navigateToMovieDetails = navigateToMovieDetails,
-                lazyGridState = lazyGridState,
-                paddingValues = PaddingValues(
-                    top = 98.dp,
-                    start = 10.dp,
-                    end = 10.dp,
-                    bottom = 10.dp
-                )
-            )
+
+            when (val state = favoriteScreenUiState.movieListState) {
+                is FavoriteScreenMovieListState.Error -> {
+                    LoadingMovieDataImageDisplay(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        image = R.drawable.movie_list_loading_error,
+                        message = R.string.movie_list_error
+                    )
+                }
+
+                is FavoriteScreenMovieListState.Loading -> {
+                    LoadingMovieDataLoadingDisplay(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
+
+                is FavoriteScreenMovieListState.Success -> {
+                    val movieList = state.movieList.collectAsLazyPagingItems()
+                    when {
+                        movieList.itemCount > 0 -> {
+                            MovieList(
+                                movieList = movieList,
+                                navigateToMovieDetails = navigateToMovieDetails,
+                                lazyGridState = lazyGridState,
+                                paddingValues = PaddingValues(
+                                    top = 98.dp,
+                                    start = 10.dp,
+                                    end = 10.dp,
+                                    bottom = 10.dp
+                                )
+                            )
+                        }
+
+                        movieList.itemCount == 0 &&
+                                movieList.loadState.source.append == LoadState.NotLoading(
+                            endOfPaginationReached = true
+                        ) -> {
+                            LoadingMovieDataImageDisplay(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                image = R.drawable.favorite_empty,
+                                message = R.string.favorite_list_empty
+                            )
+                        }
+                    }
+                }
+            }
+
             MainTopAppBar(
                 navigateToSearchScreen = navigateToSearchScreen,
                 scrollBehavior = scrollBehavior,
@@ -116,4 +159,3 @@ fun FavoriteScreen(
         }
     }
 }
-
