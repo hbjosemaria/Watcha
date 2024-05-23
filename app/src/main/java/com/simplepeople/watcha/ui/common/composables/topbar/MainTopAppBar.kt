@@ -1,11 +1,10 @@
-package com.simplepeople.watcha.ui.navigation.topbar
+package com.simplepeople.watcha.ui.common.composables.topbar
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -13,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
-import com.simplepeople.watcha.ui.navigation.topbar.common.TopAppBarLogo
+import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarLogo
 
 //FavoriteScreen TopBar
 @OptIn(ExperimentalMaterial3Api::class)

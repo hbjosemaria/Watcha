@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.simplepeople.watcha.ui.common.composables
 
 import androidx.compose.foundation.clickable
@@ -15,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,13 +25,13 @@ fun HomeMovieList(
     movieList: LazyPagingItems<Movie>,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
-    paddingValues: PaddingValues? = PaddingValues(top = 10.dp)
+    paddingValues: PaddingValues? = PaddingValues(top = 5.dp)
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = paddingValues!!,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
         state = lazyGridState
     ) {
 
@@ -66,7 +63,7 @@ fun HomeMovieList(
                 movie.movieId
             }
         ) { index ->
-            val movie = movieList[index+1]!!
+            val movie = movieList[index + 1]!!
             MovieItem(
                 movie = movie,
                 modifier = Modifier
@@ -85,13 +82,13 @@ fun MovieList(
     movieList: LazyPagingItems<Movie>,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
-    paddingValues : PaddingValues? = null
+    paddingValues: PaddingValues? = null
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-        contentPadding = paddingValues ?: PaddingValues(top = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = paddingValues ?: PaddingValues(top = 5.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
         state = lazyGridState,
     ) {
         items(

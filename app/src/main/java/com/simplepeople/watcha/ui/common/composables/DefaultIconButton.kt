@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 fun DefaultIconButton(
     action: () -> Unit,
     iconImage: ImageVector,
-    contentDescription : String,
+    contentDescription: String,
     modifier: Modifier = Modifier,
-    tint : Color? = null
+    tint: Color? = null
 ) {
     IconButton(
         onClick = {

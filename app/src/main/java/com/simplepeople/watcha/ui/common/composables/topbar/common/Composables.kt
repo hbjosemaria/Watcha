@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.ui.navigation.topbar.common
+package com.simplepeople.watcha.ui.common.composables.topbar.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -20,8 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.simplepeople.watcha.R
-import com.simplepeople.watcha.ui.home.HomeFilterOptions
-
+import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 
 @Composable
 fun TopAppBarButton(
@@ -46,7 +45,7 @@ fun TopAppBarButton(
         Text(
             text = stringResource(id = text),
             style = TextStyle(
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
             )
         )
@@ -71,7 +70,7 @@ fun TopAppBarLogo() {
 @Composable
 fun TopAppBarText(
     modifier: Modifier = Modifier,
-    textReference : Int
+    textReference: Int
 ) {
     Text(
         modifier = modifier,

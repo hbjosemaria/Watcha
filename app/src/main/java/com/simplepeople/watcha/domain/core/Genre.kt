@@ -2,7 +2,7 @@ package com.simplepeople.watcha.domain.core
 
 import com.simplepeople.watcha.R
 
-enum class Genre(val id : Int, val title: Int) {
+enum class Genre(val id: Int, val title: Int) {
     ACTION(28, R.string.genre_action),
     ADVENTURE(12, R.string.genre_adventure),
     ANIMATION(16, R.string.genre_animation),

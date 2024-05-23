@@ -8,28 +8,36 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.HomeMovieList
-import com.simplepeople.watcha.ui.navigation.NavigationBarItemSelection
-import com.simplepeople.watcha.ui.navigation.SharedNavigationBar
-import com.simplepeople.watcha.ui.navigation.topbar.HomeTopAppBar
-import com.simplepeople.watcha.ui.navigation.topbar.common.TopBarDynamicParamCalc
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataImageDisplay
+import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataLoadingDisplay
+import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
+import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
+import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
+import com.simplepeople.watcha.ui.common.composables.topbar.HomeTopAppBar
+import com.simplepeople.watcha.ui.common.composables.topbar.common.TopBarDynamicParamCalc
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,10 +50,8 @@ fun HomeScreen(
     navigateToSearchScreen: () -> Unit
 ) {
 
-    //TODO: Create an UIState class for movie and api call status
-    val movieList: LazyPagingItems<Movie> = homeViewModel.movieList.collectAsLazyPagingItems()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val homeScreenUiState by homeViewModel.homeScreenUiState
+    val homeScreenUiState by homeViewModel.homeScreenUiState.collectAsState()
 
     val movieListPaddingValues = remember {
         mutableStateOf(
@@ -58,7 +64,7 @@ fun HomeScreen(
     }
 
     val topBarAlpha = remember {
-        mutableStateOf(
+        mutableFloatStateOf(
             TopBarDynamicParamCalc(
                 minValue = .5f,
                 maxValue = 1f,
@@ -72,14 +78,14 @@ fun HomeScreen(
             scrollBehavior.state.collapsedFraction
         }
             .distinctUntilChanged()
-            .collect {
+            .collectLatest {
                 movieListPaddingValues.value = TopBarDynamicParamCalc(
                     minValue = 78.dp,
-                    maxValue = 146.dp,
+                    maxValue = 136.dp,
                     fraction = scrollBehavior.state.collapsedFraction
                 )
 
-                topBarAlpha.value = TopBarDynamicParamCalc(
+                topBarAlpha.floatValue = TopBarDynamicParamCalc(
                     minValue = .5f,
                     maxValue = 1f,
                     fraction = scrollBehavior.state.collapsedFraction
@@ -89,7 +95,7 @@ fun HomeScreen(
 
     LaunchedEffect(homeScreenUiState.scrollToTop) {
         if (homeScreenUiState.scrollToTop) {
-            lazyGridState.animateScrollToItem(0)
+            lazyGridState.scrollToItem(0)
             homeViewModel.scrollingToTop(false)
         }
     }
@@ -115,38 +121,85 @@ fun HomeScreen(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize()
         ) {
-            HomeMovieList(
-                movieList = movieList,
-                navigateToMovieDetails = navigateToMovieDetails,
-                lazyGridState = lazyGridState,
-                paddingValues = PaddingValues(
-                    top = movieListPaddingValues.value,
-                    start = 10.dp,
-                    end = 10.dp,
-                    bottom = 10.dp
-                )
-            )
+            //TODO: add retry button to each error display
+            when (val state = homeScreenUiState.movieListState) {
+                is HomeScreenMovieListState.Loading -> {
+                    LoadingMovieDataLoadingDisplay(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
+
+                is HomeScreenMovieListState.Error -> {
+                    LoadingMovieDataImageDisplay(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        image = R.drawable.movie_list_loading_error,
+                        message = state.message
+                    )
+                }
+
+                is HomeScreenMovieListState.Success -> {
+                    val movieList = state.movieList.collectAsLazyPagingItems()
+
+                    when {
+                        movieList.itemCount == 0 &&
+                                movieList.loadState.source.append == LoadState.NotLoading(
+                            endOfPaginationReached = true
+                        )
+                        -> {
+                            LoadingMovieDataImageDisplay(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                image = R.drawable.movie_list_loading_error,
+                                message = R.string.movie_list_connection_lost
+                            )
+                        }
+
+                        else -> {
+                            HomeMovieList(
+                                movieList = movieList,
+                                navigateToMovieDetails = navigateToMovieDetails,
+                                lazyGridState = lazyGridState,
+                                paddingValues = PaddingValues(
+                                    top = movieListPaddingValues.value,
+                                    start = 10.dp,
+                                    end = 10.dp,
+                                    bottom = 10.dp
+                                )
+                            )
+                            if (movieList.loadState.append == LoadState.Loading) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                    }
+                }
+            }
+
             HomeTopAppBar(
                 selectedHomeFilterOption = homeScreenUiState.selectedHomeFilterOption,
                 navigateToSearchScreen = navigateToSearchScreen,
                 filterNowPlaying = {
                     homeViewModel.updateTopBarSelection(HomeFilterOptions.NowPlaying)
-                    homeViewModel.loadMovies(HomeFilterOptions.NowPlaying)
+                    homeViewModel.loadMovies()
                 },
                 filterPopular = {
                     homeViewModel.updateTopBarSelection(HomeFilterOptions.Popular)
-                    homeViewModel.loadMovies(HomeFilterOptions.Popular)
+                    homeViewModel.loadMovies()
                 },
                 filterTopRated = {
                     homeViewModel.updateTopBarSelection(HomeFilterOptions.TopRated)
-                    homeViewModel.loadMovies(HomeFilterOptions.TopRated)
+                    homeViewModel.loadMovies()
                 },
                 filterUpcoming = {
                     homeViewModel.updateTopBarSelection(HomeFilterOptions.Upcoming)
-                    homeViewModel.loadMovies(HomeFilterOptions.Upcoming)
+                    homeViewModel.loadMovies()
+                },
+                scrollToTop = {
+                    homeViewModel.scrollingToTop(true)
                 },
                 scrollBehavior = scrollBehavior,
-                topBarAlpha = topBarAlpha.value
+                topBarAlpha = topBarAlpha.floatValue
             )
         }
     }

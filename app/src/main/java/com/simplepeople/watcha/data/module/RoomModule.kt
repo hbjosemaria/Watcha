@@ -2,7 +2,10 @@ package com.simplepeople.watcha.data.module
 
 import android.content.Context
 import androidx.room.Room
+import com.simplepeople.watcha.data.services.MovieCategoryDao
 import com.simplepeople.watcha.data.services.MovieDao
+import com.simplepeople.watcha.data.services.MovieFavoriteDao
+import com.simplepeople.watcha.data.services.RemoteKeysDao
 import com.simplepeople.watcha.data.services.SearchLogDao
 import com.simplepeople.watcha.data.services.WatchaDatabase
 import dagger.Module
@@ -18,24 +21,31 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): WatchaDatabase {
-        return Room
+    fun provideDatabase(@ApplicationContext context: Context): WatchaDatabase =
+        Room
             .databaseBuilder(context, WatchaDatabase::class.java, "Watcha")
             .fallbackToDestructiveMigration()
             .build()
 
-
-    }
+    @Provides
+    fun provideMovieDao(database: WatchaDatabase): MovieDao =
+        database.movieDao()
 
     @Provides
-    fun provideMovieDao(database: WatchaDatabase): MovieDao {
-        return database.movieDao()
-    }
+    fun provideSearchItemDao(database: WatchaDatabase): SearchLogDao =
+        database.searchLogDao()
 
     @Provides
-    fun provideSearchItemDao(database: WatchaDatabase) : SearchLogDao {
-        return database.searchLogDao()
-    }
+    fun provideRemoteKeysDao(database: WatchaDatabase): RemoteKeysDao =
+        database.remoteKeysDao()
+
+    @Provides
+    fun provideMovieCategoryDao(database: WatchaDatabase): MovieCategoryDao =
+        database.movieCategoryDao()
+
+    @Provides
+    fun provideMovieFavoriteDao(database: WatchaDatabase): MovieFavoriteDao =
+        database.movieFavoriteDao()
 
 }
 
