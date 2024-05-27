@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val movieListUseCase: MovieListUseCase
+    private val movieListUseCase: MovieListUseCase,
 ) : ViewModel() {
 
-    private val _homeScreenUiState = MutableStateFlow(HomeScreenUiState())
-    val homeScreenUiState = _homeScreenUiState.asStateFlow()
+    private val _homeScreenState = MutableStateFlow(HomeScreenState())
+    val homeScreenState = _homeScreenState.asStateFlow()
 
     init {
         loadMovies()
@@ -31,16 +31,16 @@ class HomeViewModel @Inject constructor(
             context = Dispatchers.IO
         ) {
             try {
-                _homeScreenUiState.value = homeScreenUiState.value.copy(
+                _homeScreenState.value = homeScreenState.value.copy(
                     movieListState = HomeScreenMovieListState.Success(
                         movieList = movieListUseCase
-                            .getMovies(homeScreenUiState.value.selectedHomeFilterOption)
+                            .getMovies(homeScreenState.value.selectedHomeFilterOption)
                             .distinctUntilChanged()
                             .cachedIn(viewModelScope)
                     )
                 )
             } catch (e: Exception) {
-                _homeScreenUiState.value = homeScreenUiState.value.copy(
+                _homeScreenState.value = homeScreenState.value.copy(
                     movieListState = HomeScreenMovieListState.Error(
                         message = com.simplepeople.watcha.R.string.movie_list_error
                     )
@@ -51,14 +51,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateTopBarSelection(filterOption: HomeFilterOptions) {
-        _homeScreenUiState.value = homeScreenUiState.value.copy(
+        _homeScreenState.value = homeScreenState.value.copy(
             selectedHomeFilterOption = filterOption,
             movieListState = HomeScreenMovieListState.Loading
         )
     }
 
     fun scrollingToTop(scrollToTopAction: Boolean) {
-        _homeScreenUiState.value = homeScreenUiState.value.copy(
+        _homeScreenState.value = homeScreenState.value.copy(
             scrollToTop = scrollToTopAction
         )
     }

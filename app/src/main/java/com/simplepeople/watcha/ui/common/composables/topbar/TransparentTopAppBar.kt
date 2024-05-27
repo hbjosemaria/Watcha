@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.ui.common.composables.topbar
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,7 +30,8 @@ fun TransparentTopAppBar(
                 iconImage = Icons.Filled.ArrowBack,
                 contentDescription = Icons.Filled.ArrowBack.name,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(35.dp)
+                    .padding(start = 8.dp)
             )
         }
     )

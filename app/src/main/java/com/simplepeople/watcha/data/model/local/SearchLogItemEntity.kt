@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.simplepeople.watcha.domain.core.SearchLogItem
 
 @Entity(tableName = "search")
-data class SearchLogItemModel(
+data class SearchLogItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val searchedText: String = ""

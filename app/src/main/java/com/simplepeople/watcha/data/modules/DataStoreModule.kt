@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.module
+package com.simplepeople.watcha.data.modules
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -36,4 +36,11 @@ object DataStoreModule {
             produceFile = { context.preferencesDataStoreFile(CACHE_PREFERENCES) }
         )
     }
+}
+
+sealed class DataStoreVariableType {
+    data object StringType : DataStoreVariableType()
+    data object IntType : DataStoreVariableType()
+    data object LongType : DataStoreVariableType()
+    data object BooleanType : DataStoreVariableType()
 }

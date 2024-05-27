@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,12 +40,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataImageDisplay
 import com.simplepeople.watcha.ui.common.composables.LoadingMovieDataLoadingDisplay
 import com.simplepeople.watcha.ui.common.composables.MovieList
+import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
+import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.topbar.SearchTopAppBar
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -53,14 +56,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @OptIn(FlowPreview::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
+    navigateToNavigationBarItem: (String) -> Unit,
     navigateToMovieDetails: (Long) -> Unit,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     searchViewModel: SearchViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
 ) {
 
-    val searchScreenUiState by searchViewModel.searchScreenUiState.collectAsState()
-    val searchLog = searchScreenUiState.searchLog.collectAsLazyPagingItems()
+    val searchScreenUiState by searchViewModel.searchScreenState.collectAsState()
+    val searchLog = searchScreenUiState.searchLog
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     LaunchedEffect(searchScreenUiState.searchText) {
@@ -72,7 +75,7 @@ fun SearchScreen(
             .collectLatest { searchText ->
                 if (searchText.isNotBlank()) {
                     searchViewModel.getMoviesByTitle(searchText)
-                    if (searchLog.itemSnapshotList.items.find { it.searchedText.lowercase() == searchText.lowercase() } == null) {
+                    if (searchLog.find { it.searchedText.lowercase() == searchText.lowercase() } == null) {
                         searchViewModel.addNewSearch(searchText)
                     }
                 } else {
@@ -93,10 +96,16 @@ fun SearchScreen(
 
     }
 
+    DisposableEffect(true) {
+        onDispose {
+            searchViewModel.cleanMovieSearch()
+            searchViewModel.cleanSearchText()
+        }
+    }
+
     Scaffold(
         topBar = {
             SearchTopAppBar(
-                navigateBack = navigateBack,
                 scrollBehavior = scrollBehavior,
                 searchText = searchScreenUiState.searchText,
                 onValueChange = { newText: String ->
@@ -108,6 +117,15 @@ fun SearchScreen(
                 }
             )
         },
+        bottomBar = {
+            SharedNavigationBar(
+                navigateToNavigationBarItem = navigateToNavigationBarItem,
+                selectedNavigationItemIndex = NavigationBarItemSelection.selectedNavigationItemIndex,
+                updateNavigationBarSelectedIndex = { index ->
+                    searchViewModel.updateNavigationItemIndex(index)
+                }
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -119,7 +137,7 @@ fun SearchScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    if (searchLog.itemCount > 0) {
+                    if (searchLog.isNotEmpty()) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -140,10 +158,11 @@ fun SearchScreen(
                     }
 
                     items(
-                        count = searchLog.itemCount,
-                        key = searchLog.itemKey { it.searchedText },
-                    ) { index ->
-                        val searchLogItem = searchLog[index]!!
+                        items = searchLog,
+                        key = { searchLogItem ->
+                            searchLogItem.id
+                        }
+                    ) { searchLogItem ->
                         SearchLogItem(
                             searchText = searchLogItem.searchedText,
                             applySearch = {
@@ -158,6 +177,19 @@ fun SearchScreen(
             }
 
             when (val state = searchScreenUiState.movieListState) {
+
+                is SearchScreenMovieListState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        LoadingMovieDataLoadingDisplay(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+
                 is SearchScreenMovieListState.Error -> {
                     Box(
                         modifier = Modifier
@@ -168,18 +200,6 @@ fun SearchScreen(
                                 .align(Alignment.Center),
                             image = R.drawable.favorite_empty,
                             message = state.message
-                        )
-                    }
-                }
-
-                is SearchScreenMovieListState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        LoadingMovieDataLoadingDisplay(
-                            modifier = Modifier
-                                .align(Alignment.Center)
                         )
                     }
                 }
@@ -196,9 +216,7 @@ fun SearchScreen(
                         }
 
                         movieList.itemCount == 0 &&
-                                movieList.loadState.source.append == LoadState.NotLoading(
-                            endOfPaginationReached = true
-                        ) -> {
+                                movieList.loadState.refresh is LoadState.Error -> {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -222,7 +240,7 @@ fun SearchScreen(
 fun SearchLogItem(
     searchText: String,
     applySearch: () -> Unit,
-    removeSearch: () -> Unit
+    removeSearch: () -> Unit,
 ) {
     Row(
         modifier = Modifier

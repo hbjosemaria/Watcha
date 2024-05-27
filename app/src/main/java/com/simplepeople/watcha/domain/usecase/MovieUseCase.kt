@@ -5,7 +5,7 @@ import com.simplepeople.watcha.domain.core.Movie
 import javax.inject.Inject
 
 class MovieUseCase @Inject constructor(
-    private val mixedRepository: MixedMovieRepository
+    private val mixedRepository: MixedMovieRepository,
 ) {
     suspend fun getMovieById(movieId: Long): Movie {
         val mixedResponse = mixedRepository.getMovieById(movieId)

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.Dp
  * @throws IllegalStateException When this function is called with non supported classes, it throws an IllegalStateException.
  * */
 
-inline fun <reified T> TopBarDynamicParamCalc(
+inline fun <reified T> topBarDynamicParamCalc(
     minValue: T,
     maxValue: T,
     fraction: Float = 0f
@@ -46,6 +46,7 @@ inline fun <reified T> TopBarDynamicParamCalc(
             minValue + (availableValueAmount * (1 - fraction))
         }
 
+        //TODO: add exception message to String res
         else -> throw IllegalStateException(
             "An Int, Long, Float or a Dp was expected."
         )

@@ -2,12 +2,12 @@ package com.simplepeople.watcha.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.SearchLogItem
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.domain.usecase.SearchLogUseCase
+import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,18 +20,18 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val movieListUseCase: MovieListUseCase,
-    private val searchLogUseCase: SearchLogUseCase
+    private val searchLogUseCase: SearchLogUseCase,
 ) : ViewModel() {
 
-    private val _searchScreenUiState = MutableStateFlow(SearchScreenUiState())
-    val searchScreenUiState = _searchScreenUiState.asStateFlow()
+    private val _searchScreenState = MutableStateFlow(SearchScreenState())
+    val searchScreenState = _searchScreenState.asStateFlow()
 
     init {
         loadRecentSearchLog()
     }
 
     fun isSearching(text: String) {
-        _searchScreenUiState.value = searchScreenUiState.value.copy(
+        _searchScreenState.value = searchScreenState.value.copy(
             searching = true,
             scrollToTop = false,
             searchText = text,
@@ -43,16 +43,13 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            _searchScreenUiState.value = searchScreenUiState.value.copy(
-                searchLog = searchLogUseCase
-                    .getRecentSearch()
-                    .catch { exception ->
-                        _searchScreenUiState.value = _searchScreenUiState.value.copy(
-                            searchLog = MutableStateFlow(PagingData.empty())
-                        )
-                    }
-                    .cachedIn(viewModelScope)
-            )
+            searchLogUseCase
+                .getRecentSearch()
+                .collect { searchLog ->
+                    _searchScreenState.value = searchScreenState.value.copy(
+                        searchLog = searchLog
+                    )
+                }
         }
     }
 
@@ -81,7 +78,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun cleanSearchText() {
-        _searchScreenUiState.value = searchScreenUiState.value.copy(
+        _searchScreenState.value = searchScreenState.value.copy(
             searchText = ""
         )
     }
@@ -90,12 +87,12 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            _searchScreenUiState.value = searchScreenUiState.value.copy(
+            _searchScreenState.value = searchScreenState.value.copy(
                 movieListState = SearchScreenMovieListState.Success(
                     movieList = movieListUseCase
                         .getByTitle(text)
                         .catch { exception ->
-                            _searchScreenUiState.value = searchScreenUiState.value.copy(
+                            _searchScreenState.value = searchScreenState.value.copy(
                                 movieListState = SearchScreenMovieListState.Error(
                                     message = R.string.movie_list_error
                                 )
@@ -110,7 +107,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun cleanMovieSearch() {
-        _searchScreenUiState.value = searchScreenUiState.value.copy(
+        _searchScreenState.value = searchScreenState.value.copy(
             searching = false,
             movieListState = SearchScreenMovieListState.Success(
                 movieList = emptyFlow(),
@@ -119,10 +116,14 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun resetAfterSearch() {
-        _searchScreenUiState.value = searchScreenUiState.value.copy(
+        _searchScreenState.value = searchScreenState.value.copy(
             searching = false,
             scrollToTop = true
         )
+    }
+
+    fun updateNavigationItemIndex(index: Int) {
+        NavigationBarItemSelection.selectedNavigationItemIndex = index
     }
 
 }

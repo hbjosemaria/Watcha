@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.module
+package com.simplepeople.watcha.data.modules
 
 import android.content.Context
 import androidx.room.Room

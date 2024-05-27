@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.domain.core
 
-import com.simplepeople.watcha.data.model.local.MovieFavorite
-import com.simplepeople.watcha.data.model.local.MovieModel
+import com.simplepeople.watcha.data.model.local.MovieEntity
+import com.simplepeople.watcha.data.model.local.MovieFavoriteEntity
 import javax.annotation.concurrent.Immutable
 
 @Immutable
@@ -13,10 +13,10 @@ data class Movie(
     val genres: List<Genre> = listOf(),
     val releaseDate: String = "",
     val voteAverage: String? = "",
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
 ) {
-    fun toDao(): MovieModel {
-        return MovieModel(
+    fun toDao(): MovieEntity {
+        return MovieEntity(
             movieId = this.movieId,
             title = this.title,
             overview = this.overview,
@@ -28,8 +28,8 @@ data class Movie(
         )
     }
 
-    fun toFavoriteDao() : MovieFavorite {
-        return MovieFavorite(
+    fun toFavoriteDao(): MovieFavoriteEntity {
+        return MovieFavoriteEntity(
             movie = this.toDao()
         )
     }

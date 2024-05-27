@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavoriteUseCase @Inject constructor(
-    private val repository: MovieFavoriteRepository
+    private val repository: MovieFavoriteRepository,
 ) {
 
     fun getFavorites(): Flow<PagingData<Movie>> =

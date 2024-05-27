@@ -5,10 +5,10 @@ import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import kotlinx.coroutines.flow.Flow
 
-data class HomeScreenUiState(
+data class HomeScreenState(
     val scrollToTop: Boolean = false,
     val selectedHomeFilterOption: HomeFilterOptions = HomeFilterOptions.NowPlaying,
-    val movieListState: HomeScreenMovieListState = HomeScreenMovieListState.Loading
+    val movieListState: HomeScreenMovieListState = HomeScreenMovieListState.Loading,
 )
 
 sealed class HomeScreenMovieListState {

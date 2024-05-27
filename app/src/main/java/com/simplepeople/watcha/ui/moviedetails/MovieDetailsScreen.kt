@@ -60,7 +60,7 @@ fun MovieDetailsScreen(
     )
 ) {
 
-    val movieDetailsUiState by movieDetailsViewModel.movieDetailsUiState.collectAsState()
+    val movieDetailsUiState by movieDetailsViewModel.movieDetailsState.collectAsState()
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current

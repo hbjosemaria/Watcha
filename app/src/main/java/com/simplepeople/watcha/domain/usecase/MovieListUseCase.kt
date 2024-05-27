@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.simplepeople.watcha.data.model.local.MovieModel
+import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.pager.ExternalFilteredMoviePagingSource
 import com.simplepeople.watcha.data.remotemediator.MovieRemoteMediator
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MovieListUseCase @Inject constructor(
     private val apiService: ExternalMovieRepository,
     private val roomService: LocalMovieRepository,
-    private val movieRemoteMediator: MovieRemoteMediator.MovieRemoteMediatorFactory
+    private val movieRemoteMediator: MovieRemoteMediator.MovieRemoteMediatorFactory,
 ) {
 
     //This case uses a cache system with RemoteMediator as it will speed up its fetching and displaying data speed
@@ -29,9 +29,11 @@ class MovieListUseCase @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = 20,
+                enablePlaceholders = false,
                 maxSize = 220,
-                initialLoadSize = 220,
-                enablePlaceholders = false
+                //This is not the optimal approach as it is adapted to the duplication bug from TMDB API.
+                //You don't need to make an initial load of the whole list
+                initialLoadSize = 220
             ),
             remoteMediator = movieRemoteMediator.create(filterOption),
             pagingSourceFactory = {
@@ -39,7 +41,7 @@ class MovieListUseCase @Inject constructor(
             }
         ).flow
             .map { pagingData ->
-                pagingData.map { movie: MovieModel ->
+                pagingData.map { movie: MovieEntity ->
                     movie.toDomain()
                 }
             }

@@ -1,18 +1,18 @@
 package com.simplepeople.watcha.ui.common.composables.topbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +33,7 @@ import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopAppBar(
-    navigateBack: () -> Unit,
+//    navigateBack: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     searchText: String,
     onValueChange: (String) -> Unit,
@@ -49,17 +49,15 @@ fun SearchTopAppBar(
 
     CenterAlignedTopAppBar(
         modifier = Modifier
-            .padding(
-                bottom = 6.dp
-            ),
+            .padding(bottom = 6.dp),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
         scrollBehavior = scrollBehavior,
         title = {
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(
-                        x = 20.dp
-                    )
                     .focusRequester(focusRequester)
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
@@ -94,15 +92,6 @@ fun SearchTopAppBar(
                         )
                     }
                 }
-            )
-        },
-        navigationIcon = {
-            DefaultIconButton(
-                action = navigateBack,
-                iconImage = Icons.Filled.ArrowBack,
-                contentDescription = Icons.Filled.ArrowBack.name,
-                modifier = Modifier
-                    .size(30.dp)
             )
         }
     )

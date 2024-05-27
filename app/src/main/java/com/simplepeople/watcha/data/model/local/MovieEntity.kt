@@ -8,9 +8,7 @@ import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
 
 @Entity(tableName = "movie")
-data class MovieModel(
-//    @PrimaryKey(autoGenerate = true)
-//    val UUID: Int = 0,
+data class MovieEntity(
     @PrimaryKey
     val movieId: Long = 1,
     val title: String = "",

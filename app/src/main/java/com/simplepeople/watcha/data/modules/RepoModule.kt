@@ -1,5 +1,11 @@
-package com.simplepeople.watcha.data.module
+package com.simplepeople.watcha.data.modules
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.simplepeople.watcha.data.repository.CacheRepository
+import com.simplepeople.watcha.data.repository.CacheRepositoryImpl
+import com.simplepeople.watcha.data.repository.DataStoreRepository
+import com.simplepeople.watcha.data.repository.DataStoreRepositoryImpl
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.data.repository.ExternalMovieRepositoryImpl
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
@@ -44,9 +50,7 @@ object RepoModule {
 
     @Provides
     @Singleton
-    fun provideMixedMovieRepository(
-        roomService: MovieFavoriteDao,
-        apiService: TmdbApiService
+    fun provideMixedMovieRepository(roomService: MovieFavoriteDao, apiService: TmdbApiService,
     ): MixedMovieRepository {
         return MixedMovieRepositoryImpl(roomService, apiService)
     }
@@ -73,6 +77,18 @@ object RepoModule {
     @Singleton
     fun provideMovieCategoryRepository(roomService: MovieFavoriteDao): MovieFavoriteRepository {
         return MovieFavoriteRepositoryImpl(roomService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreRepository(dataStore: DataStore<Preferences>): DataStoreRepository {
+        return DataStoreRepositoryImpl(dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCacheRepository(dataStore: DataStore<Preferences>): CacheRepository {
+        return CacheRepositoryImpl(dataStore)
     }
 
 }

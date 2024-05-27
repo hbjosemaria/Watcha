@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.module
+package com.simplepeople.watcha.data.modules
 
 import com.simplepeople.watcha.BuildConfig
 import com.simplepeople.watcha.data.services.TmdbApiService

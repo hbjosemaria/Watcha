@@ -1,12 +1,11 @@
 package com.simplepeople.watcha.data.model.external
 
 import com.google.gson.annotations.SerializedName
-import com.simplepeople.watcha.data.model.local.MovieModel
+import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.services.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Movie
 
-//DTO Class
-data class MovieListResponseModel(
+data class MovieListResponseDto(
     @SerializedName("page") var page: Int = 1,
     @SerializedName("results") var results: ArrayList<Results> = arrayListOf(),
     @SerializedName("total_pages") var totalPages: Int = 0,
@@ -29,7 +28,6 @@ data class MovieListResponseModel(
         @SerializedName("vote_count") var voteCount: Int = 0
     )
 
-    //Function for mapping to Domain class
     fun toDomain(): List<Movie> =
         results.map {
             Movie(
@@ -42,10 +40,9 @@ data class MovieListResponseModel(
             )
         }
 
-
-    fun toDao(): List<MovieModel> =
+    fun toDao(): List<MovieEntity> =
         results.map {
-            MovieModel(
+            MovieEntity(
                 movieId = it.id,
                 title = it.title,
                 overview = it.overview,

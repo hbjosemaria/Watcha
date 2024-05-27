@@ -5,8 +5,7 @@ import com.simplepeople.watcha.data.services.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
 
-//DTO Class
-data class MovieResponseModel(
+data class MovieResponseDto(
     @SerializedName("adult")
     val adult: Boolean = false,
     @SerializedName("backdrop_path")
@@ -108,7 +107,6 @@ data class MovieResponseModel(
         val name: String = ""
     )
 
-    //Mapping function to Domain class
     fun toDomain(): Movie {
         return Movie(
             movieId = this.id,
