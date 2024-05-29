@@ -19,7 +19,7 @@ sealed class MainAppScreens(
         }
 
         fun buildRoute(): String {
-            return "$route/{movieId}"
+            return "$route/{${NavigationVariableNames.MOVIE_ID.variableName}}"
         }
     }
 

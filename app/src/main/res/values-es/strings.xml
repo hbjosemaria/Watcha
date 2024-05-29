@@ -71,4 +71,5 @@
     <string name="main">Principal</string>
     <string name="settings_language">Idioma</string>
     <string name="app_language">Idioma de la aplicación</string>
+    <string name="settings_language_explanation">Al cambiar este ajuste, tanto la app como las llamadas a la api TMDB serán mostradas en el idioma seleccionado.</string>
 </resources>

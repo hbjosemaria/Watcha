@@ -203,7 +203,7 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 
 enum class NavigationVariableNames(val variableName : String) {
     REFRESH_MOVIE_LIST("refresh_movie_list"),
-    MOVIE_ID("movie_id")
+    MOVIE_ID("movieId")
 }
 
 
