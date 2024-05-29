@@ -8,6 +8,7 @@ It uses:
 - MVVM
 - Clean architecture
 - Compose navigation
+  * Nested navigation  
 - Room
 - Hilt
 - Coil
@@ -15,5 +16,6 @@ It uses:
 - Paging 3
   * PagingSource
   * RemoteMediator
-- Cached system for offline access
+- Cache system for offline access
 - Custom LoadStates per ViewModel for better UX
+- App language selection
