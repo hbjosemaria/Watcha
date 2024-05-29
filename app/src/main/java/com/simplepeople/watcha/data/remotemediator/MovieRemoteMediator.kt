@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.data.remotemediator
 
+import androidx.compose.ui.text.intl.Locale
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -107,11 +108,13 @@ class MovieRemoteMediator @AssistedInject constructor(
                 }
             }
 
+            val language = Locale.current.language
+
             val movies = when (filterOption) {
-                HomeFilterOptions.NowPlaying -> apiService.getNowPlayingByPage(page)
-                HomeFilterOptions.Popular -> apiService.getPopularByPage(page)
-                HomeFilterOptions.TopRated -> apiService.getTopRatedByPage(page)
-                HomeFilterOptions.Upcoming -> apiService.getUpcomingByPage(page)
+                HomeFilterOptions.NowPlaying -> apiService.getNowPlayingByPage(page, language)
+                HomeFilterOptions.Popular -> apiService.getPopularByPage(page, language)
+                HomeFilterOptions.TopRated -> apiService.getTopRatedByPage(page, language)
+                HomeFilterOptions.Upcoming -> apiService.getUpcomingByPage(page, language)
             }.toDao()
 
             val remoteKeys = movies.map { movieModel ->

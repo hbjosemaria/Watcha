@@ -33,6 +33,7 @@ fun HomeTopAppBar(
     filterTopRated: () -> Unit,
     filterUpcoming: () -> Unit,
     scrollToTop: () -> Unit,
+    loadMovies: () -> Unit,
     navigateToSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     topBarAlpha: Float? = null
@@ -59,6 +60,7 @@ fun HomeTopAppBar(
                     text = R.string.home_now_playing,
                     action = {
                         filterNowPlaying()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -68,6 +70,7 @@ fun HomeTopAppBar(
                     text = R.string.home_popular,
                     action = {
                         filterPopular()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -77,6 +80,7 @@ fun HomeTopAppBar(
                     text = R.string.home_top_rated,
                     action = {
                         filterTopRated()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -86,6 +90,7 @@ fun HomeTopAppBar(
                     text = R.string.home_upcoming,
                     action = {
                         filterUpcoming()
+                        loadMovies()
                         scrollToTop()
                     }
                 )

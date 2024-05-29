@@ -13,12 +13,16 @@ import javax.inject.Inject
 
 //Model interface guide for function implementation
 interface ExternalMovieRepository {
-    suspend fun getMovieById(movieId: Long): MovieResponseDto
-    suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponseDto
-    suspend fun getNowPlayingByPage(page: Int): MovieListResponseDto
-    suspend fun getPopularByPage(page: Int): MovieListResponseDto
-    suspend fun getTopRatedByPage(page: Int): MovieListResponseDto
-    suspend fun getUpcomingByPage(page: Int): MovieListResponseDto
+    suspend fun getMoviesByTitle(
+        searchText: String,
+        page: Int,
+        language: String,
+    ): MovieListResponseDto
+    suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto
+    suspend fun getNowPlayingByPage(page: Int, language: String): MovieListResponseDto
+    suspend fun getPopularByPage(page: Int, language: String): MovieListResponseDto
+    suspend fun getTopRatedByPage(page: Int, language: String): MovieListResponseDto
+    suspend fun getUpcomingByPage(page: Int, language: String): MovieListResponseDto
 }
 
 //Model interface function for function implementation
@@ -35,38 +39,38 @@ interface LocalMovieRepository {
 
 //Model interface function for function implementation
 interface MixedMovieRepository {
-    suspend fun getMovieById(movieId: Long): Pair<MovieResponseDto, Int>
+    suspend fun getMovieById(movieId: Long, language: String): Pair<MovieResponseDto, Int>
 }
 
 //Implementation of repo
 class ExternalMovieRepositoryImpl @Inject constructor(
-    private val apiService: TmdbApiService
+    private val apiService: TmdbApiService,
 ) : ExternalMovieRepository {
 
-    override suspend fun getMovieById(movieId: Long): MovieResponseDto =
-        apiService.getMovieById(movieId)
+    override suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto =
+        apiService.getMovieById(movieId, language)
 
-    override suspend fun getMoviesByTitle(searchText: String, page: Int): MovieListResponseDto =
-        apiService.getMoviesByTitle(searchText, page)
+    override suspend fun getMoviesByTitle(searchText: String, page: Int, language: String): MovieListResponseDto =
+        apiService.getMoviesByTitle(searchText, page, language)
 
-    override suspend fun getNowPlayingByPage(page: Int): MovieListResponseDto =
-        apiService.getNowPlayingByPage(page)
+    override suspend fun getNowPlayingByPage(page: Int, language: String): MovieListResponseDto =
+        apiService.getNowPlayingByPage(page, language)
 
-    override suspend fun getPopularByPage(page: Int): MovieListResponseDto =
-        apiService.getPopularByPage(page)
+    override suspend fun getPopularByPage(page: Int, language: String): MovieListResponseDto =
+        apiService.getPopularByPage(page, language)
 
-    override suspend fun getTopRatedByPage(page: Int): MovieListResponseDto =
-        apiService.getTopRatedByPage(page)
+    override suspend fun getTopRatedByPage(page: Int, language: String): MovieListResponseDto =
+        apiService.getTopRatedByPage(page, language)
 
-    override suspend fun getUpcomingByPage(page: Int): MovieListResponseDto =
-        apiService.getUpcomingByPage(page)
+    override suspend fun getUpcomingByPage(page: Int, language: String): MovieListResponseDto =
+        apiService.getUpcomingByPage(page, language)
 
 
 }
 
 //Implementation of repo
 class LocalMovieRepositoryImpl @Inject constructor(
-    private val apiService: MovieDao
+    private val apiService: MovieDao,
 ) : LocalMovieRepository {
 
     override fun getAllMovies(): PagingSource<Int, MovieEntity> =
@@ -94,12 +98,11 @@ class LocalMovieRepositoryImpl @Inject constructor(
 //Implementation of repo
 class MixedMovieRepositoryImpl @Inject constructor(
     private val roomService: MovieFavoriteDao,
-    private val apiService: TmdbApiService
+    private val apiService: TmdbApiService,
 ) : MixedMovieRepository {
-    override suspend fun getMovieById(movieId: Long): Pair<MovieResponseDto, Int> {
-        return Pair(
-            apiService.getMovieById(movieId),
+    override suspend fun getMovieById(movieId: Long, language: String): Pair<MovieResponseDto, Int> =
+        Pair(
+            apiService.getMovieById(movieId, language),
             roomService.checkIfMovieIsFavorite(movieId)
         )
-    }
 }

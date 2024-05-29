@@ -69,4 +69,7 @@
     <string name="github_url">https://github.com/hbjosemaria</string>
     <string name="linkedin_url">https://linkedin.com/in/josemariahb</string>
     <string name="mail_to_gmail">mailto:hbjosemaria@gmail.com</string>
+    <string name="main">Main</string>
+    <string name="settings_language">Language</string>
+    <string name="app_language">App language</string>
 </resources>

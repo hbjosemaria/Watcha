@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.simplepeople.watcha.ui.navigation.AppScreens
+import com.simplepeople.watcha.ui.navigation.MainAppScreens
 
 @Composable
 fun SharedNavigationBar(
@@ -102,29 +102,29 @@ class BottomNavigationItemProvider {
     companion object {
         val navigationItemLists: List<NavigationItem> = listOf(
             NavigationItem(
-                AppScreens.HomeScreen.route,
+                MainAppScreens.HomeScreen.route,
                 Icons.Filled.Home,
                 Icons.Outlined.Home,
-                AppScreens.HomeScreen.name
+                MainAppScreens.HomeScreen.name
             ),
             NavigationItem(
-                AppScreens.SearchScreen.route,
+                MainAppScreens.SearchScreen.route,
                 Icons.Filled.Search,
                 Icons.Filled.Search,
-                AppScreens.SearchScreen.name
+                MainAppScreens.SearchScreen.name
             ),
             NavigationItem(
-                AppScreens.FavoriteScreen.route,
+                MainAppScreens.FavoriteScreen.route,
                 Icons.Filled.Favorite,
                 Icons.Outlined.FavoriteBorder,
-                AppScreens.FavoriteScreen.name
+                MainAppScreens.FavoriteScreen.name
             ),
             //TODO: implement profile screen
             NavigationItem(
-                AppScreens.FavoriteScreen.route,
+                MainAppScreens.FavoriteScreen.route,
                 Icons.Filled.Person,
                 Icons.Outlined.Person,
-                AppScreens.FavoriteScreen.name
+                MainAppScreens.FavoriteScreen.name
             )
         )
     }

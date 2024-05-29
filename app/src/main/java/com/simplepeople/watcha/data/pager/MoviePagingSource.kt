@@ -1,5 +1,6 @@
 package com.simplepeople.watcha.data.pager
 
+import androidx.compose.ui.text.intl.Locale
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
@@ -55,7 +56,7 @@ class ExternalFilteredMoviePagingSource(
 
         return try {
             val position = params.key ?: 1
-            val response = repository.getMoviesByTitle(searchText, position)
+            val response = repository.getMoviesByTitle(searchText, position, Locale.current.language)
 
             if (response.results.isNotEmpty()) {
                 LoadResult.Page(

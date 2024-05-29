@@ -17,32 +17,38 @@ interface TmdbApiService : ExternalMovieRepository {
 
     @GET("movie/{movie_id}")
     override suspend fun getMovieById(
-        @Path("movie_id") movieId: Long
+        @Path("movie_id") movieId: Long,
+        @Query("language") language: String
     ): MovieResponseDto
 
     @GET("search/movie")
     override suspend fun getMoviesByTitle(
         @Query("query") searchText: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("language") language: String
     ): MovieListResponseDto
 
     @GET("movie/now_playing")
     override suspend fun getNowPlayingByPage(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("language") language: String
     ): MovieListResponseDto
 
     @GET("movie/popular")
     override suspend fun getPopularByPage(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("language") language: String
     ): MovieListResponseDto
 
     @GET("movie/top_rated")
     override suspend fun getTopRatedByPage(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("language") language: String
     ): MovieListResponseDto
 
     @GET("movie/upcoming")
     override suspend fun getUpcomingByPage(
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("language") language: String
     ): MovieListResponseDto
 }
