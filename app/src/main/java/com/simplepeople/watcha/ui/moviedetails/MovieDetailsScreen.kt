@@ -60,7 +60,7 @@ fun MovieDetailsScreen(
     )
 ) {
 
-    val movieDetailsUiState by movieDetailsViewModel.movieDetailsUiState.collectAsState()
+    val movieDetailsUiState by movieDetailsViewModel.movieDetailsState.collectAsState()
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -150,6 +150,7 @@ private fun MovieDetailsHeader(
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .fallback(R.drawable.movie_placeholder)
                 .placeholder(R.drawable.movie_placeholder)
+                .error(R.drawable.movie_placeholder)
                 .build(),
             contentDescription = movie.title,
             contentScale = ContentScale.FillWidth,

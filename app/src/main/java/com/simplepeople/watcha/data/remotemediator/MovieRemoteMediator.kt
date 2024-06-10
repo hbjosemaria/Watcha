@@ -1,19 +1,17 @@
 package com.simplepeople.watcha.data.remotemediator
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.compose.ui.text.intl.Locale
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import coil.network.HttpException
-import com.simplepeople.watcha.data.model.local.MovieCategory
-import com.simplepeople.watcha.data.model.local.MovieModel
-import com.simplepeople.watcha.data.model.local.RemoteKeys
-import com.simplepeople.watcha.data.pager.TMDB_API_MAX_PAGES
+import com.simplepeople.watcha.data.model.local.MovieCategoryEntity
+import com.simplepeople.watcha.data.model.local.MovieEntity
+import com.simplepeople.watcha.data.model.local.RemoteKeysEntity
+import com.simplepeople.watcha.data.pagingsource.TMDB_API_MAX_PAGES
+import com.simplepeople.watcha.data.repository.CacheRepository
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
@@ -23,8 +21,6 @@ import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import okio.IOException
 import java.util.Calendar
 import java.util.TimeZone
@@ -36,9 +32,9 @@ class MovieRemoteMediator @AssistedInject constructor(
     private val localMovieRepository: LocalMovieRepository,
     private val remoteKeysRepository: RemoteKeysRepository,
     private val movieCategoryRepository: MovieCategoryRepository,
-    private val dataStore: DataStore<Preferences>,
-    @Assisted private val filterOption: HomeFilterOptions
-) : RemoteMediator<Int, MovieModel>() {
+    private val cacheRepository: CacheRepository,
+    @Assisted private val filterOption: HomeFilterOptions,
+) : RemoteMediator<Int, MovieEntity>() {
 
     @AssistedFactory
     interface MovieRemoteMediatorFactory {
@@ -47,9 +43,7 @@ class MovieRemoteMediator @AssistedInject constructor(
 
     override suspend fun initialize(): InitializeAction {
 
-        val lastTimeoutCache = dataStore.data.map { preferences ->
-            preferences[longPreferencesKey("last_timeout_cache_category${filterOption.categoryId}")]
-        }.first()
+        val lastTimeoutCache = cacheRepository.loadMovieCacheExpiration(filterOption.categoryId)
         val cacheTimeout = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         cacheTimeout.add(Calendar.DAY_OF_YEAR, 1)
         cacheTimeout.set(Calendar.HOUR_OF_DAY, 0)
@@ -58,25 +52,22 @@ class MovieRemoteMediator @AssistedInject constructor(
         cacheTimeout.set(Calendar.MILLISECOND, 0)
         val currentTime = System.currentTimeMillis()
 
-
         return when {
             lastTimeoutCache == null -> {
-                dataStore.edit { preferences ->
-                    preferences[longPreferencesKey("last_timeout_cache_category${filterOption.categoryId}")] =
-                        cacheTimeout.timeInMillis
-                }
+                cacheRepository.saveMovieCacheExpiration(
+                    categoryId = filterOption.categoryId,
+                    cacheExpiration = cacheTimeout.timeInMillis
+                )
                 InitializeAction.LAUNCH_INITIAL_REFRESH
             }
 
             currentTime > lastTimeoutCache -> {
                 database.withTransaction {
-                    dataStore.edit { preferences ->
-                        preferences.clear()
-                    }
-                    dataStore.edit { preferences ->
-                        preferences[longPreferencesKey("last_timeout_cache_category${filterOption.categoryId}")] =
-                            cacheTimeout.timeInMillis
-                    }
+                    cacheRepository.clearMovieCacheExpiration()
+                    cacheRepository.saveMovieCacheExpiration(
+                        categoryId = filterOption.categoryId,
+                        cacheExpiration = cacheTimeout.timeInMillis
+                    )
                     localMovieRepository.clearCachedMovies()
                     movieCategoryRepository.clearAll()
                     remoteKeysRepository.clearRemoteKeys()
@@ -94,7 +85,7 @@ class MovieRemoteMediator @AssistedInject constructor(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, MovieModel>
+        state: PagingState<Int, MovieEntity>,
     ): MediatorResult {
         return try {
             val page = when (loadType) {
@@ -117,15 +108,17 @@ class MovieRemoteMediator @AssistedInject constructor(
                 }
             }
 
+            val language = Locale.current.language
+
             val movies = when (filterOption) {
-                HomeFilterOptions.NowPlaying -> apiService.getNowPlayingByPage(page)
-                HomeFilterOptions.Popular -> apiService.getPopularByPage(page)
-                HomeFilterOptions.TopRated -> apiService.getTopRatedByPage(page)
-                HomeFilterOptions.Upcoming -> apiService.getUpcomingByPage(page)
-            }.toDao()
+                HomeFilterOptions.NowPlaying -> apiService.getNowPlayingByPage(page, language)
+                HomeFilterOptions.Popular -> apiService.getPopularByPage(page, language)
+                HomeFilterOptions.TopRated -> apiService.getTopRatedByPage(page, language)
+                HomeFilterOptions.Upcoming -> apiService.getUpcomingByPage(page, language)
+            }.toEntity()
 
             val remoteKeys = movies.map { movieModel ->
-                RemoteKeys(
+                RemoteKeysEntity(
                     movieId = movieModel.movieId,
                     categoryId = filterOption.categoryId,
                     prevKey = if (page == 1) null else page - 1,
@@ -134,7 +127,7 @@ class MovieRemoteMediator @AssistedInject constructor(
             }
 
             val movieCategories = movies.mapIndexed { index, movieModel ->
-                MovieCategory(
+                MovieCategoryEntity(
                     movieId = movieModel.movieId,
                     categoryId = filterOption.categoryId,
                     position = index + ((page - 1) * state.config.pageSize) + 1
@@ -156,9 +149,9 @@ class MovieRemoteMediator @AssistedInject constructor(
     }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, MovieModel>,
-        category: Int
-    ): RemoteKeys? {
+        state: PagingState<Int, MovieEntity>,
+        category: Int,
+    ): RemoteKeysEntity? {
         return state.pages
             .lastOrNull { it.data.isNotEmpty() }
             ?.data
@@ -172,9 +165,9 @@ class MovieRemoteMediator @AssistedInject constructor(
     }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, MovieModel>,
-        category: Int
-    ): RemoteKeys? {
+        state: PagingState<Int, MovieEntity>,
+        category: Int,
+    ): RemoteKeysEntity? {
         return state.pages
             .firstOrNull { it.data.isNotEmpty() }
             ?.data
@@ -188,9 +181,9 @@ class MovieRemoteMediator @AssistedInject constructor(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, MovieModel>,
-        category: Int
-    ): RemoteKeys? {
+        state: PagingState<Int, MovieEntity>,
+        category: Int,
+    ): RemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.movieId?.let { movieId ->
                 remoteKeysRepository.getRemoteKey(

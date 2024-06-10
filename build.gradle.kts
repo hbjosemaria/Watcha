@@ -5,3 +5,15 @@ plugins {
     val hiltVersion = "2.51.1"
     id("com.google.dagger.hilt.android") version hiltVersion apply false
 }
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath (libs.gradle)
+        classpath (libs.kotlin.gradle.plugin)
+        classpath (libs.hilt.android.gradle.plugin)
+    }
+}

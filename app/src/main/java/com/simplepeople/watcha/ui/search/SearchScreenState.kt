@@ -4,13 +4,12 @@ import androidx.paging.PagingData
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.core.SearchLogItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
-data class SearchScreenUiState(
+data class SearchScreenState(
     val searchText: String = "",
     val searching: Boolean = false,
     val scrollToTop: Boolean = false,
-    val searchLog: Flow<PagingData<SearchLogItem>> = MutableStateFlow(PagingData.empty()),
+    val searchLog: List<SearchLogItem> = listOf(),
     val movieListState: SearchScreenMovieListState = SearchScreenMovieListState.Loading
 )
 

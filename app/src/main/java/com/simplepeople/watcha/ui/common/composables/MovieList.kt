@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.simplepeople.watcha.domain.core.Movie
@@ -25,12 +27,12 @@ fun HomeMovieList(
     movieList: LazyPagingItems<Movie>,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
-    paddingValues: PaddingValues? = PaddingValues(top = 5.dp)
+    paddingValues: PaddingValues? = PaddingValues(top = 5.dp),
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = paddingValues!!,
-        verticalArrangement = Arrangement.spacedBy(5.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(5.dp),
         state = lazyGridState
     ) {
@@ -49,7 +51,8 @@ fun HomeMovieList(
                         .fillMaxWidth()
                         .clickable {
                             navigateToMovieDetails(movie.movieId)
-                        }
+                        },
+                    textSize = 16.sp
                 )
             }
         }
@@ -74,7 +77,6 @@ fun HomeMovieList(
             )
         }
     }
-
 }
 
 @Composable
@@ -82,7 +84,7 @@ fun MovieList(
     movieList: LazyPagingItems<Movie>,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
-    paddingValues: PaddingValues? = null
+    paddingValues: PaddingValues? = null,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -106,6 +108,43 @@ fun MovieList(
                         navigateToMovieDetails(movie.movieId)
                     }
             )
+        }
+    }
+}
+
+
+@Composable
+fun MovieListPlaceholder(
+    isHomeScreen: Boolean = false,
+    paddingValues: PaddingValues = PaddingValues(top = 5.dp),
+) {
+    LazyVerticalGrid(
+        modifier = Modifier
+            .fillMaxSize(),
+        columns = GridCells.Fixed(3),
+        contentPadding = paddingValues,
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        state = rememberLazyGridState(),
+    ) {
+
+        if (isHomeScreen) {
+            item(
+                span = {
+                    GridItemSpan(3)
+                }
+            ) {
+                MovieItemPlaceholder(
+                    modifier = Modifier
+                        .padding(WindowInsets.safeDrawing.asPaddingValues())
+                )
+            }
+        }
+
+        items(
+            count = if (isHomeScreen) 13 else 12
+        ) {
+            MovieItemPlaceholder()
         }
     }
 }

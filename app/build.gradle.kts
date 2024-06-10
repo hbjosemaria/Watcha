@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.simplepeople.watcha.tools.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -57,28 +57,54 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
+    //Testing dependencies
+    androidTestImplementation(libs.ui.test.manifest)
+    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.intents)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.androidx.runner)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.androidx.datastore.core)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.truth)
+//    testImplementation(libs.robolectric)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.ui.test.manifest)
+    kaptTest(libs.com.google.dagger.hilt.compiler2)
+    kaptAndroidTest(libs.com.google.dagger.hilt.compiler2)
+
+    //Regular dependencies
+    implementation(libs.androidx.paging.testing.android)
+    implementation(libs.androidx.runner)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.paging.runtime.ktx)
-    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.paging.compose)
-    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.coil.compose)
-    implementation(libs.retrofit)
-    implementation(libs.converter.scalars)
-    implementation(libs.converter.gson)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation (libs.hilt.android.v2511)
-    kapt(libs.hilt.compiler)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -86,13 +112,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.material)
+    implementation(libs.hilt.android.v2511)
+    implementation(libs.coil.compose)
+    implementation(libs.retrofit)
+    implementation(libs.core.ktx)
+    implementation(libs.converter.scalars)
+    implementation(libs.converter.gson)
+
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.androidx.room.compiler)
+    kapt(libs.hilt.compiler)
+    kapt(libs.com.google.dagger.hilt.compiler2)
 }
 
 kapt {

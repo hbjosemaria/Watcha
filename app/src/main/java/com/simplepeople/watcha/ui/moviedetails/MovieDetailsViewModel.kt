@@ -27,8 +27,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
         fun create(movieId: Long): MovieDetailsViewModel
     }
 
-    val _movieDetailsUiState = MutableStateFlow(MovieDetailsUiState())
-    val movieDetailsUiState = _movieDetailsUiState.asStateFlow()
+    private val _movieDetailsState = MutableStateFlow(MovieDetailsState())
+    val movieDetailsState = _movieDetailsState.asStateFlow()
 
     init {
         getMovieDetails()
@@ -38,7 +38,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            when (val state = movieDetailsUiState.value.movieState) {
+            when (val state = movieDetailsState.value.movieState) {
                 is MovieDetailsMovieState.Error,
                 MovieDetailsMovieState.Loading -> {
                     //Do nothing
@@ -50,7 +50,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         isFavorite = !state.movie.isFavorite
                     )
 
-                    _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                    _movieDetailsState.value = _movieDetailsState.value.copy(
                         movieState = MovieDetailsMovieState.Success(
                             movie = movie
                         )
@@ -59,7 +59,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
                     try {
                         if (movie.isFavorite) {
                             favoriteUseCase.saveFavorite(movie)
-                            _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                            _movieDetailsState.value = _movieDetailsState.value.copy(
                                 snackBarItem = SnackbarItem(
                                     show = true,
                                     isError = false,
@@ -68,7 +68,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
                             )
                         } else {
                             favoriteUseCase.deleteFavorite(movie.movieId)
-                            _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                            _movieDetailsState.value = _movieDetailsState.value.copy(
                                 snackBarItem = SnackbarItem(
                                     show = true,
                                     isError = false,
@@ -77,7 +77,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
                             )
                         }
                     } catch (e: IllegalStateException) {
-                        _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                        _movieDetailsState.value = _movieDetailsState.value.copy(
                             snackBarItem = SnackbarItem(
                                 show = true,
                                 isError = true,
@@ -91,7 +91,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
     }
 
     fun resetSnackbar() {
-        _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+        _movieDetailsState.value = _movieDetailsState.value.copy(
             snackBarItem = SnackbarItem(
                 show = false
             )
@@ -103,13 +103,13 @@ class MovieDetailsViewModel @AssistedInject constructor(
             context = Dispatchers.IO
         ) {
             try {
-                _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                _movieDetailsState.value = _movieDetailsState.value.copy(
                     movieState = MovieDetailsMovieState.Success(
                         movie = movieUseCase.getMovieById(movieId)
                     )
                 )
             } catch (e: Exception) {
-                _movieDetailsUiState.value = _movieDetailsUiState.value.copy(
+                _movieDetailsState.value = _movieDetailsState.value.copy(
                     movieState = MovieDetailsMovieState.Error(
                         message = R.string.movie_list_error
                     )

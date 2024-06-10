@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val favoriteUseCase: FavoriteUseCase
+    private val favoriteUseCase: FavoriteUseCase,
 ) : ViewModel() {
 
-    private val _favoriteScreenUiState = MutableStateFlow(FavoriteScreenUiState())
-    val favoriteScreenUiState = _favoriteScreenUiState.asStateFlow()
+    private val _favoriteScreenState = MutableStateFlow(FavoriteScreenState())
+    val favoriteScreenState = _favoriteScreenState.asStateFlow()
 
     init {
         getFavorites()
@@ -30,12 +30,12 @@ class FavoriteViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            _favoriteScreenUiState.value = favoriteScreenUiState.value.copy(
+            _favoriteScreenState.value = favoriteScreenState.value.copy(
                 movieListState = FavoriteScreenMovieListState.Success(
                     movieList = favoriteUseCase
                         .getFavorites()
                         .catch {
-                            _favoriteScreenUiState.value = favoriteScreenUiState.value.copy(
+                            _favoriteScreenState.value = favoriteScreenState.value.copy(
                                 movieListState = FavoriteScreenMovieListState.Error(R.string.movie_list_error)
                             )
                         }
@@ -46,7 +46,7 @@ class FavoriteViewModel @Inject constructor(
     }
 
     fun scrollingToTop(scrollToTopAction: Boolean) {
-        _favoriteScreenUiState.value = favoriteScreenUiState.value.copy(
+        _favoriteScreenState.value = favoriteScreenState.value.copy(
             scrollToTop = scrollToTopAction
         )
     }

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun LoadingMovieDataImageDisplay(
     modifier: Modifier,
     image: Int,
-    message: Int
+    message: Int,
 ) {
     Column(
         modifier = modifier
@@ -40,7 +40,7 @@ fun LoadingMovieDataImageDisplay(
 
 @Composable
 fun LoadingMovieDataLoadingDisplay(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     CircularProgressIndicator(
         modifier = modifier

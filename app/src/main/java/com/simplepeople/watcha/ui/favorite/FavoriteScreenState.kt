@@ -4,9 +4,9 @@ import androidx.paging.PagingData
 import com.simplepeople.watcha.domain.core.Movie
 import kotlinx.coroutines.flow.Flow
 
-data class FavoriteScreenUiState(
+data class FavoriteScreenState(
     val scrollToTop: Boolean = false,
-    val movieListState: FavoriteScreenMovieListState = FavoriteScreenMovieListState.Loading
+    val movieListState: FavoriteScreenMovieListState = FavoriteScreenMovieListState.Loading,
 )
 
 sealed class FavoriteScreenMovieListState {

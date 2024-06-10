@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavoriteUseCase @Inject constructor(
-    private val repository: MovieFavoriteRepository
+    private val repository: MovieFavoriteRepository,
 ) {
 
     fun getFavorites(): Flow<PagingData<Movie>> =
@@ -29,7 +29,7 @@ class FavoriteUseCase @Inject constructor(
             }
 
     suspend fun saveFavorite(movie: Movie) =
-        repository.insertFavorite(movie.toFavoriteDao())
+        repository.insertFavorite(movie.toFavoriteEntity())
 
     suspend fun deleteFavorite(movieId: Long) =
         repository.removeFavorite(movieId)

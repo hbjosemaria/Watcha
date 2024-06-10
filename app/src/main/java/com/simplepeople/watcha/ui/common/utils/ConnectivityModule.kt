@@ -15,21 +15,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
+//This module is actually unused, but if we need to check the device connection, we can make use of it
 @Module
 @InstallIn(SingletonComponent::class)
-object ConnectivityModule  {
+object ConnectivityModule {
 
     @Provides
     @Singleton
-    fun provideConnectivityState(@ApplicationContext context: Context) : ConnectivityState =
+    fun provideConnectivityState(@ApplicationContext context: Context): ConnectivityState =
         ConnectivityState(context)
 }
 
-class ConnectivityState @Inject constructor (
-    private val context : Context
+class ConnectivityState @Inject constructor(
+    private val context: Context,
 ) {
 
-    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     //Exposed flow to check network connection status changes
     private val _connectivityStateFlow = MutableStateFlow(false)

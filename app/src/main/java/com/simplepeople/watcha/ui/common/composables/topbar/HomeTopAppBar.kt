@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
@@ -25,23 +25,23 @@ import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarLogo
 
-//HomeScreen TopBar
 @Composable
 fun HomeTopAppBar(
     selectedHomeFilterOption: HomeFilterOptions,
-    navigateToSearchScreen: () -> Unit,
     filterNowPlaying: () -> Unit,
     filterPopular: () -> Unit,
     filterTopRated: () -> Unit,
     filterUpcoming: () -> Unit,
     scrollToTop: () -> Unit,
+    loadMovies: () -> Unit,
+    navigateToSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     topBarAlpha: Float? = null
 ) {
     MediumTopAppBar(
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+            containerColor = MaterialTheme.colorScheme.background.copy(
                 alpha = topBarAlpha ?: 1f
             )
         ),
@@ -60,6 +60,7 @@ fun HomeTopAppBar(
                     text = R.string.home_now_playing,
                     action = {
                         filterNowPlaying()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -69,6 +70,7 @@ fun HomeTopAppBar(
                     text = R.string.home_popular,
                     action = {
                         filterPopular()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -78,6 +80,7 @@ fun HomeTopAppBar(
                     text = R.string.home_top_rated,
                     action = {
                         filterTopRated()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -87,6 +90,7 @@ fun HomeTopAppBar(
                     text = R.string.home_upcoming,
                     action = {
                         filterUpcoming()
+                        loadMovies()
                         scrollToTop()
                     }
                 )
@@ -97,11 +101,12 @@ fun HomeTopAppBar(
         },
         actions = {
             DefaultIconButton(
-                action = navigateToSearchScreen,
-                iconImage = Icons.Default.Search,
-                contentDescription = Icons.Default.Search.name,
+                action = navigateToSettings,
+                iconImage = Icons.Default.Settings,
+                contentDescription = Icons.Default.Settings.name,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(35.dp)
+                    .padding(end = 8.dp)
             )
         }
     )

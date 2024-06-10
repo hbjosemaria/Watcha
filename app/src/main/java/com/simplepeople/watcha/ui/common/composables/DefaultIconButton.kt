@@ -15,7 +15,7 @@ fun DefaultIconButton(
     iconImage: ImageVector,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    tint: Color? = null
+    tint: Color? = null,
 ) {
     IconButton(
         onClick = {

@@ -1,28 +1,28 @@
 package com.simplepeople.watcha.data.repository
 
-import androidx.paging.PagingSource
-import com.simplepeople.watcha.data.model.local.SearchLogItemModel
+import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
 import com.simplepeople.watcha.data.services.SearchLogDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface SearchRepository {
-    fun getRecentSearch(): PagingSource<Int, SearchLogItemModel>
-    fun addNewSearch(searchLogItemModel: SearchLogItemModel): Long
-    fun removeSearch(searchLogItemModel: SearchLogItemModel): Int
+    fun getRecentSearch(): Flow<List<SearchLogItemEntity>>
+    fun addNewSearch(searchLogItemEntity: SearchLogItemEntity): Long
+    fun removeSearch(searchLogItemEntity: SearchLogItemEntity): Int
     fun cleanSearchLog(): Int
 }
 
 class SearchRepositoryImpl @Inject constructor(
-    private val apiService: SearchLogDao
+    private val apiService: SearchLogDao,
 ) : SearchRepository {
-    override fun getRecentSearch(): PagingSource<Int, SearchLogItemModel> =
+    override fun getRecentSearch(): Flow<List<SearchLogItemEntity>> =
         apiService.getRecentSearch()
 
-    override fun addNewSearch(searchLogItemModel: SearchLogItemModel): Long =
-        apiService.addNewSearch(searchLogItemModel)
+    override fun addNewSearch(searchLogItemEntity: SearchLogItemEntity): Long =
+        apiService.addNewSearch(searchLogItemEntity)
 
-    override fun removeSearch(searchLogItemModel: SearchLogItemModel): Int =
-        apiService.removeSearch(searchLogItemModel)
+    override fun removeSearch(searchLogItemEntity: SearchLogItemEntity): Int =
+        apiService.removeSearch(searchLogItemEntity)
 
     override fun cleanSearchLog(): Int =
         apiService.cleanSearchLog()

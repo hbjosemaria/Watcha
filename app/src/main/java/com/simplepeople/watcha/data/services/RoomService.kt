@@ -12,22 +12,23 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplepeople.watcha.data.model.local.MovieCategory
-import com.simplepeople.watcha.data.model.local.MovieFavorite
-import com.simplepeople.watcha.data.model.local.MovieModel
-import com.simplepeople.watcha.data.model.local.RemoteKeys
-import com.simplepeople.watcha.data.model.local.SearchLogItemModel
+import com.simplepeople.watcha.data.model.local.MovieCategoryEntity
+import com.simplepeople.watcha.data.model.local.MovieEntity
+import com.simplepeople.watcha.data.model.local.MovieFavoriteEntity
+import com.simplepeople.watcha.data.model.local.RemoteKeysEntity
+import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
 import com.simplepeople.watcha.data.repository.MovieFavoriteRepository
 import com.simplepeople.watcha.data.repository.RemoteKeysRepository
 import com.simplepeople.watcha.data.repository.SearchRepository
 import com.simplepeople.watcha.domain.core.Genre
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
 @Database(
-    entities = [MovieModel::class, SearchLogItemModel::class, RemoteKeys::class, MovieCategory::class, MovieFavorite::class],
-    version = 15,
+    entities = [MovieEntity::class, SearchLogItemEntity::class, RemoteKeysEntity::class, MovieCategoryEntity::class, MovieFavoriteEntity::class],
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(GenreConverter::class)
@@ -56,22 +57,22 @@ class GenreConverter {
 interface MovieDao : LocalMovieRepository {
 
     @Query("select * from movie")
-    override fun getAllMovies(): PagingSource<Int, MovieModel>
+    override fun getAllMovies(): PagingSource<Int, MovieEntity>
 
     @Query("select m.* from movie m inner join movie_category mc on m.movieId = mc.movieId where mc.categoryId = :category order by mc.position")
-    override fun getByCategory(category: Int): PagingSource<Int, MovieModel>
+    override fun getByCategory(category: Int): PagingSource<Int, MovieEntity>
 
     @Query("select * from movie where movieId = :movieId")
-    override suspend fun getMovieById(movieId: Long): MovieModel
+    override suspend fun getMovieById(movieId: Long): MovieEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun addMovie(movie: MovieModel): Long
+    override suspend fun addMovie(movie: MovieEntity): Long
 
     @Query("delete from movie where movieId = :movieId")
     override suspend fun deleteMovie(movieId: Long): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    override suspend fun insertAllMovies(movieList: List<MovieModel>)
+    override suspend fun insertAllMovies(movieList: List<MovieEntity>)
 
     @Query("delete from movie")
     override suspend fun clearCachedMovies(): Int
@@ -80,13 +81,13 @@ interface MovieDao : LocalMovieRepository {
 @Dao
 interface SearchLogDao : SearchRepository {
     @Query("select * from search order by id desc limit 5")
-    override fun getRecentSearch(): PagingSource<Int, SearchLogItemModel>
+    override fun getRecentSearch(): Flow<List<SearchLogItemEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    override fun addNewSearch(searchLogItemModel: SearchLogItemModel): Long
+    override fun addNewSearch(searchLogItemEntity: SearchLogItemEntity): Long
 
     @Delete
-    override fun removeSearch(searchLogItemModel: SearchLogItemModel): Int
+    override fun removeSearch(searchLogItemEntity: SearchLogItemEntity): Int
 
     @Query("delete from search")
     override fun cleanSearchLog(): Int
@@ -95,10 +96,10 @@ interface SearchLogDao : SearchRepository {
 @Dao
 interface RemoteKeysDao : RemoteKeysRepository {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    override suspend fun insertAll(keys: List<RemoteKeys>)
+    override suspend fun insertAll(keys: List<RemoteKeysEntity>)
 
     @Query("select * from remote_keys where movieId = :movieId and categoryId = :categoryId")
-    override suspend fun getRemoteKey(movieId: Long, categoryId: Int): RemoteKeys?
+    override suspend fun getRemoteKey(movieId: Long, categoryId: Int): RemoteKeysEntity?
 
     @Query("delete from remote_keys")
     override suspend fun clearRemoteKeys()
@@ -107,7 +108,7 @@ interface RemoteKeysDao : RemoteKeysRepository {
 @Dao
 interface MovieCategoryDao : MovieCategoryRepository {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    override suspend fun insertAll(keys: List<MovieCategory>)
+    override suspend fun insertAll(categories: List<MovieCategoryEntity>)
 
     @Query("delete from movie_category")
     override suspend fun clearAll()
@@ -116,10 +117,10 @@ interface MovieCategoryDao : MovieCategoryRepository {
 @Dao
 interface MovieFavoriteDao : MovieFavoriteRepository {
     @Query("select * from movie_favorite order by id asc")
-    override fun getFavorites(): PagingSource<Int, MovieFavorite>
+    override fun getFavorites(): PagingSource<Int, MovieFavoriteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insertFavorite(favorite: MovieFavorite)
+    override suspend fun insertFavorite(favorite: MovieFavoriteEntity)
 
     @Query("delete from movie_favorite where movieId = :movieId")
     override suspend fun removeFavorite(movieId: Long)

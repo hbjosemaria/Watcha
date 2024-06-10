@@ -53,4 +53,23 @@
     <string name="movie_list_connection_lost">Parece ser que no hay conexión...</string>
     <string name="favorite_list_empty">¿Por qué está vacío? Añade algunas películas top.</string>
     <string name="search_no_result">No pudimos encontrar nada</string>
+    <string name="settings">Ajustes</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_english">Inglés</string>
+    <string name="tmdb_logo">The Movie Database</string>
+    <string name="tmdb_credits">Créditos a The Movie Database por dar acceso a su API</string>
+    <string name="github">GitHub</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="gmail">Gmail</string>
+    <string name="reach_me">Puedes contactarme a través de las siguientes vías</string>
+    <string name="language">Idioma</string>
+    <string name="api_settings">Ajustes de API</string>
+    <string name="tmdb_url">https://www.themoviedb.org/</string>
+    <string name="github_url">https://github.com/hbjosemaria</string>
+    <string name="linkedin_url">https://linkedin.com/in/josemariahb</string>
+    <string name="mail_to_gmail">mailto:hbjosemaria@gmail.com</string>
+    <string name="main">Principal</string>
+    <string name="settings_language">Idioma</string>
+    <string name="app_language">Idioma de la aplicación</string>
+    <string name="settings_language_explanation">Al cambiar este ajuste, tanto la app como las llamadas a la api TMDB serán mostradas en el idioma seleccionado.</string>
 </resources>

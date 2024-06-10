@@ -32,7 +32,7 @@ import com.simplepeople.watcha.ui.common.composables.MovieList
 import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
 import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.topbar.MainTopAppBar
-import com.simplepeople.watcha.ui.common.composables.topbar.common.TopBarDynamicParamCalc
+import com.simplepeople.watcha.ui.common.composables.topbar.common.topBarDynamicParamCalc
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -43,15 +43,15 @@ fun FavoriteScreen(
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
     navigateToNavigationBarItem: (String) -> Unit,
-    navigateToSearchScreen: () -> Unit
+    navigateToSettings: () -> Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val favoriteScreenUiState by favoriteViewModel.favoriteScreenUiState.collectAsState()
+    val favoriteScreenUiState by favoriteViewModel.favoriteScreenState.collectAsState()
 
     val topBarAlpha = remember {
         mutableFloatStateOf(
-            TopBarDynamicParamCalc(
+            topBarDynamicParamCalc(
                 minValue = .5f,
                 maxValue = .75f,
                 fraction = scrollBehavior.state.overlappedFraction
@@ -65,7 +65,7 @@ fun FavoriteScreen(
         }
             .distinctUntilChanged()
             .collectLatest {
-                topBarAlpha.floatValue = TopBarDynamicParamCalc(
+                topBarAlpha.floatValue = topBarDynamicParamCalc(
                     minValue = .5f,
                     maxValue = .75f,
                     fraction = scrollBehavior.state.overlappedFraction
@@ -152,9 +152,9 @@ fun FavoriteScreen(
             }
 
             MainTopAppBar(
-                navigateToSearchScreen = navigateToSearchScreen,
                 scrollBehavior = scrollBehavior,
-                topBarAlpha = topBarAlpha.floatValue
+                topBarAlpha = topBarAlpha.floatValue,
+                navigateToSettings = navigateToSettings
             )
         }
     }
