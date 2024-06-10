@@ -16,6 +16,10 @@ It uses:
 - Paging 3
   * PagingSource
   * RemoteMediator
+- Testing:
+  * Unit tests
+  * Instrumentation tests (UI, integration) -> AndroidComposeRules
+  * Libraries: JUnit, MockK, Espresso, Robolectric, Truth, Hilt (DI).
 - Cache system for offline access
 - Custom LoadStates per ViewModel for better UX
 - App language selection
