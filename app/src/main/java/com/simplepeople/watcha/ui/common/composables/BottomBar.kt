@@ -124,7 +124,7 @@ class BottomNavigationItemProvider {
                 MainAppScreens.FavoriteScreen.route,
                 Icons.Filled.Person,
                 Icons.Outlined.Person,
-                MainAppScreens.FavoriteScreen.name
+                MainAppScreens.ProfileScreen.name
             )
         )
     }

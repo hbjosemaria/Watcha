@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.pager
+package com.simplepeople.watcha.data.pagingsource
 
 import androidx.compose.ui.text.intl.Locale
 import androidx.paging.PagingSource
@@ -62,7 +62,7 @@ class ExternalFilteredMoviePagingSource(
                 LoadResult.Page(
                     data = response.toDomain(),
                     prevKey = if (position == 1) null else (position - 1),
-                    nextKey = if (position == TMDB_API_MAX_PAGES) null else (position + 1)
+                    nextKey = if (position == response.totalPages) null else (position + 1)
                 )
             } else {
                 LoadResult.Error(throw Exception("No Response"))

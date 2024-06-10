@@ -22,7 +22,7 @@ class SearchLogUseCase @Inject constructor(
     }
 
     fun removeSearch(searchLogItem: SearchLogItem) {
-        repository.removeSearch(searchLogItem.toDao())
+        repository.removeSearch(searchLogItem.toEntity())
     }
 
     fun cleanSearchLog() {

@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.simplepeople.watcha">
+
+    <application android:label="Watcha UI Test Application" android:theme="@style/Theme.AppCompat.Light">
+        <uses-library android:name="android.test.runner" android:required="false" />
+        <activity
+            android:name=".HiltTestActivity"
+            android:exported="false">
+        </activity>
+    </application>
+
+    <instrumentation
+        android:name="com.simplepeople.watcha.tools.HiltTestRunner"
+        android:targetPackage="com.simplepeople.watcha"
+        android:handleProfiling="true"
+        android:functionalTest="true" />
+</manifest>

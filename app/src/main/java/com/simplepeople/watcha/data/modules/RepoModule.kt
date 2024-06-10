@@ -90,5 +90,4 @@ object RepoModule {
     fun provideCacheRepository(dataStore: DataStore<Preferences>): CacheRepository {
         return CacheRepositoryImpl(dataStore)
     }
-
 }

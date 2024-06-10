@@ -150,6 +150,7 @@ private fun MovieDetailsHeader(
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .fallback(R.drawable.movie_placeholder)
                 .placeholder(R.drawable.movie_placeholder)
+                .error(R.drawable.movie_placeholder)
                 .build(),
             contentDescription = movie.title,
             contentScale = ContentScale.FillWidth,

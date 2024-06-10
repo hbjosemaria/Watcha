@@ -6,7 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.simplepeople.watcha.data.model.local.MovieEntity
-import com.simplepeople.watcha.data.pager.ExternalFilteredMoviePagingSource
+import com.simplepeople.watcha.data.pagingsource.ExternalFilteredMoviePagingSource
 import com.simplepeople.watcha.data.remotemediator.MovieRemoteMediator
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MovieListUseCase @Inject constructor(
     private val apiService: ExternalMovieRepository,
     private val roomService: LocalMovieRepository,
-    private val movieRemoteMediator: MovieRemoteMediator.MovieRemoteMediatorFactory,
+    private val movieRemoteMediator: MovieRemoteMediator.MovieRemoteMediatorFactory
 ) {
 
     //This case uses a cache system with RemoteMediator as it will speed up its fetching and displaying data speed

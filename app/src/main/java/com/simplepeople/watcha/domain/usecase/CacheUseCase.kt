@@ -9,5 +9,4 @@ class CacheUseCase @Inject constructor (
     suspend fun forceCacheExpiration() {
         cacheRepository.forceCacheExpiration()
     }
-
 }

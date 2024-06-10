@@ -108,7 +108,7 @@ interface RemoteKeysDao : RemoteKeysRepository {
 @Dao
 interface MovieCategoryDao : MovieCategoryRepository {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    override suspend fun insertAll(keys: List<MovieCategoryEntity>)
+    override suspend fun insertAll(categories: List<MovieCategoryEntity>)
 
     @Query("delete from movie_category")
     override suspend fun clearAll()

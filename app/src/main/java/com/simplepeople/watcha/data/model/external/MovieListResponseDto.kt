@@ -8,8 +8,8 @@ import com.simplepeople.watcha.domain.core.Movie
 data class MovieListResponseDto(
     @SerializedName("page") var page: Int = 1,
     @SerializedName("results") var results: ArrayList<Results> = arrayListOf(),
-    @SerializedName("total_pages") var totalPages: Int = 0,
-    @SerializedName("total_results") var totalResults: Int = 0
+    @SerializedName("total_pages") var totalPages: Int = 1,
+    @SerializedName("total_results") var totalResults: Int = results.size
 ) {
     data class Results(
         @SerializedName("adult") var adult: Boolean = false,
@@ -40,7 +40,7 @@ data class MovieListResponseDto(
             )
         }
 
-    fun toDao(): List<MovieEntity> =
+    fun toEntity(): List<MovieEntity> =
         results.map {
             MovieEntity(
                 movieId = it.id,

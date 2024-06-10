@@ -76,13 +76,17 @@ class HomeViewModel @Inject constructor(
     fun reloadMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             cacheUseCase.forceCacheExpiration()
-            _homeScreenState.value = _homeScreenState.value.copy(
-                movieListState = HomeScreenMovieListState.Success(
-                    movieList = emptyFlow()
-                )
-            )
+            cleanMovieList()
             loadMovies()
         }
+    }
+
+    fun cleanMovieList() {
+        _homeScreenState.value = _homeScreenState.value.copy(
+            movieListState = HomeScreenMovieListState.Success(
+                movieList = emptyFlow()
+            )
+        )
     }
 
 }

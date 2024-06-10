@@ -26,6 +26,7 @@ sealed class MainAppScreens(
     data object FavoriteScreen : MainAppScreens("main_favorites", R.string.list_favorites)
     data object SearchScreen : MainAppScreens("main_search", R.string.search)
     data object SettingsScreen : MainAppScreens("main_settings", R.string.settings)
+    data object ProfileScreen : MainAppScreens("main_profile", R.string.user_profile)
 }
 
 sealed class SettingsAppScreens(

@@ -10,6 +10,6 @@ class MovieUseCase @Inject constructor(
 ) {
     suspend fun getMovieById(movieId: Long): Movie {
         val mixedResponse = mixedRepository.getMovieById(movieId, Locale.current.language)
-        return mixedResponse.first.toDomain().copy(isFavorite = mixedResponse.second > 0L)
+        return mixedResponse.first.toDomain().copy(isFavorite = mixedResponse.second > 0)
     }
 }

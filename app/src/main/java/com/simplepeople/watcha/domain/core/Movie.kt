@@ -15,7 +15,7 @@ data class Movie(
     val voteAverage: String? = "",
     var isFavorite: Boolean = false,
 ) {
-    fun toDao(): MovieEntity {
+    fun toEntity(): MovieEntity {
         return MovieEntity(
             movieId = this.movieId,
             title = this.title,
@@ -28,9 +28,9 @@ data class Movie(
         )
     }
 
-    fun toFavoriteDao(): MovieFavoriteEntity {
+    fun toFavoriteEntity(): MovieFavoriteEntity {
         return MovieFavoriteEntity(
-            movie = this.toDao()
+            movie = this.toEntity()
         )
     }
 }

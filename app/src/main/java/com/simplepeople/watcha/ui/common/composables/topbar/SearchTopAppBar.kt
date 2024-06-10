@@ -33,7 +33,6 @@ import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopAppBar(
-//    navigateBack: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     searchText: String,
     onValueChange: (String) -> Unit,

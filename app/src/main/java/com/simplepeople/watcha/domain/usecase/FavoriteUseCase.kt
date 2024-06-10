@@ -29,7 +29,7 @@ class FavoriteUseCase @Inject constructor(
             }
 
     suspend fun saveFavorite(movie: Movie) =
-        repository.insertFavorite(movie.toFavoriteDao())
+        repository.insertFavorite(movie.toFavoriteEntity())
 
     suspend fun deleteFavorite(movieId: Long) =
         repository.removeFavorite(movieId)

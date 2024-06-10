@@ -6,7 +6,7 @@ data class SearchLogItem(
     val id: Int = 0,
     val searchedText: String = "",
 ) {
-    fun toDao(): SearchLogItemEntity =
+    fun toEntity(): SearchLogItemEntity =
         SearchLogItemEntity(
             id = this.id,
             searchedText = this.searchedText

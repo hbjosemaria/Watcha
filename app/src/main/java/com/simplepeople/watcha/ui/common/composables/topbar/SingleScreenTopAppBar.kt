@@ -3,7 +3,7 @@ package com.simplepeople.watcha.ui.common.composables.topbar
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -36,8 +36,8 @@ fun SingleScreenTopAppBar(
         navigationIcon = {
             DefaultIconButton(
                 action = navigateBack,
-                iconImage = Icons.Filled.ArrowBack,
-                contentDescription = Icons.Filled.ArrowBack.name,
+                iconImage = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = Icons.AutoMirrored.Filled.ArrowBack.name,
                 modifier = Modifier
                     .size(35.dp)
                     .padding(start = 8.dp)

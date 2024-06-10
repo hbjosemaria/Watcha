@@ -10,7 +10,7 @@ import coil.network.HttpException
 import com.simplepeople.watcha.data.model.local.MovieCategoryEntity
 import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.model.local.RemoteKeysEntity
-import com.simplepeople.watcha.data.pager.TMDB_API_MAX_PAGES
+import com.simplepeople.watcha.data.pagingsource.TMDB_API_MAX_PAGES
 import com.simplepeople.watcha.data.repository.CacheRepository
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
@@ -115,7 +115,7 @@ class MovieRemoteMediator @AssistedInject constructor(
                 HomeFilterOptions.Popular -> apiService.getPopularByPage(page, language)
                 HomeFilterOptions.TopRated -> apiService.getTopRatedByPage(page, language)
                 HomeFilterOptions.Upcoming -> apiService.getUpcomingByPage(page, language)
-            }.toDao()
+            }.toEntity()
 
             val remoteKeys = movies.map { movieModel ->
                 RemoteKeysEntity(

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import java.util.TimeZone
+import javax.inject.Inject
 
 interface CacheRepository {
 
@@ -19,7 +20,7 @@ interface CacheRepository {
     suspend fun forceCacheExpiration()
 }
 
-class CacheRepositoryImpl(
+class CacheRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : CacheRepository {
 
