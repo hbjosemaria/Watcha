@@ -19,7 +19,7 @@ It uses:
 - Testing:
   * Unit tests
   * Instrumentation tests (UI, integration) -> AndroidComposeRules
-  * Libraries: JUnit, MockK, Espresso, Robolectric, Truth, Hilt (DI).
+  * Libraries: JUnit, MockK, Espresso, Robolectric, Truth, Hilt (DI), Turbine.
 - Cache system for offline access
 - Custom LoadStates per ViewModel for better UX
 - App language selection
