@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data
+package com.simplepeople.watcha.tests.data
 
 import androidx.compose.ui.text.intl.Locale
 import androidx.paging.ExperimentalPagingApi

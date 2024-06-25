@@ -50,16 +50,19 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         isFavorite = !state.movie.isFavorite
                     )
 
-                    _movieDetailsState.value = _movieDetailsState.value.copy(
-                        movieState = MovieDetailsMovieState.Success(
-                            movie = movie
-                        )
-                    )
+//                    _movieDetailsState.value = _movieDetailsState.value.copy(
+//                        movieState = MovieDetailsMovieState.Success(
+//                            movie = movie
+//                        )
+//                    )
 
                     try {
                         if (movie.isFavorite) {
                             favoriteUseCase.saveFavorite(movie)
                             _movieDetailsState.value = _movieDetailsState.value.copy(
+                                movieState = MovieDetailsMovieState.Success(
+                                    movie = movie
+                                ),
                                 snackBarItem = SnackbarItem(
                                     show = true,
                                     isError = false,
@@ -69,6 +72,9 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         } else {
                             favoriteUseCase.deleteFavorite(movie.movieId)
                             _movieDetailsState.value = _movieDetailsState.value.copy(
+                                movieState = MovieDetailsMovieState.Success(
+                                    movie = movie
+                                ),
                                 snackBarItem = SnackbarItem(
                                     show = true,
                                     isError = false,
@@ -78,6 +84,9 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         }
                     } catch (e: IllegalStateException) {
                         _movieDetailsState.value = _movieDetailsState.value.copy(
+                            movieState = MovieDetailsMovieState.Success(
+                                movie = movie
+                            ),
                             snackBarItem = SnackbarItem(
                                 show = true,
                                 isError = true,

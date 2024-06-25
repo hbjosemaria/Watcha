@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data
+package com.simplepeople.watcha.tests.data
 
 import androidx.paging.PagingSource
 import com.simplepeople.watcha.data.model.external.MovieListResponseDto
@@ -243,8 +243,8 @@ class FakeSearchRepositoryImpl : SearchRepository {
     }
 
     override fun cleanSearchLog(): Int {
-        val isSearchLogCleaned = FakeData.fakeSearchData.removeAll { true }
-        return if (isSearchLogCleaned) 1 else 0
+        FakeData.fakeSearchData.clear()
+        return if (FakeData.fakeSearchData.isEmpty()) 1 else 0
     }
 
 }
