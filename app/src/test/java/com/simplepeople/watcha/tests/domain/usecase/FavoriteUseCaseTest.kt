@@ -5,11 +5,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.testing.TestPager
 import com.google.common.truth.Truth.assertThat
-import com.simplepeople.watcha.data.FakeData
-import com.simplepeople.watcha.data.FakeMovieFavoriteRepository
 import com.simplepeople.watcha.data.repository.MovieFavoriteRepository
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
+import com.simplepeople.watcha.tests.data.FakeData
+import com.simplepeople.watcha.tests.data.FakeMovieFavoriteRepository
 import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest

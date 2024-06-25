@@ -1,9 +1,9 @@
 package com.simplepeople.watcha.tests.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.simplepeople.watcha.data.FakeSearchRepositoryImpl
 import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
 import com.simplepeople.watcha.data.repository.SearchRepository
+import com.simplepeople.watcha.tests.data.FakeSearchRepositoryImpl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

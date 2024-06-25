@@ -1,50 +1,75 @@
 package com.simplepeople.watcha.tests.ui.viewmodel
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import com.simplepeople.watcha.data.repository.CacheRepository
-import com.simplepeople.watcha.data.repository.CacheRepositoryImpl
-import com.simplepeople.watcha.data.repository.DataStoreRepository
-import com.simplepeople.watcha.data.repository.DataStoreRepositoryImpl
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
+import com.simplepeople.watcha.domain.core.Language
+import com.simplepeople.watcha.domain.core.Settings
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
 import com.simplepeople.watcha.domain.usecase.SettingsUseCase
 import com.simplepeople.watcha.ui.settings.SettingsViewModel
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
 class SettingsViewModelTest {
 
+    @MockK
     private lateinit var settingsUseCase: SettingsUseCase
-    private lateinit var cacheUseCase: CacheUseCase
-    private lateinit var dataStoreRepository: DataStoreRepository
-    private lateinit var cacheRepository: CacheRepository
-    private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var dataStore : DataStore<Preferences>
 
+    @MockK
+    private lateinit var cacheUseCase: CacheUseCase
+
+    private lateinit var settingsViewModel: SettingsViewModel
 
     @Before
-    fun setUp() = runBlocking {
-//        dataStore = FakeDataStore()
-        dataStore = mockk()
-        dataStoreRepository = DataStoreRepositoryImpl(dataStore)
-        cacheRepository = CacheRepositoryImpl(dataStore)
-        settingsUseCase = SettingsUseCase(dataStoreRepository = dataStoreRepository)
-        cacheUseCase = CacheUseCase(cacheRepository = cacheRepository)
+    fun setUp() {
+        MockKAnnotations.init(this)
+        coEvery {settingsUseCase.loadSettings()} returns Settings(
+            language = Language.Spanish
+        )
+        coJustRun {settingsUseCase.updateSettings(Language.English) }
+        coJustRun {cacheUseCase.forceCacheExpiration()}
+
         settingsViewModel = SettingsViewModel(settingsUseCase, cacheUseCase)
     }
 
-    //Still pending TODO
     @Test
     fun `Load settings into state holder`() = runTest {
-//        val settings = settingsUseCase.loadSettings()
-//        assertThat(settings).isInstanceOf(Settings::class.java)
+        val settings = settingsViewModel.settingsState.value.settings
+        val expectedSettings = Settings(
+            language = Language.Spanish
+        )
+
+        assertThat(settings).isInstanceOf(Settings::class.java)
+        assertThat(settings).isEqualTo(expectedSettings)
     }
 
-    //TODO
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `Update settings in viewModel and dataStore`() {
+    fun `Update settings in viewModel and dataStore`() = runTest {
+        val expectedNewSettings = Settings(
+            language = Language.English
+        )
+        val languageSelection = Language.English
+
+        settingsViewModel.settingsState.test {
+            val previousSettings = awaitItem().settings
+
+            settingsViewModel.updateSetting(languageSelection)
+
+            advanceUntilIdle()
+
+            val currentSettings = awaitItem().settings
+            assertThat(previousSettings).isNotEqualTo(currentSettings)
+            assertThat(currentSettings).isEqualTo(expectedNewSettings)
+
+            cancelAndConsumeRemainingEvents()
+        }
     }
 }

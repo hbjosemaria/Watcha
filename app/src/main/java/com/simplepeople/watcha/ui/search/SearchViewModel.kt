@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -87,20 +86,21 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            _searchScreenState.value = searchScreenState.value.copy(
-                movieListState = SearchScreenMovieListState.Success(
-                    movieList = movieListUseCase
-                        .getByTitle(text)
-                        .catch { exception ->
-                            _searchScreenState.value = searchScreenState.value.copy(
-                                movieListState = SearchScreenMovieListState.Error(
-                                    message = R.string.movie_list_error
-                                )
-                            )
-                        }
-                        .cachedIn(viewModelScope)
+            try {
+                _searchScreenState.value = searchScreenState.value.copy(
+                    movieListState = SearchScreenMovieListState.Success(
+                        movieList = movieListUseCase
+                            .getByTitle(text)
+                            .cachedIn(viewModelScope)
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                _searchScreenState.value = searchScreenState.value.copy(
+                    movieListState = SearchScreenMovieListState.Error(
+                        message = R.string.movie_list_error
+                    )
+                )
+            }
 
             resetAfterSearch()
         }

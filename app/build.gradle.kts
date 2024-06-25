@@ -75,6 +75,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.truth)
+    testImplementation(libs.turbine)
     testImplementation(libs.mockk)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.androidx.runner)
@@ -84,7 +85,8 @@ dependencies {
     testImplementation(libs.room.testing)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
-//    testImplementation(libs.robolectric)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.paging.testing.android)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.ui.test.manifest)
@@ -92,7 +94,6 @@ dependencies {
     kaptAndroidTest(libs.com.google.dagger.hilt.compiler2)
 
     //Regular dependencies
-    implementation(libs.androidx.paging.testing.android)
     implementation(libs.androidx.runner)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.room.paging)

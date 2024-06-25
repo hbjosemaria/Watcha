@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,18 +29,20 @@ class FavoriteViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            _favoriteScreenState.value = favoriteScreenState.value.copy(
-                movieListState = FavoriteScreenMovieListState.Success(
-                    movieList = favoriteUseCase
-                        .getFavorites()
-                        .catch {
-                            _favoriteScreenState.value = favoriteScreenState.value.copy(
-                                movieListState = FavoriteScreenMovieListState.Error(R.string.movie_list_error)
-                            )
-                        }
-                        .cachedIn(viewModelScope)
+            try {
+                _favoriteScreenState.value = favoriteScreenState.value.copy(
+                    movieListState = FavoriteScreenMovieListState.Success(
+                        movieList = favoriteUseCase
+                            .getFavorites()
+                            .cachedIn(viewModelScope)
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                _favoriteScreenState.value = favoriteScreenState.value.copy(
+                    movieListState = FavoriteScreenMovieListState.Error(R.string.movie_list_error)
+                )
+            }
+
         }
     }
 

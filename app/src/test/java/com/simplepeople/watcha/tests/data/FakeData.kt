@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data
+package com.simplepeople.watcha.tests.data
 
 import com.simplepeople.watcha.data.model.external.MovieListResponseDto
 import com.simplepeople.watcha.data.model.local.MovieCategoryEntity

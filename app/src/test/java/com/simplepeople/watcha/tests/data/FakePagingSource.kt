@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data
+package com.simplepeople.watcha.tests.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

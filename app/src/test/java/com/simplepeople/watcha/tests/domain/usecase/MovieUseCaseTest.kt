@@ -2,8 +2,8 @@ package com.simplepeople.watcha.tests.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
 import com.google.common.truth.Truth.assertThat
-import com.simplepeople.watcha.data.FakeMixedMovieRepositoryImpl
 import com.simplepeople.watcha.data.repository.MixedMovieRepository
+import com.simplepeople.watcha.tests.data.FakeMixedMovieRepositoryImpl
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

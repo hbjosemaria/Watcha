@@ -45,7 +45,7 @@
     <string name="home_popular">Popular</string>
     <string name="home_top_rated">Top Rated</string>
     <string name="home_upcoming">Upcoming</string>
-    <string name="favorite_error">An error ocurred. Please, try again later.</string>
+    <string name="favorite_error">An error occurred. Please, try again later.</string>
     <string name="search_clean_log">Clean search log</string>
     <string name="movie_list_error">An error has occurred.</string>
     <string name="retry">Retry</string>
