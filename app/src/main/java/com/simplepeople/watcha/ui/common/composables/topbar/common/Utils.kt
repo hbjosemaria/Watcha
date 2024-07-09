@@ -46,7 +46,6 @@ inline fun <reified T> topBarDynamicParamCalc(
             minValue + (availableValueAmount * (1 - fraction))
         }
 
-        //TODO: add exception message to String res
         else -> throw IllegalStateException(
             "An Int, Long, Float or a Dp was expected."
         )

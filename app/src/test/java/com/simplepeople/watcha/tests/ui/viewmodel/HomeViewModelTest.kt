@@ -7,12 +7,12 @@ import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.tests.data.FakeData
-import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
+import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import com.simplepeople.watcha.ui.common.utils.ConnectivityState
-import com.simplepeople.watcha.ui.home.HomeScreenMovieListState
-import com.simplepeople.watcha.ui.home.HomeScreenState
-import com.simplepeople.watcha.ui.home.HomeViewModel
+import com.simplepeople.watcha.ui.main.home.HomeScreenMovieListState
+import com.simplepeople.watcha.ui.main.home.HomeScreenState
+import com.simplepeople.watcha.ui.main.home.HomeViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -132,9 +132,9 @@ class HomeViewModelTest {
     @Test
     fun updateNavigationItemIndex() {
         val newNavigationIndex = 1
-        val previousNavigationIndex = NavigationBarItemSelection.selectedNavigationItemIndex
+        val previousNavigationIndex = NavigationBarIndex.selectedIndex
         homeViewModel.updateNavigationItemIndex(newNavigationIndex)
-        val currentNavigationIndex = NavigationBarItemSelection.selectedNavigationItemIndex
+        val currentNavigationIndex = NavigationBarIndex.selectedIndex
         assertThat(previousNavigationIndex).isNotEqualTo(currentNavigationIndex)
     }
 

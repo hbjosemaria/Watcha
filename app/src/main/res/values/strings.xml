@@ -38,8 +38,8 @@
     <string name="search_label">Search movie</string>
     <string name="search_placeholder">What movie are we watching?</string>
     <string name="user_profile">User profile</string>
-    <string name="favorite_add_success">Added to favorites.</string>
-    <string name="favorite_remove_success">Removed from favorites.</string>
+    <string name="favorite_add_success">Added to favorites</string>
+    <string name="favorite_remove_success">Removed from favorites</string>
     <string name="toast_close">Dimsmiss</string>
     <string name="empty_text" translatable="false" />
     <string name="home_now_playing">Now Playing</string>
@@ -48,10 +48,10 @@
     <string name="home_upcoming">Upcoming</string>
     <string name="favorite_error">An error occurred. Please, try again later.</string>
     <string name="search_clean_log">Clean search log</string>
-    <string name="movie_list_error">An error has occurred.</string>
+    <string name="movie_list_error">An error has occurred</string>
     <string name="retry">Retry</string>
-    <string name="movie_list_loading">Loading data.</string>
-    <string name="movie_list_connection_lost">It seems that connection has been lost...</string>
+    <string name="movie_list_loading">Loading data</string>
+    <string name="movie_list_connection_lost">It seems that connection has been lost…</string>
     <string name="favorite_list_empty">Why so empty? Go add some movie bangers!</string>
     <string name="search_no_result">We couldn\'t find anything</string>
     <string name="settings">Settings</string>
@@ -73,4 +73,30 @@
     <string name="settings_language">Language</string>
     <string name="app_language">App language</string>
     <string name="settings_language_explanation">By changing this setting, both App and TMDB Api calls will be shown in the selected language.</string>
+    <string name="sign_in_screen">Sign in</string>
+    <string name="sign_in_header">Heading inside to watch some movies?</string>
+    <string name="sign_in_subheader">Sign in first to access</string>
+    <string name="sign_in">Sign in with credentials</string>
+    <string name="sign_up">Sign up with password</string>
+    <string name="log_out">Log out</string>
+    <string name="sign_in_no_credentials_error">To access, you must sign up first</string>
+    <string name="sign_in_error">An error occurred while trying to sing in</string>
+    <string name="app_logo">App logo</string>
+    <string name="sign_up_screen">Sign up</string>
+    <string name="sign_up_account">Sign up account</string>
+    <string name="sign_up_email_placeholder">example@gmail.com</string>
+    <string name="sign_up_password_label">Password</string>
+    <string name="sign_up_email_label" translatable="false">Email</string>
+    <string name="sign_up_password_placeholder">MySpeciallySecretPassword</string>
+    <string name="sign_up_no_user_found_error">Your account could not be created</string>
+    <string name="sign_up_credential_error">An error occurred during the creation process. Try again later</string>
+    <string name="email_is_not_valid">Email is not valid</string>
+    <string name="auth_screen">TMDB Sync Authorization</string>
+    <string name="auth_session_not_created">We could not vinculate your TMDB user. If this persists, please contact us</string>
+    <string name="auth_session_being_created">"Linking your account "</string>
+    <string name="auth_session_created">Account linked successfully</string>
+    <string name="auth_request_token_failed">An error occurred while trying to ask for authorization. Please, try again later</string>
+    <string name="auth_explanation">In order to sync Watcha with TMDB, we will ask for your authorization to link your account to Watcha.</string>
+    <string name="auth_explanation_button">Proceed to authorization</string>
+    <string name="watcha_and_tmdb_sync" translatable="false">Sync image</string>
 </resources>

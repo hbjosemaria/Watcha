@@ -36,3 +36,12 @@ sealed class SettingsAppScreens(
     data object SettingsScreen: SettingsAppScreens("settings_settings", R.string.settings)
     data object SettingsLanguageScreen: SettingsAppScreens("settings_language", R.string.settings_language)
 }
+
+sealed class AuthAppScreens(
+    override val route: String,
+    override val name: Int
+) : AppScreens(route = route, name = name) {
+    data object SignInScreen: AuthAppScreens("sign_in", R.string.sign_in_screen)
+    data object SignUpScreen: AuthAppScreens("sign_up", R.string.sign_up_screen)
+    data object AuthScreen: AuthAppScreens("auth", R.string.auth_screen)
+}

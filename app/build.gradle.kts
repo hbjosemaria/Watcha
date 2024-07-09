@@ -5,16 +5,19 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.simplepeople.watcha"
-    compileSdk = 34
+    compileSdk = 35
+    compileSdkPreview = "VanillaIceCream"
 
     defaultConfig {
         applicationId = "com.simplepeople.watcha"
         minSdk = 28
-        targetSdk = 34
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -26,6 +29,7 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("TMDB_API_KEY")}\"")
+        buildConfigField("String", "GOOGLE_ID_WEB_CLIENT", "\"${properties.getProperty("GOOGLE_ID_WEB_CLIENT")}\"")
     }
 
     buildTypes {
@@ -61,6 +65,7 @@ android {
 }
 
 dependencies {
+
     //Testing dependencies
     androidTestImplementation(libs.ui.test.manifest)
     androidTestImplementation(libs.ui.test.junit4)
@@ -113,6 +118,15 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.biometric)
+    implementation (libs.androidx.credentials.play.services.auth)
+    implementation(libs.androidx.material.icons.extended.android)
+    implementation (libs.googleid.vlatestversion)
+    implementation(libs.googleid)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
     implementation(libs.material)
     implementation(libs.hilt.android.v2511)
     implementation(libs.coil.compose)

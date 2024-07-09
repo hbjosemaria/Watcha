@@ -6,10 +6,10 @@ import com.google.common.truth.Truth.assertThat
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
 import com.simplepeople.watcha.tests.data.FakeMovieFavoriteRepository
-import com.simplepeople.watcha.ui.common.composables.NavigationBarItemSelection
-import com.simplepeople.watcha.ui.favorite.FavoriteScreenMovieListState
-import com.simplepeople.watcha.ui.favorite.FavoriteScreenState
-import com.simplepeople.watcha.ui.favorite.FavoriteViewModel
+import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
+import com.simplepeople.watcha.ui.main.favorite.FavoriteScreenMovieListState
+import com.simplepeople.watcha.ui.main.favorite.FavoriteScreenState
+import com.simplepeople.watcha.ui.main.favorite.FavoriteViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -81,9 +81,9 @@ class FavoriteViewModelTest {
     @Test
     fun updateNavigationItemIndex() {
         val newNavigationIndex = 3
-        val previousValue = NavigationBarItemSelection.selectedNavigationItemIndex
+        val previousValue = NavigationBarIndex.selectedIndex
         favoriteViewModel.updateNavigationItemIndex(newNavigationIndex)
-        val currentValue = NavigationBarItemSelection.selectedNavigationItemIndex
+        val currentValue = NavigationBarIndex.selectedIndex
         assertThat(previousValue).isNotEqualTo(currentValue)
         assertThat(currentValue).isEqualTo(newNavigationIndex)
     }

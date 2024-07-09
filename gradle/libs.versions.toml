@@ -1,10 +1,16 @@
 [versions]
 agp = "8.5.0"
+biometric = "1.4.0-alpha01"
 coilCompose = "2.6.0"
 converterScalars = "2.11.0"
-core = "1.5.0"
+core = "1.6.1"
 coreSplashscreen = "1.0.1"
+credentials = "1.5.0-alpha02"
+credentialsPlayServicesAuth = "1.2.2"
 datastorePreferences = "1.1.1"
+firebaseBom = "33.1.1"
+googleid = "1.1.1"
+googleidVersion = "1.1.1"
 gradle = "8.5.0"
 hiltAndroid = "2.44"
 hiltAndroidTesting = "2.51.1"
@@ -14,16 +20,17 @@ junitJunit = "4.13.2"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinGradlePlugin = "1.6.21"
 kotlintestRunnerJunit4 = "3.3.2"
 kotlinxCoroutinesTest = "1.8.1"
 material = "1.12.0"
-lifecycleRuntimeKtx = "2.8.2"
+lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
+materialIconsExtendedAndroid = "1.6.8"
 mockitoAll = "1.9.5"
 mockitoAndroid = "3.3.1"
 mockitoCore = "5.2.1"
@@ -37,6 +44,7 @@ mockk = "1.13.11"
 mockkAndroid = "1.13.11"
 navigationCompose = "2.7.7"
 pagingRuntimeKtx = "3.3.0"
+playServicesAuth = "21.2.0"
 powermockApiMockito2 = "2.0.9"
 powermockModuleJunit4 = "2.0.9"
 retrofit = "2.11.0"
@@ -45,21 +53,25 @@ roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
 pagingCompose = "3.3.0"
 roomTesting = "2.6.1"
-truth = "1.4.2"
+truth = "1.4.3"
 turbine = "1.1.0"
 uiTestJunit4 = "1.6.8"
 uiTestManifest = "1.6.8"
-runner = "1.5.2"
+runner = "1.6.1"
 pagingTestingAndroid = "3.3.0"
 
 [libraries]
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
 androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastorePreferences" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationCompose" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
@@ -72,7 +84,12 @@ com-google-dagger-hilt-compiler2 = { module = "com.google.dagger:hilt-compiler",
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterScalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
 core-ktx = { module = "androidx.test:core-ktx", version.ref = "core" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroidTesting" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+googleid-vlatestversion = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleidVersion" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
@@ -111,6 +128,7 @@ mockito-kotlin-v521 = { module = "org.mockito.kotlin:mockito-kotlin", version.re
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android" }
 mockk-mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 powermock-api-mockito2 = { module = "org.powermock:powermock-api-mockito2", version.ref = "powermockApiMockito2" }
 powermock-module-junit4 = { module = "org.powermock:powermock-module-junit4", version.ref = "powermockModuleJunit4" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

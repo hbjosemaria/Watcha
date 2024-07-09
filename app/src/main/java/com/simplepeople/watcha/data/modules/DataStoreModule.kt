@@ -21,14 +21,6 @@ object DataStoreModule {
     @Singleton
     @Provides
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-//        return PreferenceDataStoreFactory.create(
-//            corruptionHandler = ReplaceFileCorruptionHandler(
-//                produceNewData = { emptyPreferences() }
-//            ),
-//            migrations = listOf(SharedPreferencesMigration(context, PREFERENCES)),
-//            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-//            produceFile = { context.preferencesDataStoreFile(PREFERENCES) }
-//        )
         return context.dataStore
     }
 }

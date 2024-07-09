@@ -61,13 +61,13 @@ data class MovieResponseDto(
 ) {
     data class BelongsToCollection(
         @SerializedName("id")
-        var id: Int = 0,
+        val id: Int = 0,
         @SerializedName("name")
-        var name: String = "",
+        val name: String = "",
         @SerializedName("poster_path")
-        var posterPath: String = "",
+        val posterPath: String = "",
         @SerializedName("backdrop_path")
-        var backdropPath: String = ""
+        val backdropPath: String = ""
     )
 
     data class Genres(

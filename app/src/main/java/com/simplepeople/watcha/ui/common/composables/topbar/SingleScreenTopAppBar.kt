@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarText
 
-//Screens that displays a title and back navigation
+/**
+ * TopBar with title and navigate back action
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleScreenTopAppBar(

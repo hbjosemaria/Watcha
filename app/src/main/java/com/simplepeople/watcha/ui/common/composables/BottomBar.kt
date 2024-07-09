@@ -130,8 +130,11 @@ class BottomNavigationItemProvider {
     }
 }
 
-class NavigationBarItemSelection {
-    companion object {
-        var selectedNavigationItemIndex: Int = 0
+object NavigationBarIndex {
+    var selectedIndex: Int = 0
+        private set
+
+    fun setSelectedIndex(newIndex: Int) {
+        this.selectedIndex = newIndex
     }
 }

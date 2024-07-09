@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.sp
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 
+/**
+ * TopBar made for search purposes. It has a TextField inside.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopAppBar(
