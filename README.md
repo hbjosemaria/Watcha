@@ -13,6 +13,8 @@ It uses:
 - Hilt
 - Coil
 - Retrofit
+- Credential Manager (email + password, Google Sign In)
+- Firebase (Authentication)
 - Paging 3
   * PagingSource
   * RemoteMediator
@@ -23,3 +25,4 @@ It uses:
 - Cache system for offline access
 - Custom LoadStates per ViewModel for better UX
 - App language selection
+- User sync with TMDB api with its session_id.
