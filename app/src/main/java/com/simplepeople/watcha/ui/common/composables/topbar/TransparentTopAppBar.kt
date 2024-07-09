@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 
-//Screens for detailed info with no bar, like MovieDetailsScreen
+/**
+ * TopBar with no background and navigate back action
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransparentTopAppBar(

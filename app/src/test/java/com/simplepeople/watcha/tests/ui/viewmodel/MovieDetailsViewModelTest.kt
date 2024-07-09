@@ -10,8 +10,8 @@ import com.simplepeople.watcha.tests.data.FakeData
 import com.simplepeople.watcha.tests.data.FakeMixedMovieRepositoryImpl
 import com.simplepeople.watcha.tests.data.FakeMovieFavoriteRepository
 import com.simplepeople.watcha.ui.common.utils.SnackbarItem
-import com.simplepeople.watcha.ui.moviedetails.MovieDetailsMovieState
-import com.simplepeople.watcha.ui.moviedetails.MovieDetailsViewModel
+import com.simplepeople.watcha.ui.main.moviedetails.MovieDetailsMovieState
+import com.simplepeople.watcha.ui.main.moviedetails.MovieDetailsViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

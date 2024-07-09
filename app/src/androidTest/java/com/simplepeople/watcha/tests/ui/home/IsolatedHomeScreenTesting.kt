@@ -11,8 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.WatchaTheme
 import com.simplepeople.watcha.MainActivity
-import com.simplepeople.watcha.ui.home.HomeScreen
-import com.simplepeople.watcha.ui.home.HomeViewModel
+import com.simplepeople.watcha.ui.main.home.HomeScreen
+import com.simplepeople.watcha.ui.main.home.HomeViewModel
 import com.simplepeople.watcha.ui.navigation.MainAppScreens
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

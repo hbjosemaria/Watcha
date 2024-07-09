@@ -6,7 +6,7 @@ import com.simplepeople.watcha.data.model.external.MovieResponseDto
 import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.services.MovieDao
 import com.simplepeople.watcha.data.services.MovieFavoriteDao
-import com.simplepeople.watcha.data.services.TmdbApiService
+import com.simplepeople.watcha.data.services.TmdbMovieService
 import javax.inject.Inject
 
 //Interfaces which returns a Long or Int on insert and delete queries usually means if the query has success or not.
@@ -44,7 +44,7 @@ interface MixedMovieRepository {
 
 //Implementation of repo
 class ExternalMovieRepositoryImpl @Inject constructor(
-    private val apiService: TmdbApiService,
+    private val apiService: TmdbMovieService,
 ) : ExternalMovieRepository {
 
     override suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto =
@@ -98,7 +98,7 @@ class LocalMovieRepositoryImpl @Inject constructor(
 //Implementation of repo
 class MixedMovieRepositoryImpl @Inject constructor(
     private val roomService: MovieFavoriteDao,
-    private val apiService: TmdbApiService,
+    private val apiService: TmdbMovieService,
 ) : MixedMovieRepository {
     override suspend fun getMovieById(movieId: Long, language: String): Pair<MovieResponseDto, Int> =
         Pair(

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     val hiltVersion = "2.51.1"
     id("com.google.dagger.hilt.android") version hiltVersion apply false
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }
 
 buildscript {

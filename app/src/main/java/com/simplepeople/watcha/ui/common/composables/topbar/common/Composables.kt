@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.sp
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 
+/**
+ * TopBar buttons for Home
+ */
 @Composable
 fun TopAppBarButton(
     buttonFilterOption: HomeFilterOptions,
@@ -52,6 +55,9 @@ fun TopAppBarButton(
     }
 }
 
+/**
+ * TopBar logo composable
+ */
 @Composable
 fun TopAppBarLogo() {
     Row(
@@ -67,6 +73,9 @@ fun TopAppBarLogo() {
     }
 }
 
+/**
+ * TopBar text composable
+ */
 @Composable
 fun TopAppBarText(
     modifier: Modifier = Modifier,

@@ -25,6 +25,9 @@ import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarLogo
 
+/**
+ * TopBar exclusive for Home
+ */
 @Composable
 fun HomeTopAppBar(
     selectedHomeFilterOption: HomeFilterOptions,
@@ -35,14 +38,13 @@ fun HomeTopAppBar(
     scrollToTop: () -> Unit,
     loadMovies: () -> Unit,
     navigateToSettings: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
-    topBarAlpha: Float? = null
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     MediumTopAppBar(
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background.copy(
-                alpha = topBarAlpha ?: 1f
+            scrolledContainerColor = MaterialTheme.colorScheme.background.copy(
+                alpha = .5f
             )
         ),
         title = {

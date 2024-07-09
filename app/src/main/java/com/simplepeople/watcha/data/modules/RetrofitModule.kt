@@ -1,8 +1,9 @@
 package com.simplepeople.watcha.data.modules
 
 import com.simplepeople.watcha.BuildConfig
-import com.simplepeople.watcha.data.services.TmdbApiService
 import com.simplepeople.watcha.data.services.TmdbApiUrl
+import com.simplepeople.watcha.data.services.TmdbExternalAuthService
+import com.simplepeople.watcha.data.services.TmdbMovieService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,7 @@ object RetrofitModule {
     }
 
     @Provides
-    fun provideRetroFitService(): Retrofit {
+    fun provideRetrofitService(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(TmdbApiUrl.BASE_URL.url)
             .client(provideOkHttpClient())
@@ -36,8 +37,14 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideTmdbApiService(retrofit: Retrofit): TmdbApiService {
-        return retrofit.create(TmdbApiService::class.java)
+    fun provideTmdbMovieService(retrofit: Retrofit): TmdbMovieService {
+        return retrofit.create(TmdbMovieService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTmdbAuthService(retrofit: Retrofit): TmdbExternalAuthService {
+        return retrofit.create(TmdbExternalAuthService::class.java)
     }
 
     class APIKeyInterceptor : Interceptor {

@@ -16,16 +16,18 @@ import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarLogo
 
 @OptIn(ExperimentalMaterial3Api::class)
+/**
+ * TopBar with logo and settings icon
+ */
 @Composable
 fun MainTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    topBarAlpha: Float? = null,
     navigateToSettings: () -> Unit
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background.copy(
-                alpha = topBarAlpha ?: 1f
+            scrolledContainerColor = MaterialTheme.colorScheme.background.copy(
+                alpha = .5f
             )
         ),
         title = {},

@@ -17,6 +17,8 @@ import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.model.local.MovieFavoriteEntity
 import com.simplepeople.watcha.data.model.local.RemoteKeysEntity
 import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
+import com.simplepeople.watcha.data.model.local.TmdbSessionIdEntity
+import com.simplepeople.watcha.data.repository.LocalAuthRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
 import com.simplepeople.watcha.data.repository.MovieFavoriteRepository
@@ -27,8 +29,14 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
 @Database(
-    entities = [MovieEntity::class, SearchLogItemEntity::class, RemoteKeysEntity::class, MovieCategoryEntity::class, MovieFavoriteEntity::class],
-    version = 16,
+    entities = [
+        MovieEntity::class,
+        SearchLogItemEntity::class,
+        RemoteKeysEntity::class,
+        MovieCategoryEntity::class,
+        MovieFavoriteEntity::class,
+        TmdbSessionIdEntity::class],
+    version = 18,
     exportSchema = false
 )
 @TypeConverters(GenreConverter::class)
@@ -38,6 +46,7 @@ abstract class WatchaDatabase : RoomDatabase() {
     abstract fun remoteKeysDao(): RemoteKeysDao
     abstract fun movieCategoryDao(): MovieCategoryDao
     abstract fun movieFavoriteDao(): MovieFavoriteDao
+    abstract fun tmdbSessionIdDao(): TmdbSessionIdDao
 }
 
 @Singleton
@@ -127,4 +136,14 @@ interface MovieFavoriteDao : MovieFavoriteRepository {
 
     @Query("select count(1) from movie_favorite where movieId = :movieId")
     override suspend fun checkIfMovieIsFavorite(movieId: Long): Int
+}
+
+@Dao
+interface TmdbSessionIdDao : LocalAuthRepository {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    override suspend fun saveSessionId(sessionId: TmdbSessionIdEntity) : Long
+
+    @Query("select sessionId from tmdb_session_id where email = :email")
+    override suspend fun getSessionId(email: String?): String?
 }
