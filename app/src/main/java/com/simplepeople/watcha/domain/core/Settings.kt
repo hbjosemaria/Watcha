@@ -6,7 +6,6 @@ data class Settings(
     val language: Language = Language.English,
 )
 
-//TODO: add a new parameter with the resId for the corresponding flag
 sealed class Language(
     val isoCode: String,
     val textRes: Int,

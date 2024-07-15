@@ -3,6 +3,8 @@ package com.simplepeople.watcha.ui.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -19,25 +21,28 @@ import androidx.navigation.navigation
 import com.simplepeople.watcha.ui.auth.auth.AuthScreen
 import com.simplepeople.watcha.ui.auth.signin.SignInScreen
 import com.simplepeople.watcha.ui.auth.signup.SignUpScreen
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.main.favorite.FavoriteScreen
 import com.simplepeople.watcha.ui.main.home.HomeScreen
 import com.simplepeople.watcha.ui.main.moviedetails.MovieDetailsScreen
 import com.simplepeople.watcha.ui.main.search.SearchScreen
 import com.simplepeople.watcha.ui.settings.SettingsScreen
 import com.simplepeople.watcha.ui.settings.language.SettingsLanguageScreen
+import com.simplepeople.watcha.ui.userprofile.ProfileScreen
 
 @Composable
 fun AppNavigation(
-    isUserSignedIn: Boolean = false
+    isUserSignedIn: Boolean = false,
+    appNavigationViewModel: AppNavigationViewModel = hiltViewModel(),
 ) {
 
     val navController = rememberNavController()
     navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route == MainAppScreens.HomeScreen.route) {
-            NavigationBarIndex.setSelectedIndex(0)
+            appNavigationViewModel.updateNavigationBarIndex(0)
         }
     }
+
+    val appNavigationState by appNavigationViewModel.appNavigationState.collectAsState()
 
     NavHost(
         navController = navController,
@@ -68,8 +73,8 @@ fun AppNavigation(
             route = AuthAppScreens.SignUpScreen.route
         ) {
             SignUpScreen(
-                navigateToAuth = { navController.navigate(AuthAppScreens.AuthScreen.route)},
-                navigateBack = {navController.popBackStack()}
+                navigateToAuth = { navController.navigate(AuthAppScreens.AuthScreen.route) },
+                navigateBack = { navController.popBackStack() }
             )
         }
 
@@ -77,115 +82,151 @@ fun AppNavigation(
             route = AuthAppScreens.AuthScreen.route
         ) {
             AuthScreen(
-                navigateToHome = {navController.navigate(MainAppScreens.MainScreen.route)},
-                navigateBack = {navController.navigateUp()}
+                navigateToHome = { navController.navigate(MainAppScreens.MainScreen.route) },
+                navigateBack = { navController.navigateUp() }
             )
         }
 
-        mainNestedGraph(
-            navController = navController
-        )
-    }
-}
-
-private fun NavGraphBuilder.mainNestedGraph(
-    navController: NavHostController
-) {
-    navigation(
-        route = MainAppScreens.MainScreen.route,
-        startDestination = MainAppScreens.HomeScreen.route
-    ) {
-        composable(
-            route = MainAppScreens.HomeScreen.route,
-            enterTransition = {
-                EnterTransition.None
+        navigation(
+            route = MainAppScreens.MainScreen.route,
+            startDestination = MainAppScreens.HomeScreen.route
+        ) {
+            composable(
+                route = MainAppScreens.HomeScreen.route,
+                enterTransition = {
+                    EnterTransition.None
+                }
+            ) { backStackEntry ->
+                val isRefreshing = backStackEntry.savedStateHandle
+                    .get<Boolean>(NavigationVariableNames.REFRESH_MOVIE_LIST.variableName) ?: false
+                HomeScreen(
+                    navigateToMovieDetails = { movieId: Long ->
+                        navController.navigate(
+                            MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                        )
+                    },
+                    navigateToNavigationBarItem = { route ->
+                        navigateToBottomNavigationItem(
+                            navController = navController,
+                            route = route
+                        )
+                    },
+                    isRefreshing = isRefreshing,
+                    selectedNavigationItemIndex = appNavigationState.selectedNavigationItemIndex,
+                    userProfileResult = appNavigationState.userProfileResult,
+                    updateNavigationItemIndex = { newValue ->
+                        appNavigationViewModel.updateNavigationBarIndex(newValue)
+                    },
+                    loadUserProfile = {
+                        appNavigationViewModel.loadUserProfile()
+                    }
+                )
             }
-        ) { backStackEntry ->
-            val isRefreshing = backStackEntry.savedStateHandle
-                .get<Boolean>(NavigationVariableNames.REFRESH_MOVIE_LIST.variableName) ?: false
-            HomeScreen(
-                navigateToMovieDetails = { movieId: Long ->
-                    navController.navigate(
-                        MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
-                    )
-                },
-                navigateToNavigationBarItem = { route ->
-                    navigateToBottomNavigationItem(
-                        navController = navController,
-                        route = route
-                    )
-                },
-                navigateToSettings = {
-                    navController.navigate(MainAppScreens.SettingsScreen.route)
-                },
-                isRefreshing = isRefreshing
-            )
-        }
-        composable(
-            route = MainAppScreens.FavoriteScreen.route,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
-            FavoriteScreen(
-                navigateToMovieDetails = { movieId: Long ->
-                    navController.navigate(
-                        MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
-                    )
-                },
-                navigateToNavigationBarItem = { route ->
-                    navigateToBottomNavigationItem(
-                        navController = navController,
-                        route = route
-                    )
-                },
-                navigateToSettings = {
-                    navController.navigate(MainAppScreens.SettingsScreen.route)
-                }
-            )
-        }
-        composable(
-            route = MainAppScreens.MovieDetailsScreen.buildRoute(),
-            arguments = listOf(navArgument(NavigationVariableNames.MOVIE_ID.variableName) {
-                type = NavType.LongType
-            })
-        ) {
-            val movieId =
-                it.arguments?.getLong(NavigationVariableNames.MOVIE_ID.variableName) ?: 1
-            MovieDetailsScreen(
-                movieId = movieId,
-                navigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable(
-            route = MainAppScreens.SearchScreen.route,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
-            SearchScreen(
-                navigateToMovieDetails = { movieId: Long ->
-                    navController.navigate(
-                        MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
-                    )
-                },
-                navigateToNavigationBarItem = { route ->
-                    navigateToBottomNavigationItem(
-                        navController = navController,
-                        route = route
-                    )
-                }
-            )
-        }
+            composable(
+                route = MainAppScreens.FavoriteScreen.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None }
+            ) {
+                FavoriteScreen(
+                    navigateToMovieDetails = { movieId: Long ->
+                        navController.navigate(
+                            MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                        )
+                    },
+                    navigateToNavigationBarItem = { route ->
+                        navigateToBottomNavigationItem(
+                            navController = navController,
+                            route = route
+                        )
+                    },
+                    selectedNavigationItemIndex = appNavigationState.selectedNavigationItemIndex,
+                    userProfileResult = appNavigationState.userProfileResult,
+                    updateNavigationItemIndex = { newValue ->
+                        appNavigationViewModel.updateNavigationBarIndex(newValue)
+                    }
+                )
+            }
+            composable(
+                route = MainAppScreens.MovieDetailsScreen.buildRoute(),
+                arguments = listOf(navArgument(NavigationVariableNames.MOVIE_ID.variableName) {
+                    type = NavType.LongType
+                })
+            ) {
+                val movieId =
+                    it.arguments?.getLong(NavigationVariableNames.MOVIE_ID.variableName) ?: 1
+                MovieDetailsScreen(
+                    movieId = movieId,
+                    navigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(
+                route = MainAppScreens.SearchScreen.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None }
+            ) {
+                SearchScreen(
+                    navigateToMovieDetails = { movieId: Long ->
+                        navController.navigate(
+                            MainAppScreens.MovieDetailsScreen.buildArgRoute(movieId)
+                        )
+                    },
+                    navigateToNavigationBarItem = { route ->
+                        navigateToBottomNavigationItem(
+                            navController = navController,
+                            route = route
+                        )
+                    },
+                    selectedNavigationItemIndex = appNavigationState.selectedNavigationItemIndex,
+                    userProfileResult = appNavigationState.userProfileResult,
+                    updateNavigationItemIndex = { newValue ->
+                        appNavigationViewModel.updateNavigationBarIndex(newValue)
+                    }
+                )
+            }
+            composable(
+                route = MainAppScreens.ProfileScreen.route,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None }
+            ) {
+                ProfileScreen(
+                    navigateToSettings = {
+                        navController.navigate(MainAppScreens.SettingsScreen.route)
+                    },
+                    navigateToSignIn = {
+                        navController.navigate(AuthAppScreens.SignInScreen.route) {
+                            popUpTo(MainAppScreens.MainScreen.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    navigateToNavigationBarItem = { route ->
+                        navigateToBottomNavigationItem(
+                            navController = navController,
+                            route = route
+                        )
+                    },
+                    selectedNavigationItemIndex = appNavigationState.selectedNavigationItemIndex,
+                    userProfileResult = appNavigationState.userProfileResult,
+                    updateNavigationItemIndex = { newValue ->
+                        appNavigationViewModel.updateNavigationBarIndex(newValue)
+                    },
+                    updateAvatar = {
+                        appNavigationViewModel.updateAvatar()
+                    }
+                )
+            }
 
-        settingsNestedGraph(
-            navController = navController
-        )
+            settingsNestedGraph(
+                navController = navController
+            )
+        }
     }
 }
 
 private fun NavGraphBuilder.settingsNestedGraph(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     navigation(
         route = MainAppScreens.SettingsScreen.route,
@@ -208,13 +249,6 @@ private fun NavGraphBuilder.settingsNestedGraph(
                 },
                 navigateToLanguageSettings = {
                     navController.navigate(SettingsAppScreens.SettingsLanguageScreen.route)
-                },
-                navigateToLogIn = {
-                    navController.navigate(AuthAppScreens.SignInScreen.route) {
-                        popUpTo(MainAppScreens.MainScreen.route) {
-                            inclusive = true
-                        }
-                    }
                 }
             )
         }
@@ -264,8 +298,6 @@ enum class NavigationVariableNames(val variableName: String) {
     REFRESH_MOVIE_LIST("refresh_movie_list"),
     MOVIE_ID("movieId")
 }
-
-
 
 
 

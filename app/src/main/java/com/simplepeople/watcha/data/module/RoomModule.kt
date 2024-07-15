@@ -1,14 +1,15 @@
-package com.simplepeople.watcha.data.modules
+package com.simplepeople.watcha.data.module
 
 import android.content.Context
 import androidx.room.Room
-import com.simplepeople.watcha.data.services.MovieCategoryDao
-import com.simplepeople.watcha.data.services.MovieDao
-import com.simplepeople.watcha.data.services.MovieFavoriteDao
-import com.simplepeople.watcha.data.services.RemoteKeysDao
-import com.simplepeople.watcha.data.services.SearchLogDao
-import com.simplepeople.watcha.data.services.TmdbSessionIdDao
-import com.simplepeople.watcha.data.services.WatchaDatabase
+import com.simplepeople.watcha.data.service.Room.MovieCategoryDao
+import com.simplepeople.watcha.data.service.Room.MovieDao
+import com.simplepeople.watcha.data.service.Room.MovieFavoriteDao
+import com.simplepeople.watcha.data.service.Room.RemoteKeysDao
+import com.simplepeople.watcha.data.service.Room.SearchLogDao
+import com.simplepeople.watcha.data.service.Room.TmdbSessionIdDao
+import com.simplepeople.watcha.data.service.Room.UserProfileDao
+import com.simplepeople.watcha.data.service.Room.WatchaDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,6 +52,10 @@ object RoomModule {
     @Provides
     fun provideTmdbSessionIdDao(database: WatchaDatabase): TmdbSessionIdDao =
         database.tmdbSessionIdDao()
+
+    @Provides
+    fun provideUserProfileDao(database: WatchaDatabase): UserProfileDao =
+        database.userProfileDao()
 
 }
 

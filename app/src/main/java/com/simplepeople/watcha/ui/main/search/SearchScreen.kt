@@ -44,10 +44,10 @@ import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.DefaultIconButton
 import com.simplepeople.watcha.ui.common.composables.ImageWithMessage
 import com.simplepeople.watcha.ui.common.composables.LoadingIndicator
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.movielist.MovieList
 import com.simplepeople.watcha.ui.common.composables.topbar.SearchTopAppBar
+import com.simplepeople.watcha.ui.navigation.UserProfileResult
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -60,6 +60,9 @@ fun SearchScreen(
     navigateToMovieDetails: (Long) -> Unit,
     lazyGridState: LazyGridState = rememberLazyGridState(),
     searchViewModel: SearchViewModel = hiltViewModel(),
+    userProfileResult: UserProfileResult,
+    updateNavigationItemIndex: (Int) -> Unit,
+    selectedNavigationItemIndex: Int,
 ) {
 
     val searchScreenUiState by searchViewModel.searchScreenState.collectAsState()
@@ -120,10 +123,11 @@ fun SearchScreen(
         bottomBar = {
             SharedNavigationBar(
                 navigateToNavigationBarItem = navigateToNavigationBarItem,
-                selectedNavigationItemIndex = NavigationBarIndex.selectedIndex,
-                updateNavigationBarSelectedIndex = { index ->
-                    searchViewModel.updateNavigationItemIndex(index)
-                }
+                selectedNavigationItemIndex = selectedNavigationItemIndex,
+                updateNavigationBarSelectedIndex = updateNavigationItemIndex,
+                avatarUrl = if (userProfileResult is UserProfileResult.Success) {
+                    userProfileResult.userProfile.getUserImageUrl()
+                } else ""
             )
         }
     ) { innerPadding ->

@@ -3,7 +3,7 @@ package com.simplepeople.watcha.data.model.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.simplepeople.watcha.data.services.GenreConverter
+import com.simplepeople.watcha.data.service.Room.GenreConverter
 import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
 
@@ -18,7 +18,7 @@ data class MovieEntity(
     val genres: List<Genre> = listOf(),
     val releaseDate: String = "",
     val voteAverage: String? = "",
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
 ) {
     fun toDomain(): Movie {
         return Movie(

@@ -39,7 +39,7 @@ fun SearchTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     searchText: String,
     onValueChange: (String) -> Unit,
-    cleanSearch: () -> Unit
+    cleanSearch: () -> Unit,
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -52,7 +52,7 @@ fun SearchTopAppBar(
     CenterAlignedTopAppBar(
         modifier = Modifier
             .padding(bottom = 6.dp),
-        colors = TopAppBarDefaults.topAppBarColors(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         scrollBehavior = scrollBehavior,

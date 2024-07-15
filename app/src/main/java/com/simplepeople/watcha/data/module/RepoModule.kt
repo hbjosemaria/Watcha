@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.modules
+package com.simplepeople.watcha.data.module
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -29,14 +29,19 @@ import com.simplepeople.watcha.data.repository.RemoteKeyRepositoryImpl
 import com.simplepeople.watcha.data.repository.RemoteKeysRepository
 import com.simplepeople.watcha.data.repository.SearchRepository
 import com.simplepeople.watcha.data.repository.SearchRepositoryImpl
-import com.simplepeople.watcha.data.services.MovieCategoryDao
-import com.simplepeople.watcha.data.services.MovieDao
-import com.simplepeople.watcha.data.services.MovieFavoriteDao
-import com.simplepeople.watcha.data.services.RemoteKeysDao
-import com.simplepeople.watcha.data.services.SearchLogDao
-import com.simplepeople.watcha.data.services.TmdbExternalAuthService
-import com.simplepeople.watcha.data.services.TmdbMovieService
-import com.simplepeople.watcha.data.services.TmdbSessionIdDao
+import com.simplepeople.watcha.data.repository.UserProfileExternalRepository
+import com.simplepeople.watcha.data.repository.UserProfileLocalRepository
+import com.simplepeople.watcha.data.repository.UserProfileRepositoryImpl
+import com.simplepeople.watcha.data.service.Room.MovieCategoryDao
+import com.simplepeople.watcha.data.service.Room.MovieDao
+import com.simplepeople.watcha.data.service.Room.MovieFavoriteDao
+import com.simplepeople.watcha.data.service.Room.RemoteKeysDao
+import com.simplepeople.watcha.data.service.Room.SearchLogDao
+import com.simplepeople.watcha.data.service.Room.TmdbSessionIdDao
+import com.simplepeople.watcha.data.service.Room.UserProfileDao
+import com.simplepeople.watcha.data.service.TmdbExternalAuthService
+import com.simplepeople.watcha.data.service.TmdbMovieService
+import com.simplepeople.watcha.data.service.TmdbUserProfileService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -131,5 +136,24 @@ object RepoModule {
     @Singleton
     fun provideExternalAuthRepository(apiService: TmdbExternalAuthService): ExternalAuthRepository {
         return ExternalAuthRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserProfileExternalRepository(
+        apiService: TmdbUserProfileService,
+        roomService: UserProfileDao,
+    ): UserProfileExternalRepository {
+        return UserProfileRepositoryImpl(roomService, apiService)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserProfileLocalRepository(
+        apiService: TmdbUserProfileService,
+        roomService: UserProfileDao,
+    ): UserProfileLocalRepository {
+        return UserProfileRepositoryImpl(roomService, apiService)
     }
 }

@@ -1,17 +1,18 @@
 package com.simplepeople.watcha.ui.common.composables
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -19,14 +20,22 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.navigation.MainAppScreens
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun SharedNavigationBar(
@@ -34,10 +43,25 @@ fun SharedNavigationBar(
     navigateToNavigationBarItem: (String) -> Unit,
     updateNavigationBarSelectedIndex: (Int) -> Unit,
     scrollToTopAction: () -> Unit = {},
+    avatarUrl: String,
 ) {
     val borderColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(
         alpha = .25f
     )
+
+    val image = ImageRequest.Builder(LocalContext.current)
+        .dispatcher(Dispatchers.IO)
+        .data(avatarUrl)
+        .placeholder(R.drawable.movie_placeholder)
+        .fallback(R.drawable.user_image_placeholder)
+        .error(R.drawable.user_image_placeholder)
+        .allowConversionToBitmap(true)
+        .crossfade(true)
+        .memoryCacheKey(avatarUrl)
+        .diskCacheKey(avatarUrl)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .build()
 
     NavigationBar(
         modifier = Modifier
@@ -67,18 +91,47 @@ fun SharedNavigationBar(
                 },
                 icon = {
                     if (selectedNavigationItemIndex == index) {
-                        Icon(
-                            imageVector = item.itemSelectedIcon,
-                            contentDescription = itemLabel,
+                        item.itemSelectedIcon?.let {
+                            Icon(
+                                imageVector = it,
+                                contentDescription = itemLabel,
+                                modifier = Modifier
+                                    .size(28.dp)
+                            )
+                        } ?: AsyncImage(
                             modifier = Modifier
                                 .size(28.dp)
+                                .clip(
+                                    shape = CircleShape
+                                )
+                                .border(
+                                    border = BorderStroke(
+                                        width = 2.dp,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    ),
+                                    shape = CircleShape
+                                ),
+                            model = image,
+                            contentDescription = stringResource(id = R.string.user_profile),
+                            contentScale = ContentScale.FillWidth
                         )
                     } else {
-                        Icon(
-                            imageVector = item.itemNotSelectedIcon,
-                            contentDescription = itemLabel,
+                        item.itemNotSelectedIcon?.let {
+                            Icon(
+                                imageVector = it,
+                                contentDescription = itemLabel,
+                                modifier = Modifier
+                                    .size(28.dp)
+                            )
+                        } ?: AsyncImage(
                             modifier = Modifier
                                 .size(28.dp)
+                                .clip(
+                                    shape = CircleShape
+                                ),
+                            model = image,
+                            contentDescription = stringResource(id = R.string.user_profile),
+                            contentScale = ContentScale.FillWidth
                         )
                     }
                 },
@@ -88,13 +141,12 @@ fun SharedNavigationBar(
             )
         }
     }
-
 }
 
 data class NavigationItem(
     val navigationRoute: String,
-    val itemSelectedIcon: ImageVector,
-    val itemNotSelectedIcon: ImageVector,
+    val itemSelectedIcon: ImageVector? = null,
+    val itemNotSelectedIcon: ImageVector? = null,
     val itemLabel: Int,
 )
 
@@ -119,22 +171,10 @@ class BottomNavigationItemProvider {
                 Icons.Outlined.FavoriteBorder,
                 MainAppScreens.FavoriteScreen.name
             ),
-            //TODO: implement profile screen
             NavigationItem(
-                MainAppScreens.FavoriteScreen.route,
-                Icons.Filled.Person,
-                Icons.Outlined.Person,
-                MainAppScreens.ProfileScreen.name
+                navigationRoute = MainAppScreens.ProfileScreen.route,
+                itemLabel = MainAppScreens.ProfileScreen.name
             )
         )
-    }
-}
-
-object NavigationBarIndex {
-    var selectedIndex: Int = 0
-        private set
-
-    fun setSelectedIndex(newIndex: Int) {
-        this.selectedIndex = newIndex
     }
 }

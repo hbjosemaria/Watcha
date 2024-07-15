@@ -57,7 +57,7 @@ fun MovieDetailsScreen(
         creationCallback = { factory ->
             factory.create(movieId = movieId)
         }
-    )
+    ),
 ) {
 
     val movieDetailsUiState by movieDetailsViewModel.movieDetailsState.collectAsState()
@@ -134,13 +134,15 @@ fun MovieDetailsScreen(
 @Composable
 private fun MovieDetailsHeader(
     movie: Movie,
-    toggleFavorite: () -> Unit
+    toggleFavorite: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         AsyncImage(
+            modifier = Modifier
+                .fillMaxWidth(),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(movie.picture)
                 .crossfade(true)
@@ -202,7 +204,7 @@ private fun MovieDetailsHeader(
 
 @Composable
 private fun MovieDetailsBody(
-    movie: Movie
+    movie: Movie,
 ) {
     Column(
         modifier = Modifier

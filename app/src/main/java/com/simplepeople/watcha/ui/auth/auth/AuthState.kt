@@ -2,12 +2,12 @@ package com.simplepeople.watcha.ui.auth.auth
 
 import com.simplepeople.watcha.ui.common.utils.SnackbarItem
 
-data class AuthState (
-    val authResult : AuthResult = AuthResult.Pending,
-    val requestToken : String = "",
+data class AuthState(
+    val authResult: AuthResult = AuthResult.Pending,
+    val requestToken: String = "",
     val isTokenAuthorized: Boolean = false,
     val isSessionIdStored: Boolean = false,
-    val snackbarItem: SnackbarItem = SnackbarItem()
+    val snackbarItem: SnackbarItem = SnackbarItem(),
 )
 
 sealed class AuthResult {

@@ -5,6 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.simplepeople.watcha.domain.core.Language
 import com.simplepeople.watcha.domain.core.Settings
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
+import com.simplepeople.watcha.domain.usecase.CredentialsUseCase
 import com.simplepeople.watcha.domain.usecase.SettingsUseCase
 import com.simplepeople.watcha.ui.settings.SettingsViewModel
 import io.mockk.MockKAnnotations
@@ -25,6 +26,9 @@ class SettingsViewModelTest {
     @MockK
     private lateinit var cacheUseCase: CacheUseCase
 
+    @MockK(relaxed = true)
+    private lateinit var credentialsUseCase: CredentialsUseCase
+
     private lateinit var settingsViewModel: SettingsViewModel
 
     @Before
@@ -36,7 +40,11 @@ class SettingsViewModelTest {
         coJustRun {settingsUseCase.updateSettings(Language.English) }
         coJustRun {cacheUseCase.forceCacheExpiration()}
 
-        settingsViewModel = SettingsViewModel(settingsUseCase, cacheUseCase)
+        settingsViewModel = SettingsViewModel(
+            settingsUseCase,
+            cacheUseCase,
+            credentialsUseCase
+        )
     }
 
     @Test

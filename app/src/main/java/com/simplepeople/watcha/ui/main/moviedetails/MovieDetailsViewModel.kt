@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class MovieDetailsViewModel @AssistedInject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val movieUseCase: MovieUseCase,
-    @Assisted private val movieId: Long
+    @Assisted private val movieId: Long,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -40,7 +40,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         ) {
             when (val state = movieDetailsState.value.movieState) {
                 is MovieDetailsMovieState.Error,
-                MovieDetailsMovieState.Loading
+                MovieDetailsMovieState.Loading,
                 -> {
                     //Do nothing
                 }
@@ -50,12 +50,6 @@ class MovieDetailsViewModel @AssistedInject constructor(
                     val movie = state.movie.copy(
                         isFavorite = !state.movie.isFavorite
                     )
-
-//                    _movieDetailsState.value = _movieDetailsState.value.copy(
-//                        movieState = MovieDetailsMovieState.Success(
-//                            movie = movie
-//                        )
-//                    )
 
                     try {
                         if (movie.isFavorite) {

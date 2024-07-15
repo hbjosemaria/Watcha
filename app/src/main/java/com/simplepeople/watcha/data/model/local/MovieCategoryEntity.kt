@@ -11,5 +11,5 @@ import androidx.room.Index
 data class MovieCategoryEntity(
     val movieId: Long,
     val categoryId: Int,
-    val position: Int
+    val position: Int,
 )

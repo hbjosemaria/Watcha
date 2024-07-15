@@ -1,18 +1,27 @@
 package com.simplepeople.watcha.data
 
+import android.content.Context
+import androidx.credentials.CredentialManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.auth.FirebaseAuth
 import com.simplepeople.watcha.data.model.external.MovieListResponseDto
 import com.simplepeople.watcha.data.model.external.MovieResponseDto
 import com.simplepeople.watcha.data.model.local.MovieEntity
-import com.simplepeople.watcha.data.modules.RepoModule
+import com.simplepeople.watcha.data.module.RepoModule
 import com.simplepeople.watcha.data.repository.CacheRepository
 import com.simplepeople.watcha.data.repository.CacheRepositoryImpl
+import com.simplepeople.watcha.data.repository.CredentialRepository
+import com.simplepeople.watcha.data.repository.CredentialRepositoryImpl
 import com.simplepeople.watcha.data.repository.DataStoreRepository
 import com.simplepeople.watcha.data.repository.DataStoreRepositoryImpl
+import com.simplepeople.watcha.data.repository.ExternalAuthRepository
+import com.simplepeople.watcha.data.repository.ExternalAuthRepositoryImpl
 import com.simplepeople.watcha.data.repository.ExternalMovieRepository
+import com.simplepeople.watcha.data.repository.LocalAuthRepository
+import com.simplepeople.watcha.data.repository.LocalAuthRepositoryImpl
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MixedMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
@@ -23,12 +32,15 @@ import com.simplepeople.watcha.data.repository.RemoteKeyRepositoryImpl
 import com.simplepeople.watcha.data.repository.RemoteKeysRepository
 import com.simplepeople.watcha.data.repository.SearchRepository
 import com.simplepeople.watcha.data.repository.SearchRepositoryImpl
-import com.simplepeople.watcha.data.services.MovieCategoryDao
-import com.simplepeople.watcha.data.services.MovieFavoriteDao
-import com.simplepeople.watcha.data.services.RemoteKeysDao
-import com.simplepeople.watcha.data.services.SearchLogDao
+import com.simplepeople.watcha.data.service.Room.MovieCategoryDao
+import com.simplepeople.watcha.data.service.Room.MovieFavoriteDao
+import com.simplepeople.watcha.data.service.Room.RemoteKeysDao
+import com.simplepeople.watcha.data.service.Room.SearchLogDao
+import com.simplepeople.watcha.data.service.Room.TmdbSessionIdDao
+import com.simplepeople.watcha.data.service.TmdbExternalAuthService
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import javax.inject.Inject
@@ -92,6 +104,35 @@ object FakeRepoModule {
     @Singleton
     fun provideCacheRepository(dataStore: DataStore<Preferences>): CacheRepository {
         return CacheRepositoryImpl(dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCredentialsRepository(
+        @ApplicationContext context: Context,
+        credentialManager: CredentialManager,
+        firebaseAuth: FirebaseAuth,
+    ): CredentialRepository {
+        return CredentialRepositoryImpl(
+            context = context,
+            credentialManager = credentialManager,
+            firebaseAuth = firebaseAuth
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalAuthRepository(
+        roomService: TmdbSessionIdDao,
+        firebaseAuth: FirebaseAuth,
+    ): LocalAuthRepository {
+        return LocalAuthRepositoryImpl(roomService, firebaseAuth = firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideExternalAuthRepository(apiService: TmdbExternalAuthService): ExternalAuthRepository {
+        return ExternalAuthRepositoryImpl(apiService)
     }
 }
 

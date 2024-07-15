@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.simplepeople.watcha.R
+import com.simplepeople.watcha.domain.usecase.AuthUseCase
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import com.simplepeople.watcha.ui.common.utils.ConnectivityState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val movieListUseCase: MovieListUseCase,
     private val cacheUseCase: CacheUseCase,
-    private val _connectivityState: ConnectivityState
+    private val authUseCase: AuthUseCase,
+    private val _connectivityState: ConnectivityState,
 ) : ViewModel() {
 
     private val _homeScreenState = MutableStateFlow(HomeScreenState())
@@ -31,6 +32,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadMovies()
+        loadSessionId()
+    }
+
+    private fun loadSessionId() {
+        if (!authUseCase.isSessionLoaded()) {
+            viewModelScope.launch(
+                context = Dispatchers.IO
+            ) {
+                authUseCase.loadSessionId()
+            }
+        }
     }
 
     fun loadMovies() {
@@ -70,10 +82,6 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun updateNavigationItemIndex(index: Int) {
-        NavigationBarIndex.setSelectedIndex(index)
-    }
-
     fun reloadMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             cacheUseCase.forceCacheExpiration()
@@ -89,5 +97,4 @@ class HomeViewModel @Inject constructor(
             )
         )
     }
-
 }

@@ -48,10 +48,10 @@ fun AuthScreen(
     navigateBack: () -> Unit,
 ) {
 
-    val snackbarHostState = remember {SnackbarHostState()}
+    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val authState by authViewModel.authState.collectAsState()
-    var isExplanationRead by remember {mutableStateOf(false)}
+    var isExplanationRead by remember { mutableStateOf(false) }
 
     LaunchedEffect(authState.snackbarItem) {
         if (authState.snackbarItem.show) {
@@ -95,7 +95,7 @@ fun AuthScreen(
         ) {
             when {
                 !isExplanationRead -> {
-                    Column (
+                    Column(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .wrapContentSize(),
@@ -108,10 +108,12 @@ fun AuthScreen(
                                     bottom = 20.dp
                                 ),
                             painter = painterResource(id = R.drawable.watcha_and_tmdb_sync),
-                            contentDescription = stringResource(id = R.string.watcha_and_tmdb_sync))
+                            contentDescription = stringResource(id = R.string.watcha_and_tmdb_sync)
+                        )
                         ImageWithMessage(
                             modifier = Modifier,
-                            image = R.drawable.tmdb_sync)
+                            image = R.drawable.tmdb_sync
+                        )
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
@@ -125,13 +127,14 @@ fun AuthScreen(
                             .padding(
                                 bottom = 40.dp
                             ),
-                        onClick = {isExplanationRead = true}
+                        onClick = { isExplanationRead = true }
                     ) {
                         Text(
                             text = stringResource(id = R.string.auth_explanation_button)
                         )
                     }
                 }
+
                 isExplanationRead && !authState.isTokenAuthorized -> {
                     AndroidView(
                         modifier = Modifier
@@ -144,7 +147,7 @@ fun AuthScreen(
                                         view: WebView?,
                                         request: WebResourceRequest?,
                                     ): Boolean {
-                                        request?.let{
+                                        request?.let {
                                             val url = it.url.toString()
                                             authViewModel.checkIfTokenIsAuthorized(url)
                                             view?.loadUrl(url)
@@ -161,6 +164,7 @@ fun AuthScreen(
                                 -> {
                                     webView.stopLoading()
                                 }
+
                                 is AuthResult.Success -> {
                                     webView.loadUrl(state.requestTokenUrl)
                                 }
@@ -168,6 +172,7 @@ fun AuthScreen(
                         }
                     )
                 }
+
                 else -> {
                     LoadingIndicator(
                         modifier = Modifier

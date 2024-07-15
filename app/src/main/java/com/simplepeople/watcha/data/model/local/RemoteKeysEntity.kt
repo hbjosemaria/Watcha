@@ -12,5 +12,5 @@ data class RemoteKeysEntity(
     val movieId: Long,
     val categoryId: Int,
     val prevKey: Int?,
-    val nextKey: Int?
+    val nextKey: Int?,
 )

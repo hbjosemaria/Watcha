@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.repository
 
 import com.simplepeople.watcha.data.model.local.MovieCategoryEntity
-import com.simplepeople.watcha.data.services.MovieCategoryDao
+import com.simplepeople.watcha.data.service.Room.MovieCategoryDao
 import javax.inject.Inject
 
 interface MovieCategoryRepository {
@@ -10,7 +10,7 @@ interface MovieCategoryRepository {
 }
 
 class MovieCategoryRepositoryImpl @Inject constructor(
-    private val apiService: MovieCategoryDao
+    private val apiService: MovieCategoryDao,
 ) : MovieCategoryRepository {
     override suspend fun insertAll(categories: List<MovieCategoryEntity>) =
         apiService.insertAll(categories)

@@ -2,7 +2,7 @@ package com.simplepeople.watcha.data.repository
 
 import androidx.paging.PagingSource
 import com.simplepeople.watcha.data.model.local.MovieFavoriteEntity
-import com.simplepeople.watcha.data.services.MovieFavoriteDao
+import com.simplepeople.watcha.data.service.Room.MovieFavoriteDao
 import javax.inject.Inject
 
 
@@ -14,7 +14,7 @@ interface MovieFavoriteRepository {
 }
 
 class MovieFavoriteRepositoryImpl @Inject constructor(
-    private val apiService: MovieFavoriteDao
+    private val apiService: MovieFavoriteDao,
 ) : MovieFavoriteRepository {
     override fun getFavorites(): PagingSource<Int, MovieFavoriteEntity> =
         apiService.getFavorites()

@@ -96,4 +96,5 @@
     <string name="auth_request_token_failed">Ocurrió un error mientras intentábamos solicitar permiso. Inténtalo de nuevo más tarde</string>
     <string name="auth_explanation">Para sincronizar Watcha con TMDB, te pediremos tu autorización para vincular tu cuenta a Watcha.</string>
     <string name="auth_explanation_button">Proceder a la autorización</string>
+    <string name="reviews">Reseñas</string>
 </resources>

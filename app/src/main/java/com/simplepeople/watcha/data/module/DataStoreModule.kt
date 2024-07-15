@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.modules
+package com.simplepeople.watcha.data.module
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 private const val PREFERENCES = "preferences"
-val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = PREFERENCES)
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES)
 
 @InstallIn(SingletonComponent::class)
 @Module

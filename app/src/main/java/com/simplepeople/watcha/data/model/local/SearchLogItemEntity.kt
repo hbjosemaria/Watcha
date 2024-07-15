@@ -8,7 +8,7 @@ import com.simplepeople.watcha.domain.core.SearchLogItem
 data class SearchLogItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val searchedText: String = ""
+    val searchedText: String = "",
 ) {
     fun toDomain(): SearchLogItem =
         SearchLogItem(
