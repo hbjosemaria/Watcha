@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val credentialsUseCase: CredentialsUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
 ) : ViewModel(), SnackbarMessaging {
 
     private val _loginState = MutableStateFlow(LoginState())

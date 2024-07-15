@@ -3,11 +3,11 @@ package com.simplepeople.watcha.ui.auth.signup
 import com.simplepeople.watcha.ui.common.utils.SnackbarItem
 
 data class SignUpState(
-    val email : String = "",
-    val isEmailValid : Boolean = false,
-    val password : String = "",
-    val signUpResult : SignUpResult = SignUpResult.Success(false),
-    val snackbarItem: SnackbarItem = SnackbarItem()
+    val email: String = "",
+    val isEmailValid: Boolean = false,
+    val password: String = "",
+    val signUpResult: SignUpResult = SignUpResult.Success(false),
+    val snackbarItem: SnackbarItem = SnackbarItem(),
 )
 
 sealed class SignUpResult {

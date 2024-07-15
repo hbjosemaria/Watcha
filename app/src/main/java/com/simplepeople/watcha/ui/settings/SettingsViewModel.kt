@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.domain.core.Language
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
-import com.simplepeople.watcha.domain.usecase.CredentialsUseCase
 import com.simplepeople.watcha.domain.usecase.SettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,6 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val settingsUseCase: SettingsUseCase,
     private val cacheUseCase: CacheUseCase,
-    private val credentialsUseCase: CredentialsUseCase
 ) : ViewModel() {
 
     private val _settingsState = MutableStateFlow(SettingsState())
@@ -56,20 +54,11 @@ class SettingsViewModel @Inject constructor(
                     )
 
                 }
+
                 else -> {
                     _settingsState.value
                 }
             }
-        }
-    }
-
-    fun logOut() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _settingsState.value = _settingsState.value.copy(
-                isLoggedOut = true
-            )
-            cacheUseCase.forceCacheExpiration()
-            credentialsUseCase.logOut()
         }
     }
 }

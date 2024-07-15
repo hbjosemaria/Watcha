@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.repository
 
 import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
-import com.simplepeople.watcha.data.services.SearchLogDao
+import com.simplepeople.watcha.data.service.Room.SearchLogDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

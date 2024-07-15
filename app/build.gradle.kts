@@ -99,6 +99,7 @@ dependencies {
     kaptAndroidTest(libs.com.google.dagger.hilt.compiler2)
 
     //Regular dependencies
+    implementation(libs.androidx.work.testing)
     implementation(libs.androidx.runner)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.room.paging)
@@ -107,6 +108,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
@@ -120,7 +123,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.biometric)
-    implementation (libs.androidx.credentials.play.services.auth)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.material.icons.extended.android)
     implementation (libs.googleid.vlatestversion)
     implementation(libs.googleid)

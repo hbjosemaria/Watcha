@@ -7,7 +7,6 @@ import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.core.SearchLogItem
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.domain.usecase.SearchLogUseCase
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -121,9 +120,4 @@ class SearchViewModel @Inject constructor(
             scrollToTop = true
         )
     }
-
-    fun updateNavigationItemIndex(index: Int) {
-        NavigationBarIndex.setSelectedIndex(index)
-    }
-
 }

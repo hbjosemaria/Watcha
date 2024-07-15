@@ -11,7 +11,7 @@ import com.simplepeople.watcha.data.repository.ExternalMovieRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
 import com.simplepeople.watcha.data.repository.RemoteKeysRepository
-import com.simplepeople.watcha.data.services.WatchaDatabase
+import com.simplepeople.watcha.data.service.Room.WatchaDatabase
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.tests.data.FakeCacheRepositoryImpl
 import com.simplepeople.watcha.tests.data.FakeData

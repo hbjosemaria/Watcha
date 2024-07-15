@@ -36,6 +36,8 @@ fun MovieItem(
         modifier = modifier
     ) {
         AsyncImage(
+            modifier = Modifier
+                .fillMaxWidth(),
             model = ImageRequest.Builder(LocalContext.current)
                 .dispatcher(Dispatchers.IO)
                 .data(movie.picture)

@@ -2,7 +2,7 @@ package com.simplepeople.watcha.tests.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
 import com.google.common.truth.Truth.assertThat
-import com.simplepeople.watcha.data.modules.DataStoreVariableType
+import com.simplepeople.watcha.data.module.DataStoreVariableType
 import com.simplepeople.watcha.data.repository.DataStoreRepository
 import com.simplepeople.watcha.domain.core.Language
 import com.simplepeople.watcha.domain.core.Settings

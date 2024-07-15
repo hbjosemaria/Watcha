@@ -9,8 +9,8 @@ import com.simplepeople.watcha.data.model.external.RequestTokenDto
 import com.simplepeople.watcha.data.model.external.SessionDto
 import com.simplepeople.watcha.data.model.external.TokenDto
 import com.simplepeople.watcha.data.model.local.TmdbSessionIdEntity
-import com.simplepeople.watcha.data.services.TmdbExternalAuthService
-import com.simplepeople.watcha.data.services.TmdbSessionIdDao
+import com.simplepeople.watcha.data.service.Room.TmdbSessionIdDao
+import com.simplepeople.watcha.data.service.TmdbExternalAuthService
 import javax.inject.Inject
 
 interface ExternalAuthRepository {
@@ -39,13 +39,13 @@ class LocalAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : LocalAuthRepository {
     override suspend fun saveSessionId(sessionId: TmdbSessionIdEntity): Long {
-        return firebaseAuth.currentUser?.email?.let{ email ->
+        return firebaseAuth.currentUser?.email?.let { email ->
             roomService.saveSessionId(
                 sessionId.copy(
                     email = email
                 )
             )
-        } ?: throw FirebaseAuthException (
+        } ?: throw FirebaseAuthException(
             FirebaseError.ERROR_USER_NOT_FOUND.toString(),
             "User is not signed in to save its session id"
         )
@@ -54,13 +54,4 @@ class LocalAuthRepositoryImpl @Inject constructor(
     override suspend fun getSessionId(email: String?): String? =
         roomService.getSessionId(email)
 
-}
-
-object TmdbSession {
-    var sessionId: String? = null
-        private set
-
-    fun setSessionId(sessionId: String) {
-        this.sessionId = sessionId
-    }
 }

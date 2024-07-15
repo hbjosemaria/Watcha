@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.data.model.external
 
 import com.google.gson.annotations.SerializedName
-import com.simplepeople.watcha.data.services.TmdbApiUrl
+import com.simplepeople.watcha.data.service.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Genre
 import com.simplepeople.watcha.domain.core.Movie
 
@@ -57,7 +57,7 @@ data class MovieResponseDto(
     @SerializedName("vote_average")
     val voteAverage: Double = 0.0,
     @SerializedName("vote_count")
-    val voteCount: Int = 0
+    val voteCount: Int = 0,
 ) {
     data class BelongsToCollection(
         @SerializedName("id")
@@ -67,14 +67,14 @@ data class MovieResponseDto(
         @SerializedName("poster_path")
         val posterPath: String = "",
         @SerializedName("backdrop_path")
-        val backdropPath: String = ""
+        val backdropPath: String = "",
     )
 
     data class Genres(
         @SerializedName("id")
         val id: Int = 1,
         @SerializedName("name")
-        val name: String = ""
+        val name: String = "",
     ) {
         fun toDomain(): Genre = Genre.entries.find { it.id == this.id }
             ?: Genre.NOT_SPECIFIED
@@ -88,14 +88,14 @@ data class MovieResponseDto(
         @SerializedName("name")
         val name: String = "",
         @SerializedName("origin_country")
-        val originCountry: String = ""
+        val originCountry: String = "",
     )
 
     data class ProductionCountries(
         @SerializedName("iso_3166_1")
         val iso31661: String = "",
         @SerializedName("name")
-        val name: String = ""
+        val name: String = "",
     )
 
     data class SpokenLanguages(
@@ -104,7 +104,7 @@ data class MovieResponseDto(
         @SerializedName("iso_639_1")
         val iso6391: String = "",
         @SerializedName("name")
-        val name: String = ""
+        val name: String = "",
     )
 
     fun toDomain(): Movie {

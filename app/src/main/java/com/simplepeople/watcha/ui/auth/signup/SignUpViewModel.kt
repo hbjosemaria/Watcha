@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val credentialsUseCase: CredentialsUseCase
+    private val credentialsUseCase: CredentialsUseCase,
 ) : ViewModel(), SnackbarMessaging {
 
     private val _signUpState = MutableStateFlow(SignUpState())
@@ -39,7 +39,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = credentialsUseCase.createPasswordCredential(
                 email = _signUpState.value.email,
-                password =  _signUpState.value.password
+                password = _signUpState.value.password
             )
 
             when (result) {
@@ -48,6 +48,7 @@ class SignUpViewModel @Inject constructor(
                         signUpResult = SignUpResult.Success(true)
                     )
                 }
+
                 false -> {
                     _signUpState.value = _signUpState.value.copy(
                         signUpResult = SignUpResult.Error(SignUpResult.ErrorType.SIGN_UP_NO_USER_FOUND_ERROR),
@@ -58,6 +59,7 @@ class SignUpViewModel @Inject constructor(
                         )
                     )
                 }
+
                 null -> {
                     _signUpState.value = _signUpState.value.copy(
                         signUpResult = SignUpResult.Error(SignUpResult.ErrorType.SIGN_UP_CREDENTIAL_ERROR),
@@ -72,7 +74,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    override fun resetSnackbar () {
+    override fun resetSnackbar() {
         _signUpState.value = _signUpState.value.copy(
             snackbarItem = SnackbarItem()
         )

@@ -10,14 +10,15 @@ const val TMDB_API_MAX_PAGES = 11
 
 class ExternalFilteredMoviePagingSource(
     private val repository: ExternalMovieRepository,
-    private val searchText: String
+    private val searchText: String,
 ) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
 
         return try {
             val position = params.key ?: 1
-            val response = repository.getMoviesByTitle(searchText, position, Locale.current.language)
+            val response =
+                repository.getMoviesByTitle(searchText, position, Locale.current.language)
 
             if (response.results.isNotEmpty()) {
                 LoadResult.Page(

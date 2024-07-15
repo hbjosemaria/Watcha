@@ -1,7 +1,7 @@
 package com.simplepeople.watcha.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
-import com.simplepeople.watcha.data.modules.DataStoreVariableType
+import com.simplepeople.watcha.data.module.DataStoreVariableType
 import com.simplepeople.watcha.data.repository.DataStoreRepository
 import com.simplepeople.watcha.domain.core.Language
 import com.simplepeople.watcha.domain.core.Settings
@@ -42,8 +42,7 @@ class SettingsUseCase @Inject constructor(
         }
     }
 
-    //If added new settings variables, then implement their class verification inside
-    // the when clause
+    //If added new settings variables, then implement their class verification inside the When clause
     suspend fun <T> updateSettings(parameter: T) {
         when (parameter) {
             is Language -> {

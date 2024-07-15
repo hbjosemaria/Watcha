@@ -99,4 +99,5 @@
     <string name="auth_explanation">In order to sync Watcha with TMDB, we will ask for your authorization to link your account to Watcha.</string>
     <string name="auth_explanation_button">Proceed to authorization</string>
     <string name="watcha_and_tmdb_sync" translatable="false">Sync image</string>
+    <string name="reviews">Reviews</string>
 </resources>

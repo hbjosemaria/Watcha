@@ -144,9 +144,9 @@ fun SignUpScreen(
 
 @Composable
 private fun EmailField(
-    email : String,
-    isEmailValid : Boolean,
-    updateEmail: (String) -> Unit
+    email: String,
+    isEmailValid: Boolean,
+    updateEmail: (String) -> Unit,
 ) {
     TextField(
         modifier = Modifier

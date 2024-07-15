@@ -9,5 +9,5 @@ data class MovieFavoriteEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @Embedded
-    val movie: MovieEntity
+    val movie: MovieEntity,
 )

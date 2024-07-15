@@ -49,7 +49,7 @@ fun DefaultTextIconButton(
     contentDescription: String,
     modifier: Modifier = Modifier,
     tint: Color? = null,
-    text: Int
+    text: Int,
 ) {
     ElevatedButton(
         onClick = action,
@@ -59,7 +59,7 @@ fun DefaultTextIconButton(
             end = 15.dp
         )
     ) {
-        Row (
+        Row(
             modifier = Modifier
                 .wrapContentWidth(),
             verticalAlignment = Alignment.CenterVertically,

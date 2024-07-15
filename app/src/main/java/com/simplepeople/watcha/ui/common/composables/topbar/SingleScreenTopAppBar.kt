@@ -23,10 +23,10 @@ import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarText
 fun SingleScreenTopAppBar(
     navigateBack: () -> Unit,
     screenTitleResource: Int,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         scrollBehavior = scrollBehavior,

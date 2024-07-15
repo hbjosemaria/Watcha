@@ -10,7 +10,7 @@ data class SearchScreenState(
     val searching: Boolean = false,
     val scrollToTop: Boolean = false,
     val searchLog: List<SearchLogItem> = listOf(),
-    val movieListState: SearchScreenMovieListState = SearchScreenMovieListState.Loading
+    val movieListState: SearchScreenMovieListState = SearchScreenMovieListState.Loading,
 )
 
 sealed class SearchScreenMovieListState {

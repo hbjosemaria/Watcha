@@ -4,9 +4,9 @@ import androidx.paging.PagingSource
 import com.simplepeople.watcha.data.model.external.MovieListResponseDto
 import com.simplepeople.watcha.data.model.external.MovieResponseDto
 import com.simplepeople.watcha.data.model.local.MovieEntity
-import com.simplepeople.watcha.data.services.MovieDao
-import com.simplepeople.watcha.data.services.MovieFavoriteDao
-import com.simplepeople.watcha.data.services.TmdbMovieService
+import com.simplepeople.watcha.data.service.Room.MovieDao
+import com.simplepeople.watcha.data.service.Room.MovieFavoriteDao
+import com.simplepeople.watcha.data.service.TmdbMovieService
 import javax.inject.Inject
 
 //Interfaces which returns a Long or Int on insert and delete queries usually means if the query has success or not.
@@ -18,6 +18,7 @@ interface ExternalMovieRepository {
         page: Int,
         language: String,
     ): MovieListResponseDto
+
     suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto
     suspend fun getNowPlayingByPage(page: Int, language: String): MovieListResponseDto
     suspend fun getPopularByPage(page: Int, language: String): MovieListResponseDto
@@ -50,7 +51,11 @@ class ExternalMovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto =
         apiService.getMovieById(movieId, language)
 
-    override suspend fun getMoviesByTitle(searchText: String, page: Int, language: String): MovieListResponseDto =
+    override suspend fun getMoviesByTitle(
+        searchText: String,
+        page: Int,
+        language: String,
+    ): MovieListResponseDto =
         apiService.getMoviesByTitle(searchText, page, language)
 
     override suspend fun getNowPlayingByPage(page: Int, language: String): MovieListResponseDto =
@@ -100,7 +105,10 @@ class MixedMovieRepositoryImpl @Inject constructor(
     private val roomService: MovieFavoriteDao,
     private val apiService: TmdbMovieService,
 ) : MixedMovieRepository {
-    override suspend fun getMovieById(movieId: Long, language: String): Pair<MovieResponseDto, Int> =
+    override suspend fun getMovieById(
+        movieId: Long,
+        language: String,
+    ): Pair<MovieResponseDto, Int> =
         Pair(
             apiService.getMovieById(movieId, language),
             roomService.checkIfMovieIsFavorite(movieId)

@@ -33,7 +33,7 @@ interface CredentialRepository {
 class CredentialRepositoryImpl @Inject constructor(
     private val credentialManager: CredentialManager,
     private val firebaseAuth: FirebaseAuth,
-    private val context: Context
+    private val context: Context,
 ) : CredentialRepository {
 
     override suspend fun signIn(
@@ -66,6 +66,7 @@ class CredentialRepositoryImpl @Inject constructor(
                     throw Exception("Not supported federated credential")
                 }
             }
+
             else -> {
                 throw Exception("Not supported credential")
             }
@@ -99,7 +100,7 @@ class CredentialRepositoryImpl @Inject constructor(
             id = email,
             password = password
         )
-         try {
+        try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result.user?.let {
                 credentialManager.createCredential(
@@ -128,7 +129,7 @@ class CredentialRepositoryImpl @Inject constructor(
         SecureRandom().nextBytes(nonceBytes)
         val nonce = Base64.encodeToString(nonceBytes, Base64.URL_SAFE)
         return GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
+            .setFilterByAuthorizedAccounts(true)
             .setServerClientId(BuildConfig.GOOGLE_ID_WEB_CLIENT)
             .setAutoSelectEnabled(true)
             .setNonce(nonce)

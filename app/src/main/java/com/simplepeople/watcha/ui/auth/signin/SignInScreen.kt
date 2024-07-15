@@ -40,7 +40,7 @@ fun SignInScreen(
     signInViewModel: SignInViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit,
-    navigateToAuth: () -> Unit
+    navigateToAuth: () -> Unit,
 ) {
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -55,7 +55,7 @@ fun SignInScreen(
         }
     }
 
-    LaunchedEffect (loginState.snackbarItem) {
+    LaunchedEffect(loginState.snackbarItem) {
         if (loginState.snackbarItem.show) {
             snackBarHostState.currentSnackbarData?.dismiss()
             snackBarHostState.showSnackbar(

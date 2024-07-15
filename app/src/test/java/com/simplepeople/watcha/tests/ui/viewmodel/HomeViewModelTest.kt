@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.simplepeople.watcha.domain.core.Movie
+import com.simplepeople.watcha.domain.usecase.AuthUseCase
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.tests.data.FakeData
@@ -42,6 +43,9 @@ class HomeViewModelTest {
     @MockK
     private lateinit var connectivityState: ConnectivityState
 
+    @MockK(relaxed = true)
+    private lateinit var authUseCase: AuthUseCase
+
     private lateinit var homeViewModel : HomeViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -62,7 +66,8 @@ class HomeViewModelTest {
         homeViewModel = HomeViewModel(
             movieListUseCase = movieListUseCase,
             cacheUseCase = cacheUseCase,
-            _connectivityState = connectivityState
+            _connectivityState = connectivityState,
+            authUseCase = authUseCase
         )
     }
 

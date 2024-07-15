@@ -20,7 +20,7 @@ import androidx.compose.ui.test.performTextInput
 import com.simplepeople.watcha.MainActivity
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
-import com.simplepeople.watcha.data.services.WatchaDatabase
+import com.simplepeople.watcha.data.service.Room.WatchaDatabase
 import com.simplepeople.watcha.ui.navigation.MainAppScreens
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

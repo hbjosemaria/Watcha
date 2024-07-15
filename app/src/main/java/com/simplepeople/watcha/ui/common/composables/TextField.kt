@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
 fun TextFieldClickableSelected(
+    modifier: Modifier = Modifier,
     value: String,
     labelText: String = "",
     action: () -> Unit,
@@ -29,6 +30,7 @@ fun TextFieldClickableSelected(
     )
 
     TextFieldClickable(
+        modifier = modifier,
         value = value,
         action = action,
         colors = colors,
@@ -39,6 +41,7 @@ fun TextFieldClickableSelected(
 
 @Composable
 fun TextFieldClickableUnselected(
+    modifier: Modifier = Modifier,
     value: String,
     labelText: String = "",
     action: () -> Unit,
@@ -53,6 +56,7 @@ fun TextFieldClickableUnselected(
     )
 
     TextFieldClickable(
+        modifier = modifier,
         value = value,
         action = action,
         colors = colors,
@@ -64,6 +68,7 @@ fun TextFieldClickableUnselected(
 
 @Composable
 private fun TextFieldClickable(
+    modifier: Modifier,
     value: String,
     labelText: String,
     action: () -> Unit,
@@ -71,7 +76,7 @@ private fun TextFieldClickable(
     iconVector: ImageVector,
 ) {
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable {
                 action()

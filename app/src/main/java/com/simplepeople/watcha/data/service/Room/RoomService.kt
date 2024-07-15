@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.services
+package com.simplepeople.watcha.data.service.Room
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -8,25 +8,22 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.simplepeople.watcha.data.model.local.MovieCategoryEntity
 import com.simplepeople.watcha.data.model.local.MovieEntity
 import com.simplepeople.watcha.data.model.local.MovieFavoriteEntity
 import com.simplepeople.watcha.data.model.local.RemoteKeysEntity
 import com.simplepeople.watcha.data.model.local.SearchLogItemEntity
 import com.simplepeople.watcha.data.model.local.TmdbSessionIdEntity
+import com.simplepeople.watcha.data.model.local.UserProfileEntity
 import com.simplepeople.watcha.data.repository.LocalAuthRepository
 import com.simplepeople.watcha.data.repository.LocalMovieRepository
 import com.simplepeople.watcha.data.repository.MovieCategoryRepository
 import com.simplepeople.watcha.data.repository.MovieFavoriteRepository
 import com.simplepeople.watcha.data.repository.RemoteKeysRepository
 import com.simplepeople.watcha.data.repository.SearchRepository
-import com.simplepeople.watcha.domain.core.Genre
+import com.simplepeople.watcha.data.repository.UserProfileLocalRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Singleton
 
 @Database(
     entities = [
@@ -35,11 +32,16 @@ import javax.inject.Singleton
         RemoteKeysEntity::class,
         MovieCategoryEntity::class,
         MovieFavoriteEntity::class,
-        TmdbSessionIdEntity::class],
-    version = 18,
+        TmdbSessionIdEntity::class,
+        UserProfileEntity::class],
+    version = 20,
     exportSchema = false
 )
-@TypeConverters(GenreConverter::class)
+
+@TypeConverters(
+    GenreConverter::class,
+    AvatarConverter::class
+)
 abstract class WatchaDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun searchLogDao(): SearchLogDao
@@ -47,19 +49,7 @@ abstract class WatchaDatabase : RoomDatabase() {
     abstract fun movieCategoryDao(): MovieCategoryDao
     abstract fun movieFavoriteDao(): MovieFavoriteDao
     abstract fun tmdbSessionIdDao(): TmdbSessionIdDao
-}
-
-@Singleton
-class GenreConverter {
-    @TypeConverter
-    fun genresToJson(value: List<Genre>): String {
-        return Gson().toJson(value)
-    }
-
-    @TypeConverter
-    fun jsonToGenres(value: String): List<Genre> {
-        return Gson().fromJson(value, object : TypeToken<List<Genre>>() {}.type)
-    }
+    abstract fun userProfileDao(): UserProfileDao
 }
 
 @Dao
@@ -142,8 +132,24 @@ interface MovieFavoriteDao : MovieFavoriteRepository {
 interface TmdbSessionIdDao : LocalAuthRepository {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun saveSessionId(sessionId: TmdbSessionIdEntity) : Long
+    override suspend fun saveSessionId(sessionId: TmdbSessionIdEntity): Long
 
     @Query("select sessionId from tmdb_session_id where email = :email")
     override suspend fun getSessionId(email: String?): String?
+}
+
+@Dao
+interface UserProfileDao : UserProfileLocalRepository {
+
+    @Query("select * from user_profile where sessionId = :sessionId")
+    override suspend fun getUserProfile(sessionId: String?): UserProfileEntity
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    override suspend fun saveUserProfile(userProfile: UserProfileEntity): Long
+
+    @Query("update user_profile set avatar = :avatar where sessionId = :sessionId")
+    override suspend fun updateAvatar(
+        avatar: UserProfileEntity.AvatarEntity,
+        sessionId: String?,
+    )
 }

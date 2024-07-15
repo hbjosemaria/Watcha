@@ -4,8 +4,8 @@ import com.simplepeople.watcha.data.model.external.TokenDto
 import com.simplepeople.watcha.data.model.local.TmdbSessionIdEntity
 import com.simplepeople.watcha.data.repository.ExternalAuthRepository
 import com.simplepeople.watcha.data.repository.LocalAuthRepository
-import com.simplepeople.watcha.data.repository.TmdbSession
-import com.simplepeople.watcha.data.services.TmdbApiUrl
+import com.simplepeople.watcha.data.service.TmdbApiUrl
+import com.simplepeople.watcha.domain.core.UserProfile
 import javax.inject.Inject
 
 class AuthUseCase @Inject constructor(
@@ -21,22 +21,22 @@ class AuthUseCase @Inject constructor(
             .plus("?redirect_to=${TmdbApiUrl.AUTH_REDIRECT_URL.url}")
     }
 
-    fun checkIfTokenIsAuthorized(url: String) : Boolean {
+    fun checkIfTokenIsAuthorized(url: String): Boolean {
         return url.startsWith(TmdbApiUrl.AUTH_REDIRECT_URL.url)
     }
 
-    suspend fun createSession(requestToken: String) : Boolean {
+    suspend fun createSession(requestToken: String): Boolean {
         val token = TokenDto(
             requestToken = requestToken
         )
         val session = externalAuthRepository.createSession(token)
         return if (session.success) {
-            TmdbSession.setSessionId(session.sessionId)
+            UserProfile.setSessionId(session.sessionId)
             saveSessionId(session.sessionId)
         } else false
     }
 
-    private suspend fun saveSessionId(sessionId: String) : Boolean {
+    private suspend fun saveSessionId(sessionId: String): Boolean {
         val result = localAuthRepository.saveSessionId(
             TmdbSessionIdEntity(
                 sessionId = sessionId
@@ -45,11 +45,14 @@ class AuthUseCase @Inject constructor(
         return result > -1L
     }
 
-    suspend fun loadSessionId() : Boolean {
-        localAuthRepository.getSessionId()?.let {sessionId ->
-            TmdbSession.setSessionId(sessionId)
+    suspend fun loadSessionId(): Boolean {
+        localAuthRepository.getSessionId()?.let { sessionId ->
+            UserProfile.setSessionId(sessionId)
             return true
         } ?: return false
     }
+
+    fun isSessionLoaded(): Boolean =
+        UserProfile.sessionId != null
 
 }

@@ -31,7 +31,8 @@ fun Modifier.shimmerEffect(): Modifier =
                     750,
                     delayMillis = 500
                 )
-            )
+            ),
+            label = ""
         )
 
         background(

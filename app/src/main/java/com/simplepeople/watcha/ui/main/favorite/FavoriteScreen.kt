@@ -25,10 +25,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.ImageWithMessage
 import com.simplepeople.watcha.ui.common.composables.LoadingIndicator
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.movielist.MovieList
 import com.simplepeople.watcha.ui.common.composables.topbar.MainTopAppBar
+import com.simplepeople.watcha.ui.navigation.UserProfileResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +37,9 @@ fun FavoriteScreen(
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
     navigateToNavigationBarItem: (String) -> Unit,
-    navigateToSettings: () -> Unit,
+    userProfileResult: UserProfileResult,
+    updateNavigationItemIndex: (Int) -> Unit,
+    selectedNavigationItemIndex: Int,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -55,13 +57,14 @@ fun FavoriteScreen(
         bottomBar = {
             SharedNavigationBar(
                 navigateToNavigationBarItem = navigateToNavigationBarItem,
-                selectedNavigationItemIndex = NavigationBarIndex.selectedIndex,
-                updateNavigationBarSelectedIndex = { index ->
-                    favoriteViewModel.updateNavigationItemIndex(index)
-                },
+                selectedNavigationItemIndex = selectedNavigationItemIndex,
+                updateNavigationBarSelectedIndex = updateNavigationItemIndex,
                 scrollToTopAction = {
                     favoriteViewModel.scrollingToTop(true)
-                }
+                },
+                avatarUrl = if (userProfileResult is UserProfileResult.Success) {
+                    userProfileResult.userProfile.getUserImageUrl()
+                } else ""
             )
         }
     ) { innerPadding ->
@@ -122,8 +125,7 @@ fun FavoriteScreen(
             }
 
             MainTopAppBar(
-                scrollBehavior = scrollBehavior,
-                navigateToSettings = navigateToSettings
+                scrollBehavior = scrollBehavior
             )
         }
     }

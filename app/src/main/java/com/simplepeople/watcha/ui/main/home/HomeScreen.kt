@@ -35,13 +35,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.ImageWithMessage
 import com.simplepeople.watcha.ui.common.composables.LoadingIndicator
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.movielist.HomeMovieList
 import com.simplepeople.watcha.ui.common.composables.movielist.MovieListPlaceholder
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeTopAppBar
 import com.simplepeople.watcha.ui.common.composables.topbar.common.topBarDynamicParamCalc
+import com.simplepeople.watcha.ui.navigation.UserProfileResult
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -52,14 +52,17 @@ fun HomeScreen(
     lazyGridState: LazyGridState = rememberLazyGridState(),
     navigateToMovieDetails: (Long) -> Unit,
     navigateToNavigationBarItem: (String) -> Unit,
-    navigateToSettings: () -> Unit,
-    isRefreshing: Boolean
+    selectedNavigationItemIndex: Int,
+    updateNavigationItemIndex: (Int) -> Unit,
+    loadUserProfile: () -> Unit,
+    userProfileResult: UserProfileResult,
+    isRefreshing: Boolean,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val homeScreenUiState by homeViewModel.homeScreenState.collectAsState()
     val userHasConnection by homeViewModel.connectivityState.collectAsState()
-    var refreshMovieList by remember{ mutableStateOf(isRefreshing) }
+    var refreshMovieList by remember { mutableStateOf(isRefreshing) }
 
     val movieListPaddingValues = remember {
         mutableStateOf(
@@ -69,6 +72,12 @@ fun HomeScreen(
                 fraction = scrollBehavior.state.collapsedFraction
             )
         )
+    }
+
+    LaunchedEffect(Unit) {
+        if (userProfileResult !is UserProfileResult.Success) {
+            loadUserProfile()
+        }
     }
 
     LaunchedEffect(scrollBehavior.state.collapsedFraction) {
@@ -104,13 +113,14 @@ fun HomeScreen(
         bottomBar = {
             SharedNavigationBar(
                 navigateToNavigationBarItem = navigateToNavigationBarItem,
-                selectedNavigationItemIndex = NavigationBarIndex.selectedIndex,
-                updateNavigationBarSelectedIndex = { index ->
-                    homeViewModel.updateNavigationItemIndex(index)
-                },
+                selectedNavigationItemIndex = selectedNavigationItemIndex,
+                updateNavigationBarSelectedIndex = updateNavigationItemIndex,
                 scrollToTopAction = {
                     homeViewModel.scrollingToTop(true)
-                }
+                },
+                avatarUrl = if (userProfileResult is UserProfileResult.Success) {
+                    userProfileResult.userProfile.getUserImageUrl()
+                } else ""
             )
         }
     ) { innerPadding ->
@@ -221,8 +231,7 @@ fun HomeScreen(
                 scrollToTop = {
                     homeViewModel.scrollingToTop(true)
                 },
-                scrollBehavior = scrollBehavior,
-                navigateToSettings = navigateToSettings
+                scrollBehavior = scrollBehavior
             )
         }
     }

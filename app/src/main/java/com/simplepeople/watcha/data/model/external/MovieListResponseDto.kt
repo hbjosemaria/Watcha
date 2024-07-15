@@ -2,7 +2,7 @@ package com.simplepeople.watcha.data.model.external
 
 import com.google.gson.annotations.SerializedName
 import com.simplepeople.watcha.data.model.local.MovieEntity
-import com.simplepeople.watcha.data.services.TmdbApiUrl
+import com.simplepeople.watcha.data.service.TmdbApiUrl
 import com.simplepeople.watcha.domain.core.Movie
 
 data class MovieListResponseDto(
@@ -13,7 +13,7 @@ data class MovieListResponseDto(
     @SerializedName("total_pages")
     val totalPages: Int = 1,
     @SerializedName("total_results")
-    val totalResults: Int = results.size
+    val totalResults: Int = results.size,
 ) {
     data class Results(
         @SerializedName("adult")
@@ -43,7 +43,7 @@ data class MovieListResponseDto(
         @SerializedName("vote_average")
         val voteAverage: Double = 0.0,
         @SerializedName("vote_count")
-        val voteCount: Int = 0
+        val voteCount: Int = 0,
     )
 
     fun toDomain(): List<Movie> =

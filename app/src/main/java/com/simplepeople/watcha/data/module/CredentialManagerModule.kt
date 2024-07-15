@@ -1,4 +1,4 @@
-package com.simplepeople.watcha.data.modules
+package com.simplepeople.watcha.data.module
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -19,14 +19,14 @@ object CredentialManagerModule {
     @Provides
     @Singleton
     fun provideCredentialManager(
-        @ApplicationContext context : Context
-    ) : CredentialManager {
+        @ApplicationContext context: Context,
+    ): CredentialManager {
         return CredentialManager.create(context)
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth() : FirebaseAuth {
+    fun provideFirebaseAuth(): FirebaseAuth {
         return Firebase.auth
     }
 
