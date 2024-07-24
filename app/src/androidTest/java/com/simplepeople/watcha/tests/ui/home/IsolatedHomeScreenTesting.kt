@@ -14,6 +14,7 @@ import com.simplepeople.watcha.MainActivity
 import com.simplepeople.watcha.ui.main.home.HomeScreen
 import com.simplepeople.watcha.ui.main.home.HomeViewModel
 import com.simplepeople.watcha.ui.navigation.MainAppScreens
+import com.simplepeople.watcha.ui.navigation.UserProfileResult
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -45,10 +46,13 @@ class IsolatedHomeScreenTesting {
                         HomeScreen(
                             homeViewModel = homeViewModel,
                             lazyGridState = rememberLazyGridState(),
-                            navigateToSettings = {},
                             navigateToNavigationBarItem = {},
                             navigateToMovieDetails = {},
-                            isRefreshing = false
+                            isRefreshing = false,
+                            selectedNavigationItemIndex = 0,
+                            updateNavigationItemIndex = {},
+                            loadUserProfile = {},
+                            userProfileResult = UserProfileResult.Loading
                         )
                     }
                 }

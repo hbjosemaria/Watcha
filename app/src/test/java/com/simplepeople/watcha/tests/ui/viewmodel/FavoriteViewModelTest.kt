@@ -6,7 +6,6 @@ import com.google.common.truth.Truth.assertThat
 import com.simplepeople.watcha.domain.core.Movie
 import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
 import com.simplepeople.watcha.tests.data.FakeMovieFavoriteRepository
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.main.favorite.FavoriteScreenMovieListState
 import com.simplepeople.watcha.ui.main.favorite.FavoriteScreenState
 import com.simplepeople.watcha.ui.main.favorite.FavoriteViewModel
@@ -76,16 +75,6 @@ class FavoriteViewModelTest {
             assertThat(previousValue).isNotEqualTo(currentValue)
             assertThat(currentValue).isTrue()
         }
-    }
-
-    @Test
-    fun updateNavigationItemIndex() {
-        val newNavigationIndex = 3
-        val previousValue = NavigationBarIndex.selectedIndex
-        favoriteViewModel.updateNavigationItemIndex(newNavigationIndex)
-        val currentValue = NavigationBarIndex.selectedIndex
-        assertThat(previousValue).isNotEqualTo(currentValue)
-        assertThat(currentValue).isEqualTo(newNavigationIndex)
     }
 }
 

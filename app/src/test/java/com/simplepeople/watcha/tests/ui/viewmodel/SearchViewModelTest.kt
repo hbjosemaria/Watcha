@@ -11,7 +11,6 @@ import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.domain.usecase.SearchLogUseCase
 import com.simplepeople.watcha.tests.data.FakeData
 import com.simplepeople.watcha.tests.data.FakeSearchRepositoryImpl
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.main.search.SearchScreenMovieListState
 import com.simplepeople.watcha.ui.main.search.SearchViewModel
 import io.mockk.MockKAnnotations
@@ -214,15 +213,6 @@ class SearchViewModelTest {
                 }
             }
         }
-    }
-
-    @Test
-    fun updateNavigationItemIndex() {
-        val newNavigationIndex = 2
-        val previousNavigationIndex = NavigationBarIndex.selectedIndex
-        searchViewModel.updateNavigationItemIndex(newNavigationIndex)
-        val currentNavigationIndex = NavigationBarIndex.selectedIndex
-        assertThat(previousNavigationIndex).isNotEqualTo(currentNavigationIndex)
     }
 
     @Test

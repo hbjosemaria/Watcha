@@ -1,5 +1,7 @@
 package com.simplepeople.watcha.ui.main.search
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -180,65 +182,72 @@ fun SearchScreen(
                 }
             }
 
-            when (val state = searchScreenUiState.movieListState) {
-
-                is SearchScreenMovieListState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        LoadingIndicator(
+            Crossfade(
+                targetState = searchScreenUiState.movieListState,
+                label = "List animation",
+                animationSpec = tween(350)
+            ) { state ->
+                when (state) {
+                    is SearchScreenMovieListState.Loading -> {
+                        Box(
                             modifier = Modifier
-                                .align(Alignment.Center)
-                        )
-                    }
-                }
-
-                is SearchScreenMovieListState.Error -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        ImageWithMessage(
-                            modifier = Modifier
-                                .align(Alignment.Center),
-                            image = R.drawable.favorite_empty,
-                            message = state.message
-                        )
-                    }
-                }
-
-                is SearchScreenMovieListState.Success -> {
-                    val movieList = state.movieList.collectAsLazyPagingItems()
-                    when {
-                        movieList.itemCount > 0 -> {
-                            MovieList(
-                                movieList = movieList,
-                                navigateToMovieDetails = navigateToMovieDetails,
-                                paddingValues = PaddingValues(10.dp)
+                                .fillMaxSize()
+                        ) {
+                            LoadingIndicator(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
                             )
                         }
+                    }
 
-                        movieList.itemCount == 0 &&
-                                movieList.loadState.refresh is LoadState.Error -> {
-                            Box(
+                    is SearchScreenMovieListState.Error -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            ImageWithMessage(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                            ) {
-                                ImageWithMessage(
-                                    modifier = Modifier
-                                        .align(Alignment.Center),
-                                    image = R.drawable.search_no_result,
-                                    message = R.string.search_no_result
+                                    .align(Alignment.Center),
+                                image = R.drawable.favorite_empty,
+                                message = state.message
+                            )
+                        }
+                    }
+
+                    is SearchScreenMovieListState.Success -> {
+                        val movieList = state.movieList.collectAsLazyPagingItems()
+                        when {
+                            movieList.itemCount > 0 -> {
+                                MovieList(
+                                    movieList = movieList,
+                                    navigateToMovieDetails = navigateToMovieDetails,
+                                    paddingValues = PaddingValues(10.dp)
                                 )
+                            }
+
+                            movieList.itemCount == 0 &&
+                                    movieList.loadState.refresh is LoadState.Error -> {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                ) {
+                                    ImageWithMessage(
+                                        modifier = Modifier
+                                            .align(Alignment.Center),
+                                        image = R.drawable.search_no_result,
+                                        message = R.string.search_no_result
+                                    )
+                                }
                             }
                         }
                     }
                 }
+
             }
         }
     }
 }
+
 
 @Composable
 fun SearchLogItem(

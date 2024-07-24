@@ -17,19 +17,24 @@ import retrofit2.http.Query
 
 enum class TmdbApiUrl(val url: String) {
     BASE_URL("https://api.themoviedb.org/3/"),
-    IMG_BASE_URL("https://image.tmdb.org/t/p/w500/"),
+    POSTER_BASE_URL("https://image.tmdb.org/t/p/w500"),
+    BACKDROP_BASE_URL("https://image.tmdb.org/t/p/w1280"),
+    CAST_IMG_BASE_URL("https://image.tmdb.org/t/p/w276_and_h350_face"),
+    PROFILE_GRAVATAR_IMG_URL("https://secure.gravatar.com/avatar/{hash}.jpg?s=300"),
+    PROFILE_TMDB_IMG_URL("https://media.themoviedb.org/t/p/w300_and_h300_face"),
+    REVIEW_PROFILE_IMG_BASE_URL("https://media.themoviedb.org/t/p/w300_and_h300_face"),
     AUTH_URL("https://www.themoviedb.org/authenticate/"),
     AUTH_REDIRECT_URL("https://simplepeople.watcha.com/approved"),
-    GRAVATAR_IMG_URL("https://secure.gravatar.com/avatar/{hash}.jpg?s=300"),
-    TMDB_IMG_URL("https://media.themoviedb.org/t/p/w300_and_h300_face/")
+    MOVIE_WEB_BASE_URL("https://www.themoviedb.org/movie/")
 }
 
 interface TmdbMovieService : ExternalMovieRepository {
-
     @GET("movie/{movie_id}")
     override suspend fun getMovieById(
         @Path("movie_id") movieId: Long,
         @Query("language") language: String,
+        @Query("include_image_language") imageLanguage: String,
+        @Query("append_to_response") append: String
     ): MovieResponseDto
 
     @GET("search/movie")

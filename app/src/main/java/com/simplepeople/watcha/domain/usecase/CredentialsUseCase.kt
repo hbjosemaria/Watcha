@@ -32,4 +32,7 @@ class CredentialsUseCase @Inject constructor(
     suspend fun logOut() = credentialRepository
         .logOut()
 
+    suspend fun deleteAccount() = credentialRepository
+        .deleteAccount()
+
 }

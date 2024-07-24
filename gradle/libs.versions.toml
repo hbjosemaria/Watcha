@@ -1,18 +1,18 @@
 [versions]
-agp = "8.5.0"
+agp = "8.5.1"
 biometric = "1.4.0-alpha01"
-coilCompose = "2.6.0"
+coilCompose = "2.7.0"
 converterScalars = "2.11.0"
 core = "1.6.1"
 coreSplashscreen = "1.0.1"
 credentials = "1.5.0-alpha02"
 credentialsPlayServicesAuth = "1.2.2"
 datastorePreferences = "1.1.1"
-firebaseBom = "33.1.1"
+firebaseBom = "33.1.2"
 googleid = "1.1.1"
 googleidVersion = "1.1.1"
-gradle = "8.5.0"
-hiltAndroid = "2.44"
+gradle = "8.5.1"
+hiltAndroid = "2.51.1"
 hiltAndroidTesting = "2.51.1"
 hiltAndroidVersion = "2.51.1"
 hiltNavigationCompose = "1.2.0"
@@ -26,6 +26,7 @@ appcompat = "1.7.0"
 kotlinGradlePlugin = "1.6.21"
 kotlintestRunnerJunit4 = "3.3.2"
 kotlinxCoroutinesTest = "1.8.1"
+lifecycleRuntimeKtxVersion = "2.8.3"
 material = "1.12.0"
 lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
@@ -40,20 +41,21 @@ mockitoKotlin = "4.2.0"
 mockitoKotlinVersion = "5.3.1"
 mockitoMockitoCore = "5.12.0"
 mockitoMockitoKotlin = "5.3.1"
-mockk = "1.13.11"
+mockk = "1.13.12"
 mockkAndroid = "1.13.11"
 navigationCompose = "2.7.7"
 pagingRuntimeKtx = "3.3.0"
+paletteKtx = "1.0.0"
 playServicesAuth = "21.2.0"
 powermockApiMockito2 = "2.0.9"
 powermockModuleJunit4 = "2.0.9"
 retrofit = "2.11.0"
-robolectric = "4.12.2"
+robolectric = "4.13"
 roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
 pagingCompose = "3.3.0"
 roomTesting = "2.6.1"
-truth = "1.4.3"
+truth = "1.4.4"
 turbine = "1.1.0"
 uiTestJunit4 = "1.6.8"
 uiTestManifest = "1.6.8"
@@ -75,10 +77,12 @@ androidx-datastore-core = { module = "androidx.datastore:datastore-core", versio
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-lifecycle-runtime-ktx-v231 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
 androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationCompose" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "paletteKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomCompiler" }

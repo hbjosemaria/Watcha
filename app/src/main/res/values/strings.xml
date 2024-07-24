@@ -87,7 +87,7 @@
     <string name="sign_up_email_placeholder">example@gmail.com</string>
     <string name="sign_up_password_label">Password</string>
     <string name="sign_up_email_label" translatable="false">Email</string>
-    <string name="sign_up_password_placeholder">MySpeciallySecretPassword</string>
+    <string name="sign_up_password_placeholder">MyPassword#123</string>
     <string name="sign_up_no_user_found_error">Your account could not be created</string>
     <string name="sign_up_credential_error">An error occurred during the creation process. Try again later</string>
     <string name="email_is_not_valid">Email is not valid</string>
@@ -100,4 +100,21 @@
     <string name="auth_explanation_button">Proceed to authorization</string>
     <string name="watcha_and_tmdb_sync" translatable="false">Sync image</string>
     <string name="reviews">Reviews</string>
+    <string name="backdrop" translatable="false">Backdrop</string>
+    <string name="poster" translatable="false">Poster</string>
+    <string name="overview">Overview</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
+    <string name="cast_member">Cast member</string>
+    <string name="similar">Similar to %s</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="review_written_by">A review by %s</string>
+    <string name="review_author_sub">Written by %s on %s</string>
+    <string name="images">Images</string>
+    <string name="videos" translatable="false">Videos</string>
+    <string name="media" translatable="false">Media</string>
+    <string name="youtube" translatable="false">Youtube</string>
+    <string name="play_trailer">Play Trailer</string>
+    <string name="share_movie">Share movie using</string>
+    <string name="not_rated">NR</string>
+    <string name="delete_account">Delete account</string>
 </resources>

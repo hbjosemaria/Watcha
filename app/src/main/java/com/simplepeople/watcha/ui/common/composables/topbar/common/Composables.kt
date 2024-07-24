@@ -1,5 +1,7 @@
 package com.simplepeople.watcha.ui.common.composables.topbar.common
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -32,14 +35,27 @@ fun TopAppBarButton(
     text: Int,
     action: () -> Unit
 ) {
+
+    val buttonColor by animateColorAsState(
+        targetValue = if (buttonFilterOption == selectedFilterOption) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.tertiaryContainer,
+        animationSpec = tween(durationMillis = 250),
+        label = "Button animation"
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = if (buttonFilterOption == selectedFilterOption) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
+        animationSpec = tween(durationMillis = 250),
+        label = "Button animation"
+    )
+
     Button(
         onClick = {
             action()
         },
         contentPadding = ButtonDefaults.TextButtonContentPadding,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (buttonFilterOption == selectedFilterOption) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = if (buttonFilterOption == selectedFilterOption) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
+            containerColor = buttonColor,
+            contentColor = contentColor,
         ),
         modifier = Modifier
             .clip(RoundedCornerShape(3.dp))

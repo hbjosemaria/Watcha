@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.MaterialTheme
@@ -109,6 +110,14 @@ fun ProfileScreen(
 
             ColumnElementDivider()
 
+            DeleteAccountItem (
+                action = {
+                    userProfileViewModel.deleteAccount()
+                }
+            )
+
+            ColumnElementDivider()
+
             LogOutItem(
                 action = {
                     userProfileViewModel.logOut()
@@ -192,7 +201,7 @@ private fun UserHeader(
                     .build(),
                 contentDescription = name,
                 contentScale = ContentScale.FillWidth,
-                placeholder = painterResource(id = R.drawable.movie_placeholder)
+                placeholder = painterResource(id = R.drawable.poster_placeholder)
             )
             Text(
                 modifier = Modifier
@@ -222,6 +231,19 @@ private fun LogOutItem(
 }
 
 @Composable
+private fun DeleteAccountItem(
+    modifier: Modifier = Modifier,
+    action: () -> Unit,
+) {
+    TextFieldClickableUnselected(
+        modifier = modifier,
+        value = stringResource(id = R.string.delete_account),
+        action = action,
+        iconVector = Icons.Default.DeleteSweep
+    )
+}
+
+@Composable
 private fun SettingsItem(
     modifier: Modifier = Modifier,
     navigateToSettings: () -> Unit,
@@ -234,7 +256,6 @@ private fun SettingsItem(
     )
 }
 
-//TODO: implement ReviewScreen and attach its navigation to this item
 @Composable
 private fun ReviewsItem(
     modifier: Modifier = Modifier,

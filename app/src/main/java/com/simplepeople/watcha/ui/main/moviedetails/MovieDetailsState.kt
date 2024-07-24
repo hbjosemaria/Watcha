@@ -6,6 +6,7 @@ import com.simplepeople.watcha.ui.common.utils.SnackbarItem
 data class MovieDetailsState(
     val snackBarItem: SnackbarItem = SnackbarItem(),
     val movieState: MovieDetailsMovieState = MovieDetailsMovieState.Loading,
+    val scrollToTop: Boolean = false
 )
 
 sealed class MovieDetailsMovieState {

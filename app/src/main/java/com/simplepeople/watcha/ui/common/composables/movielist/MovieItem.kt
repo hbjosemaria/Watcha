@@ -41,8 +41,8 @@ fun MovieItem(
             model = ImageRequest.Builder(LocalContext.current)
                 .dispatcher(Dispatchers.IO)
                 .data(movie.picture)
-                .placeholder(R.drawable.movie_placeholder)
-                .fallback(R.drawable.movie_placeholder)
+                .placeholder(R.drawable.poster_placeholder)
+                .fallback(R.drawable.poster_placeholder)
                 .error(R.drawable.movie_error_placeholder)
                 .allowConversionToBitmap(true)
                 .crossfade(true)
@@ -53,7 +53,7 @@ fun MovieItem(
                 .build(),
             contentDescription = movie.title,
             contentScale = ContentScale.FillWidth,
-            placeholder = painterResource(id = R.drawable.movie_placeholder)
+            placeholder = painterResource(id = R.drawable.poster_placeholder)
         )
         Text(
             modifier = Modifier

@@ -22,19 +22,21 @@ class AppNavigationViewModel @Inject constructor(
         viewModelScope.launch(
             context = Dispatchers.IO
         ) {
-            try {
-                _appNavigationState.value = _appNavigationState.value.copy(
-                    userProfileResult = UserProfileResult.Success(
-                        userProfile = userProfileUseCase.getUserProfile()
-                            ?: userProfileUseCase.fetchAndSaveUserProfile()
+            if (_appNavigationState.value.userProfileResult !is UserProfileResult.Success) {
+                try {
+                    _appNavigationState.value = _appNavigationState.value.copy(
+                        userProfileResult = UserProfileResult.Success(
+                            userProfile = userProfileUseCase.getUserProfile()
+                                ?: userProfileUseCase.fetchAndSaveUserProfile()
+                        )
                     )
-                )
-            } catch (e: Exception) {
-                _appNavigationState.value = _appNavigationState.value.copy(
-                    userProfileResult = UserProfileResult.Error(
-                        error = UserProfileResult.TypeError.PROFILE_NOT_FOUND
+                } catch (e: Exception) {
+                    _appNavigationState.value = _appNavigationState.value.copy(
+                        userProfileResult = UserProfileResult.Error(
+                            error = UserProfileResult.TypeError.PROFILE_NOT_FOUND
+                        )
                     )
-                )
+                }
             }
         }
     }

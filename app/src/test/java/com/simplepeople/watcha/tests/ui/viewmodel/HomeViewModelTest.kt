@@ -8,7 +8,6 @@ import com.simplepeople.watcha.domain.usecase.AuthUseCase
 import com.simplepeople.watcha.domain.usecase.CacheUseCase
 import com.simplepeople.watcha.domain.usecase.MovieListUseCase
 import com.simplepeople.watcha.tests.data.FakeData
-import com.simplepeople.watcha.ui.common.composables.NavigationBarIndex
 import com.simplepeople.watcha.ui.common.composables.topbar.HomeFilterOptions
 import com.simplepeople.watcha.ui.common.utils.ConnectivityState
 import com.simplepeople.watcha.ui.main.home.HomeScreenMovieListState
@@ -132,15 +131,6 @@ class HomeViewModelTest {
             assertThat(previousValue).isNotEqualTo(currentValue)
             assertThat(currentValue).isTrue()
         }
-    }
-
-    @Test
-    fun updateNavigationItemIndex() {
-        val newNavigationIndex = 1
-        val previousNavigationIndex = NavigationBarIndex.selectedIndex
-        homeViewModel.updateNavigationItemIndex(newNavigationIndex)
-        val currentNavigationIndex = NavigationBarIndex.selectedIndex
-        assertThat(previousNavigationIndex).isNotEqualTo(currentNavigationIndex)
     }
 
     @Test

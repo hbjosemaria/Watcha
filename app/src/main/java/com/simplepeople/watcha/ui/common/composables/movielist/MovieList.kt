@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.simplepeople.watcha.ui.common.composables.movielist
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -104,6 +107,7 @@ fun MovieList(
                 movie = movie,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .animateItemPlacement()
                     .clickable {
                         navigateToMovieDetails(movie.movieId)
                     }

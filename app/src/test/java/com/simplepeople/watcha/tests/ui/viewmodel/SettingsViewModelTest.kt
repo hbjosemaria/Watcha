@@ -42,8 +42,7 @@ class SettingsViewModelTest {
 
         settingsViewModel = SettingsViewModel(
             settingsUseCase,
-            cacheUseCase,
-            credentialsUseCase
+            cacheUseCase
         )
     }
 

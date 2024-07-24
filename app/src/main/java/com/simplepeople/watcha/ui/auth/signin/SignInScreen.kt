@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -118,13 +118,12 @@ fun SignInScreen(
                         bottom = 40.dp
                     )
             ) {
-
                 DefaultTextIconButton(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                     action = { signInViewModel.signIn() },
-                    iconImage = Icons.Default.Add,
-                    contentDescription = Icons.Default.Add.name,
+                    iconImage = Icons.Filled.Key,
+                    contentDescription = Icons.Filled.Key.name,
                     text = R.string.sign_in
                 )
 
@@ -132,8 +131,6 @@ fun SignInScreen(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                     action = navigateToSignUp,
-                    iconImage = Icons.Default.Add,
-                    contentDescription = Icons.Default.Add.name,
                     text = R.string.sign_up
                 )
             }

@@ -1,5 +1,7 @@
 package com.simplepeople.watcha.ui.main.favorite
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -68,57 +70,63 @@ fun FavoriteScreen(
             )
         }
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize()
-        ) {
 
-            when (val state = favoriteScreenUiState.movieListState) {
-                is FavoriteScreenMovieListState.Error -> {
-                    ImageWithMessage(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        image = R.drawable.movie_list_loading_error,
-                        message = R.string.movie_list_error
-                    )
-                }
+        Crossfade(
+            targetState = favoriteScreenUiState.movieListState,
+            label = "List animation",
+            animationSpec = tween(350)
+        ) { state ->
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxSize()
+            ) {
+                when (state) {
+                    is FavoriteScreenMovieListState.Error -> {
+                        ImageWithMessage(
+                            modifier = Modifier
+                                .align(Alignment.Center),
+                            image = R.drawable.movie_list_loading_error,
+                            message = R.string.movie_list_error
+                        )
+                    }
 
-                is FavoriteScreenMovieListState.Loading -> {
-                    LoadingIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
+                    is FavoriteScreenMovieListState.Loading -> {
+                        LoadingIndicator(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                    }
 
-                is FavoriteScreenMovieListState.Success -> {
-                    val movieList = state.movieList.collectAsLazyPagingItems()
-                    when {
-                        movieList.itemCount > 0 -> {
-                            MovieList(
-                                movieList = movieList,
-                                navigateToMovieDetails = navigateToMovieDetails,
-                                lazyGridState = lazyGridState,
-                                paddingValues = PaddingValues(
-                                    top = 98.dp,
-                                    start = 10.dp,
-                                    end = 10.dp,
-                                    bottom = 10.dp
+                    is FavoriteScreenMovieListState.Success -> {
+                        val movieList = state.movieList.collectAsLazyPagingItems()
+                        when {
+                            movieList.itemCount > 0 -> {
+                                MovieList(
+                                    movieList = movieList,
+                                    navigateToMovieDetails = navigateToMovieDetails,
+                                    lazyGridState = lazyGridState,
+                                    paddingValues = PaddingValues(
+                                        top = 98.dp,
+                                        start = 10.dp,
+                                        end = 10.dp,
+                                        bottom = 10.dp
+                                    )
                                 )
-                            )
-                        }
+                            }
 
-                        movieList.itemCount == 0 &&
-                                movieList.loadState.source.append == LoadState.NotLoading(
-                            endOfPaginationReached = true
-                        ) -> {
-                            ImageWithMessage(
-                                modifier = Modifier
-                                    .align(Alignment.Center),
-                                image = R.drawable.favorite_empty,
-                                message = R.string.favorite_list_empty
-                            )
+                            movieList.itemCount == 0 &&
+                                    movieList.loadState.source.append == LoadState.NotLoading(
+                                endOfPaginationReached = true
+                            ) -> {
+                                ImageWithMessage(
+                                    modifier = Modifier
+                                        .align(Alignment.Center),
+                                    image = R.drawable.favorite_empty,
+                                    message = R.string.favorite_list_empty
+                                )
+                            }
                         }
                     }
                 }
