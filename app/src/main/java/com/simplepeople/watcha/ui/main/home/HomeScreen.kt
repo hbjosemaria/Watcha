@@ -1,7 +1,8 @@
 package com.simplepeople.watcha.ui.main.home
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,7 +34,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.ui.common.composables.ImageWithMessage
-import com.simplepeople.watcha.ui.common.composables.LoadingIndicator
 import com.simplepeople.watcha.ui.common.composables.SharedNavigationBar
 import com.simplepeople.watcha.ui.common.composables.movielist.HomeMovieList
 import com.simplepeople.watcha.ui.common.composables.movielist.MovieListPlaceholder
@@ -59,7 +58,7 @@ fun HomeScreen(
     isRefreshing: Boolean,
 ) {
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val homeScreenUiState by homeViewModel.homeScreenState.collectAsState()
     val userHasConnection by homeViewModel.connectivityState.collectAsState()
     var refreshMovieList by remember { mutableStateOf(isRefreshing) }
@@ -124,76 +123,80 @@ fun HomeScreen(
             )
         }
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize()
-        ) {
-            when (val state = homeScreenUiState.movieListState) {
-                is HomeScreenMovieListState.Loading -> {
-                    MovieListPlaceholder(
-                        isHomeScreen = true,
-                        paddingValues = PaddingValues(
-                            top = movieListPaddingValues.value,
-                            start = 10.dp,
-                            end = 10.dp,
-                            bottom = 10.dp
+        Crossfade(
+            targetState = homeScreenUiState.movieListState,
+            label = "List animation",
+            animationSpec = tween(500)
+        ) { state ->
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxSize()
+            ) {
+                when (state) {
+                    is HomeScreenMovieListState.Loading -> {
+                        MovieListPlaceholder(
+                            isHomeScreen = true,
+                            paddingValues = PaddingValues(
+                                top = movieListPaddingValues.value,
+                                start = 10.dp,
+                                end = 10.dp,
+                                bottom = 10.dp
+                            )
                         )
-                    )
-                }
+                    }
 
-                is HomeScreenMovieListState.Error -> {
-                    ImageWithMessage(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        image = R.drawable.movie_list_loading_error,
-                        message = state.message
-                    )
-                }
+                    is HomeScreenMovieListState.Error -> {
+                        ImageWithMessage(
+                            modifier = Modifier
+                                .align(Alignment.Center),
+                            image = R.drawable.movie_list_loading_error,
+                            message = state.message
+                        )
+                    }
 
-                is HomeScreenMovieListState.Success -> {
-                    val movieList = state.movieList.collectAsLazyPagingItems()
+                    is HomeScreenMovieListState.Success -> {
+                        val movieList = state.movieList.collectAsLazyPagingItems()
 
-                    when {
-                        movieList.itemSnapshotList.isEmpty() && (
-                                movieList.loadState.refresh == LoadState.Loading || movieList.loadState.source.append == LoadState.Loading) -> {
-                            LoadingIndicator(
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
+                        when {
+                            movieList.itemSnapshotList.isEmpty() && (
+                                    movieList.loadState.refresh == LoadState.Loading || movieList.loadState.source.append == LoadState.Loading) -> {
+//                            LoadingIndicator(
+//                                modifier = Modifier
+//                                    .align(Alignment.Center)
+//                            )
+                            }
 
-                        movieList.loadState.refresh is LoadState.Error ||
-                                (movieList.loadState.source.append == LoadState.NotLoading(true) && movieList.itemSnapshotList.isEmpty()) -> {
-                            ImageWithMessage(
-                                modifier = Modifier
-                                    .align(Alignment.Center),
-                                image = R.drawable.movie_list_loading_error,
-                                message = R.string.movie_list_connection_lost
-                            )
-
-                            if (userHasConnection) {
-                                TextButton(
+                            movieList.loadState.refresh is LoadState.Error ||
+                                    (movieList.loadState.source.append == LoadState.NotLoading(true) && movieList.itemSnapshotList.isEmpty()) -> {
+                                ImageWithMessage(
                                     modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .padding(
-                                            bottom = 30.dp
-                                        ),
-                                    onClick = {
-                                        homeViewModel.reloadMovies()
-                                    },
-                                    shape = ButtonDefaults.filledTonalShape
-                                ) {
-                                    Text(
-                                        stringResource(id = R.string.retry)
-                                    )
+                                        .align(Alignment.Center),
+                                    image = R.drawable.movie_list_loading_error,
+                                    message = R.string.movie_list_connection_lost
+                                )
+
+                                if (userHasConnection) {
+                                    TextButton(
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .padding(
+                                                bottom = 30.dp
+                                            ),
+                                        onClick = {
+                                            homeViewModel.reloadMovies()
+                                        },
+                                        shape = ButtonDefaults.filledTonalShape
+                                    ) {
+                                        Text(
+                                            stringResource(id = R.string.retry)
+                                        )
+                                    }
                                 }
                             }
-                        }
 
-                        else -> {
-                            Column {
+                            else -> {
                                 HomeMovieList(
                                     movieList = movieList,
                                     navigateToMovieDetails = navigateToMovieDetails,

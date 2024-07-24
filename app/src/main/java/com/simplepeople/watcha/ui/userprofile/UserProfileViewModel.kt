@@ -29,4 +29,14 @@ class UserProfileViewModel @Inject constructor(
             credentialsUseCase.logOut()
         }
     }
+
+    fun deleteAccount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _userProfileState.value = _userProfileState.value.copy(
+                isLoggedOut = true
+            )
+            cacheUseCase.forceCacheExpiration()
+            credentialsUseCase.deleteAccount()
+        }
+    }
 }

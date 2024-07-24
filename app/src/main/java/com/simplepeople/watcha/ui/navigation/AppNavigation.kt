@@ -1,7 +1,5 @@
 package com.simplepeople.watcha.ui.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +22,7 @@ import com.simplepeople.watcha.ui.auth.signup.SignUpScreen
 import com.simplepeople.watcha.ui.main.favorite.FavoriteScreen
 import com.simplepeople.watcha.ui.main.home.HomeScreen
 import com.simplepeople.watcha.ui.main.moviedetails.MovieDetailsScreen
+import com.simplepeople.watcha.ui.main.moviedetails.YoutubeScreen
 import com.simplepeople.watcha.ui.main.search.SearchScreen
 import com.simplepeople.watcha.ui.settings.SettingsScreen
 import com.simplepeople.watcha.ui.settings.language.SettingsLanguageScreen
@@ -83,7 +82,7 @@ fun AppNavigation(
         ) {
             AuthScreen(
                 navigateToHome = { navController.navigate(MainAppScreens.MainScreen.route) },
-                navigateBack = { navController.navigateUp() }
+                navigateBack = { navController.popBackStack(AuthAppScreens.SignInScreen.route, false) }
             )
         }
 
@@ -92,10 +91,7 @@ fun AppNavigation(
             startDestination = MainAppScreens.HomeScreen.route
         ) {
             composable(
-                route = MainAppScreens.HomeScreen.route,
-                enterTransition = {
-                    EnterTransition.None
-                }
+                route = MainAppScreens.HomeScreen.route
             ) { backStackEntry ->
                 val isRefreshing = backStackEntry.savedStateHandle
                     .get<Boolean>(NavigationVariableNames.REFRESH_MOVIE_LIST.variableName) ?: false
@@ -123,9 +119,7 @@ fun AppNavigation(
                 )
             }
             composable(
-                route = MainAppScreens.FavoriteScreen.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                route = MainAppScreens.FavoriteScreen.route
             ) {
                 FavoriteScreen(
                     navigateToMovieDetails = { movieId: Long ->
@@ -147,6 +141,21 @@ fun AppNavigation(
                 )
             }
             composable(
+                route = MainAppScreens.YoutubeScreen.buildRoute(),
+                arguments = listOf(navArgument(NavigationVariableNames.VIDEO_KEY.variableName) {
+                    type = NavType.StringType
+                })
+            ) {
+                val videoKey =
+                    it.arguments?.getString(NavigationVariableNames.VIDEO_KEY.variableName) ?: ""
+                YoutubeScreen(
+                    videoKey = videoKey,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable(
                 route = MainAppScreens.MovieDetailsScreen.buildRoute(),
                 arguments = listOf(navArgument(NavigationVariableNames.MOVIE_ID.variableName) {
                     type = NavType.LongType
@@ -158,13 +167,16 @@ fun AppNavigation(
                     movieId = movieId,
                     navigateBack = {
                         navController.popBackStack()
+                    },
+                    navigateToYoutubeScreen = { videoKey : String ->
+                        navController.navigate(
+                            MainAppScreens.YoutubeScreen.buildArgRoute(videoKey)
+                        )
                     }
                 )
             }
             composable(
-                route = MainAppScreens.SearchScreen.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                route = MainAppScreens.SearchScreen.route
             ) {
                 SearchScreen(
                     navigateToMovieDetails = { movieId: Long ->
@@ -186,9 +198,7 @@ fun AppNavigation(
                 )
             }
             composable(
-                route = MainAppScreens.ProfileScreen.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                route = MainAppScreens.ProfileScreen.route
             ) {
                 ProfileScreen(
                     navigateToSettings = {
@@ -296,7 +306,8 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 
 enum class NavigationVariableNames(val variableName: String) {
     REFRESH_MOVIE_LIST("refresh_movie_list"),
-    MOVIE_ID("movieId")
+    MOVIE_ID("movieId"),
+    VIDEO_KEY("videoKey")
 }
 
 

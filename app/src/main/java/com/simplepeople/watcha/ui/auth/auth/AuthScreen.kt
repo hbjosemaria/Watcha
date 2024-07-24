@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.simplepeople.watcha.R
+import com.simplepeople.watcha.ui.common.composables.DefaultTextIconButton
 import com.simplepeople.watcha.ui.common.composables.ImageWithMessage
 import com.simplepeople.watcha.ui.common.composables.LoadingIndicator
 import com.simplepeople.watcha.ui.common.composables.topbar.SingleScreenTopAppBar
@@ -121,18 +121,15 @@ fun AuthScreen(
                             textAlign = TextAlign.Center
                         )
                     }
-                    ElevatedButton(
+                    DefaultTextIconButton(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .padding(
                                 bottom = 40.dp
                             ),
-                        onClick = { isExplanationRead = true }
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.auth_explanation_button)
-                        )
-                    }
+                        action = { isExplanationRead = true },
+                        text =  R.string.auth_explanation_button
+                    )
                 }
 
                 isExplanationRead && !authState.isTokenAuthorized -> {

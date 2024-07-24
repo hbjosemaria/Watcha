@@ -158,17 +158,6 @@ private val fakeDaoMovieData = fakeAPIMovieData.toEntity()
 
 class FakeExternalMovieRepositoryImpl : ExternalMovieRepository {
 
-    override suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto {
-        val movie = fakeDaoMovieData.find { it.movieId == movieId }
-        return movie.let {
-            MovieResponseDto(
-                id = it!!.movieId,
-                title = it.title,
-                overview = it.overview
-            )
-        }
-    }
-
     override suspend fun getMoviesByTitle(
         searchText: String,
         page: Int,
@@ -183,6 +172,22 @@ class FakeExternalMovieRepositoryImpl : ExternalMovieRepository {
             totalPages = 1,
             totalResults = filteredMovies.size
         )
+    }
+
+    override suspend fun getMovieById(
+        movieId: Long,
+        language: String,
+        imageLanguage: String,
+        append: String,
+    ): MovieResponseDto {
+        val movie = fakeDaoMovieData.find { it.movieId == movieId }
+        return movie.let {
+            MovieResponseDto(
+                id = it!!.movieId,
+                title = it.title,
+                overview = it.overview
+            )
+        }
     }
 
 
@@ -256,6 +261,8 @@ class FakeMixedMovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(
         movieId: Long,
         language: String,
+        imageLanguage: String,
+        append: String,
     ): Pair<MovieResponseDto, Int> {
         val movie = fakeAPIMovieData.toEntity().find {
             it.movieId == movieId

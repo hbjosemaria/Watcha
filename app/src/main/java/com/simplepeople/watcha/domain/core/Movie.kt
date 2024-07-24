@@ -10,12 +10,44 @@ data class Movie(
     val movieId: Long = 1,
     val title: String = "",
     val overview: String = "",
+    val tagline: String = "",
     val picture: String = "",
+    val backdrop: String = "",
     val genres: List<Genre> = listOf(),
+    val runTime: Int = 0,
     val releaseDate: String = "",
-    val voteAverage: String? = "",
+    val voteAverage: Int? = null,
+    val webUrl: String = "",
     var isFavorite: Boolean = false,
+    val images: List<String> = emptyList(),
+    val trailer: String? = null,
+    val credits: List<CastMember> = emptyList(),
+    val review: Review? = Review(),
+    val recommendations: List<MovieItem> = emptyList(),
+    val similar: List<MovieItem> = emptyList()
 ) {
+
+    data class Review(
+        val author: String = "",
+        val avatarPath: String? = null,
+        val rating: Int? = null,
+        val content: String = "",
+        val updatedAt: String = ""
+    )
+
+    data class MovieItem(
+        val id: Long = 0,
+        val title: String = "",
+        val posterPath: String? = null,
+    )
+
+    data class CastMember(
+        val name: String = "",
+        val profilePath: String? = null,
+        val character: String = "",
+        val order: Int = 0
+    )
+
     fun toEntity(): MovieEntity {
         return MovieEntity(
             movieId = this.movieId,

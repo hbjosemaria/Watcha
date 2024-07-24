@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,10 +47,10 @@ fun DefaultIconButton(
 
 @Composable
 fun DefaultTextIconButton(
-    action: () -> Unit,
-    iconImage: ImageVector,
-    contentDescription: String,
     modifier: Modifier = Modifier,
+    action: () -> Unit,
+    iconImage: ImageVector? = null,
+    contentDescription: String? = null,
     tint: Color? = null,
     text: Int,
 ) {
@@ -57,6 +60,10 @@ fun DefaultTextIconButton(
         contentPadding = PaddingValues(
             start = 10.dp,
             end = 15.dp
+        ),
+        colors = ButtonDefaults.elevatedButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.tertiaryContainer
         )
     ) {
         Row(
@@ -65,11 +72,15 @@ fun DefaultTextIconButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = iconImage,
-                contentDescription = contentDescription,
-                tint = tint ?: LocalContentColor.current
-            )
+            iconImage?.let {
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp),
+                    imageVector = it,
+                    contentDescription = contentDescription,
+                    tint = tint ?: LocalContentColor.current
+                )
+            }
             Text(
                 modifier = Modifier
                     .padding(

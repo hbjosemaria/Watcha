@@ -52,7 +52,7 @@ fun SharedNavigationBar(
     val image = ImageRequest.Builder(LocalContext.current)
         .dispatcher(Dispatchers.IO)
         .data(avatarUrl)
-        .placeholder(R.drawable.movie_placeholder)
+        .placeholder(R.drawable.poster_placeholder)
         .fallback(R.drawable.user_image_placeholder)
         .error(R.drawable.user_image_placeholder)
         .allowConversionToBitmap(true)

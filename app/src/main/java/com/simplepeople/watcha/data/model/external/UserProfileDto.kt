@@ -34,14 +34,14 @@ data class UserProfileDto(
             fun toEntity(): UserProfileEntity.AvatarEntity.GravatarEntity =
                 UserProfileEntity.AvatarEntity.GravatarEntity(
                     hash = if (hash.isNotEmpty()) {
-                        TmdbApiUrl.GRAVATAR_IMG_URL.url.replace("{hash}", hash)
+                        TmdbApiUrl.PROFILE_GRAVATAR_IMG_URL.url.replace("{hash}", hash)
                     } else hash
                 )
 
             fun toDomain(): UserProfile.Avatar.Gravatar =
                 UserProfile.Avatar.Gravatar(
                     hash = if (hash.isNotEmpty()) {
-                        TmdbApiUrl.GRAVATAR_IMG_URL.url.replace("{hash}", hash)
+                        TmdbApiUrl.PROFILE_GRAVATAR_IMG_URL.url.replace("{hash}", hash)
                     } else hash
                 )
         }
@@ -53,14 +53,14 @@ data class UserProfileDto(
             fun toEntity(): UserProfileEntity.AvatarEntity.TmdbAvatarEntity =
                 UserProfileEntity.AvatarEntity.TmdbAvatarEntity(
                     avatarPath = avatarPath?.let {
-                        TmdbApiUrl.TMDB_IMG_URL.url.plus(it)
+                        TmdbApiUrl.PROFILE_TMDB_IMG_URL.url.plus(it)
                     }
                 )
 
             fun toDomain(): UserProfile.Avatar.TmdbAvatar =
                 UserProfile.Avatar.TmdbAvatar(
                     avatarPath = avatarPath?.let {
-                        TmdbApiUrl.TMDB_IMG_URL.url.plus(it)
+                        TmdbApiUrl.PROFILE_TMDB_IMG_URL.url.plus(it)
                     }
                 )
         }

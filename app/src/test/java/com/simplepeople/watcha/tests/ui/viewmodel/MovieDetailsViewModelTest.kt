@@ -99,7 +99,7 @@ class MovieDetailsViewModelTest {
     }
 
     @Test
-    fun getMovieDetailsState() = runTest {
+    fun loadMovieState() = runTest {
         val defaultSnackbarItem = SnackbarItem()
         movieDetailsViewModel.movieDetailsState.test {
             val state = awaitItem()

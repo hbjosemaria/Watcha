@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.simplepeople.watcha.R
 import com.simplepeople.watcha.domain.usecase.FavoriteUseCase
 import com.simplepeople.watcha.domain.usecase.MovieUseCase
+import com.simplepeople.watcha.ui.common.ScrollToTopAction
+import com.simplepeople.watcha.ui.common.SnackbarMessaging
 import com.simplepeople.watcha.ui.common.utils.SnackbarItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -19,8 +21,8 @@ import kotlinx.coroutines.launch
 class MovieDetailsViewModel @AssistedInject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val movieUseCase: MovieUseCase,
-    @Assisted private val movieId: Long,
-) : ViewModel() {
+    @Assisted private val movieId: Long
+) : ViewModel(), SnackbarMessaging, ScrollToTopAction {
 
     @AssistedFactory
     interface MovieDetailsViewModelFactory {
@@ -31,7 +33,28 @@ class MovieDetailsViewModel @AssistedInject constructor(
     val movieDetailsState = _movieDetailsState.asStateFlow()
 
     init {
-        getMovieDetails()
+        loadMovie()
+    }
+
+    fun loadMovie(id: Long = movieId) {
+        viewModelScope.launch(
+            context = Dispatchers.IO
+        ) {
+            try {
+                _movieDetailsState.value = _movieDetailsState.value.copy(
+                    movieState = MovieDetailsMovieState.Success(
+                        movie = movieUseCase.getMovieById(id)
+                    ),
+                    scrollToTop = true
+                )
+            } catch (e: Exception) {
+                _movieDetailsState.value = _movieDetailsState.value.copy(
+                    movieState = MovieDetailsMovieState.Error(
+                        message = R.string.movie_list_error
+                    )
+                )
+            }
+        }
     }
 
     fun toggleFavorite() {
@@ -94,7 +117,7 @@ class MovieDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun resetSnackbar() {
+    override fun resetSnackbar() {
         _movieDetailsState.value = _movieDetailsState.value.copy(
             snackBarItem = SnackbarItem(
                 show = false
@@ -102,23 +125,17 @@ class MovieDetailsViewModel @AssistedInject constructor(
         )
     }
 
-    private fun getMovieDetails() {
-        viewModelScope.launch(
-            context = Dispatchers.IO
-        ) {
-            try {
-                _movieDetailsState.value = _movieDetailsState.value.copy(
-                    movieState = MovieDetailsMovieState.Success(
-                        movie = movieUseCase.getMovieById(movieId)
-                    )
-                )
-            } catch (e: Exception) {
-                _movieDetailsState.value = _movieDetailsState.value.copy(
-                    movieState = MovieDetailsMovieState.Error(
-                        message = R.string.movie_list_error
-                    )
-                )
-            }
-        }
+    override fun scrollingToTop() {
+        _movieDetailsState.value = _movieDetailsState.value.copy(
+            scrollToTop = true
+        )
     }
+
+    override fun resetScrollingToTop() {
+        _movieDetailsState.value = _movieDetailsState.value.copy(
+            scrollToTop = false
+        )
+    }
+
+
 }

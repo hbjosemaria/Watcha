@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -106,11 +106,10 @@ private fun LanguageSetting(
     language: Language,
     navigateToLanguageSettings: () -> Unit,
 ) {
-    //TODO: change the icon for another more appropriate
     TextFieldClickableUnselected(
         value = stringResource(id = language.textRes),
         action = navigateToLanguageSettings,
-        iconVector = Icons.Default.Place,
+        iconVector = Icons.Filled.Language,
         labelText = stringResource(id = R.string.app_language)
     )
 }

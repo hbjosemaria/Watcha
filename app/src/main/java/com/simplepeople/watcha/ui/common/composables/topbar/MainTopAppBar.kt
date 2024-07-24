@@ -10,7 +10,7 @@ import com.simplepeople.watcha.ui.common.composables.topbar.common.TopAppBarLogo
 
 @OptIn(ExperimentalMaterial3Api::class)
 /**
- * TopBar with logo and settings icon
+ * TopBar with logo
  */
 @Composable
 fun MainTopAppBar(

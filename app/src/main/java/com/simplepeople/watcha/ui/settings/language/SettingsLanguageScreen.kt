@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -116,7 +116,6 @@ private fun SettingsLanguageItem(
         updateSetting(itemLanguage)
     }
 
-    //TODO: change leadingIcon icon to the corresponding flag
     if (selectedLanguage == itemLanguage)
         TextFieldClickableSelected(
             value = stringResource(id = itemLanguage.textRes),
@@ -127,7 +126,7 @@ private fun SettingsLanguageItem(
         TextFieldClickableUnselected(
             value = stringResource(id = itemLanguage.textRes),
             action = action,
-            iconVector = Icons.Outlined.Place
+            iconVector = Icons.Outlined.LocationOn
         )
 
 }

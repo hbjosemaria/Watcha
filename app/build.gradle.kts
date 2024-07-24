@@ -126,6 +126,7 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.material.icons.extended.android)
+    implementation(libs.androidx.palette.ktx)
     implementation (libs.googleid.vlatestversion)
     implementation(libs.googleid)
     implementation(platform(libs.firebase.bom))
@@ -138,6 +139,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.converter.scalars)
     implementation(libs.converter.gson)
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)

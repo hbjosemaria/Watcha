@@ -34,10 +34,9 @@ import kotlinx.coroutines.flow.Flow
         MovieFavoriteEntity::class,
         TmdbSessionIdEntity::class,
         UserProfileEntity::class],
-    version = 20,
+    version = 22,
     exportSchema = false
 )
-
 @TypeConverters(
     GenreConverter::class,
     AvatarConverter::class
@@ -142,7 +141,7 @@ interface TmdbSessionIdDao : LocalAuthRepository {
 interface UserProfileDao : UserProfileLocalRepository {
 
     @Query("select * from user_profile where sessionId = :sessionId")
-    override suspend fun getUserProfile(sessionId: String?): UserProfileEntity
+    override suspend fun getUserProfile(sessionId: String?): UserProfileEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun saveUserProfile(userProfile: UserProfileEntity): Long

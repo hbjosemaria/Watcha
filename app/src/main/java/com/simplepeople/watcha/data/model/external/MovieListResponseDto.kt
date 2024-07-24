@@ -52,9 +52,10 @@ data class MovieListResponseDto(
                 movieId = it.id,
                 title = it.title,
                 overview = it.overview,
-                picture = TmdbApiUrl.IMG_BASE_URL.url + it.posterPath,
+                picture = TmdbApiUrl.POSTER_BASE_URL.url + it.posterPath,
+                backdrop = TmdbApiUrl.POSTER_BASE_URL.url + it.backdropPath,
                 releaseDate = it.releaseDate,
-                voteAverage = it.voteAverage.toString()
+                voteAverage = (it.voteAverage * 10).toInt()
             )
         }
 
@@ -64,9 +65,10 @@ data class MovieListResponseDto(
                 movieId = it.id,
                 title = it.title,
                 overview = it.overview,
-                picture = TmdbApiUrl.IMG_BASE_URL.url + it.posterPath,
+                picture = TmdbApiUrl.POSTER_BASE_URL.url + it.posterPath,
+                backdrop = TmdbApiUrl.POSTER_BASE_URL.url + it.backdropPath,
                 releaseDate = it.releaseDate,
-                voteAverage = it.voteAverage.toString()
+                voteAverage = (it.voteAverage * 10).toInt()
             )
         }
 

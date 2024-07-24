@@ -14,10 +14,11 @@ data class MovieEntity(
     val title: String = "",
     val overview: String = "",
     val picture: String = "",
+    val backdrop: String = "",
     @TypeConverters(GenreConverter::class)
     val genres: List<Genre> = listOf(),
     val releaseDate: String = "",
-    val voteAverage: String? = "",
+    val voteAverage: Int? = null,
     var isFavorite: Boolean = false,
 ) {
     fun toDomain(): Movie {
@@ -26,6 +27,7 @@ data class MovieEntity(
             title = this.title,
             overview = this.overview,
             picture = this.picture,
+            backdrop = this.backdrop,
             genres = this.genres,
             releaseDate = this.releaseDate,
             voteAverage = this.voteAverage,

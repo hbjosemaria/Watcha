@@ -22,7 +22,15 @@ sealed class MainAppScreens(
             return "$route/{${NavigationVariableNames.MOVIE_ID.variableName}}"
         }
     }
+    data object YoutubeScreen : MainAppScreens("main_youtube", R.string.youtube)  {
+        fun buildArgRoute(value: String): String {
+            return "$route/${value}"
+        }
 
+        fun buildRoute(): String {
+            return "$route/{${NavigationVariableNames.VIDEO_KEY.variableName}}"
+        }
+    }
     data object FavoriteScreen : MainAppScreens("main_favorites", R.string.list_favorites)
     data object SearchScreen : MainAppScreens("main_search", R.string.search)
     data object SettingsScreen : MainAppScreens("main_settings", R.string.settings)

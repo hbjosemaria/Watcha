@@ -85,7 +85,7 @@
     <string name="sign_up_account">Registrar cuenta</string>
     <string name="sign_up_email_placeholder">ejemplo@gmail.com</string>
     <string name="sign_up_password_label">Contraseña</string>
-    <string name="sign_up_password_placeholder">MiContraseñaEspecialmenteSecreta</string>
+    <string name="sign_up_password_placeholder">MiContraseña#123</string>
     <string name="sign_up_no_user_found_error">Tu cuenta no pudo ser creada</string>
     <string name="sign_up_credential_error">Ocurrió un error durante el proceso de creación. Inténtalo de nuevo más tarde</string>
     <string name="email_is_not_valid">El email no es válido</string>
@@ -97,4 +97,16 @@
     <string name="auth_explanation">Para sincronizar Watcha con TMDB, te pediremos tu autorización para vincular tu cuenta a Watcha.</string>
     <string name="auth_explanation_button">Proceder a la autorización</string>
     <string name="reviews">Reseñas</string>
+    <string name="overview">Vista general</string>
+    <string name="top_billed_cast">Reparto principal</string>
+    <string name="cast_member">Miembro de reparto</string>
+    <string name="similar">Similares a %s</string>
+    <string name="recommendations">Recomendaciones</string>
+    <string name="review_written_by">Una reseña de %s</string>
+    <string name="review_author_sub">Escrito por %s el %sh</string>
+    <string name="images">Imágenes</string>
+    <string name="play_trailer">Reproducir tráiler</string>
+    <string name="share_movie">Compartir película usando</string>
+    <string name="not_rated">N.P.</string>
+    <string name="delete_account">Eliminar cuenta</string>
 </resources>

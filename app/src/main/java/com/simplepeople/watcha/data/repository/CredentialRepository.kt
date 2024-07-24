@@ -28,6 +28,7 @@ interface CredentialRepository {
     suspend fun getCredential(): GetCredentialResponse?
     suspend fun createPasswordCredential(email: String, password: String): Boolean?
     suspend fun logOut()
+    suspend fun deleteAccount()
 }
 
 class CredentialRepositoryImpl @Inject constructor(
@@ -118,6 +119,14 @@ class CredentialRepositoryImpl @Inject constructor(
 
     override suspend fun logOut() {
         firebaseAuth.signOut()
+        val clearCredentialRequest = ClearCredentialStateRequest()
+        credentialManager.clearCredentialState(
+            clearCredentialRequest
+        )
+    }
+
+    override suspend fun deleteAccount() {
+        firebaseAuth.currentUser?.delete()
         val clearCredentialRequest = ClearCredentialStateRequest()
         credentialManager.clearCredentialState(
             clearCredentialRequest

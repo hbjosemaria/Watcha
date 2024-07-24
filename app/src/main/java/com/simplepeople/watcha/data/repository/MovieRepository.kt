@@ -19,7 +19,7 @@ interface ExternalMovieRepository {
         language: String,
     ): MovieListResponseDto
 
-    suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto
+    suspend fun getMovieById(movieId: Long, language: String, imageLanguage: String, append: String = "images,videos,reviews,recommendations,similar"): MovieResponseDto
     suspend fun getNowPlayingByPage(page: Int, language: String): MovieListResponseDto
     suspend fun getPopularByPage(page: Int, language: String): MovieListResponseDto
     suspend fun getTopRatedByPage(page: Int, language: String): MovieListResponseDto
@@ -40,7 +40,7 @@ interface LocalMovieRepository {
 
 //Model interface function for function implementation
 interface MixedMovieRepository {
-    suspend fun getMovieById(movieId: Long, language: String): Pair<MovieResponseDto, Int>
+    suspend fun getMovieById(movieId: Long, language: String, imageLanguage: String, append: String = "images,videos,credits,reviews,recommendations,similar"): Pair<MovieResponseDto, Int>
 }
 
 //Implementation of repo
@@ -48,8 +48,13 @@ class ExternalMovieRepositoryImpl @Inject constructor(
     private val apiService: TmdbMovieService,
 ) : ExternalMovieRepository {
 
-    override suspend fun getMovieById(movieId: Long, language: String): MovieResponseDto =
-        apiService.getMovieById(movieId, language)
+    override suspend fun getMovieById(
+        movieId: Long,
+        language: String,
+        imageLanguage: String,
+        append: String
+    ): MovieResponseDto =
+        apiService.getMovieById(movieId, language, imageLanguage, append)
 
     override suspend fun getMoviesByTitle(
         searchText: String,
@@ -108,9 +113,11 @@ class MixedMovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(
         movieId: Long,
         language: String,
+        imageLanguage: String,
+        append: String
     ): Pair<MovieResponseDto, Int> =
         Pair(
-            apiService.getMovieById(movieId, language),
+            apiService.getMovieById(movieId, language, imageLanguage, append),
             roomService.checkIfMovieIsFavorite(movieId)
         )
 }
