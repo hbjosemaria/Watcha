@@ -73,6 +73,8 @@
     <img src="previews/Favorites.gif" align="center" width="295"/>
     <p align="center"><b>Favorite list</b></p>
   </td>
+</tr>
+<tr>
   <td>
     <img src="previews/Movie%20trailers.gif" align="center" width="295"/>
     <p align="center"><b>Youtube trailers</b></p>
@@ -84,16 +86,20 @@
 </tr>
 <tr>
   <td>
-    <img src="previews/Caching%20system%20and%20error%20management.gif" width="295"/>
-    <p align="center"><b>Caching system and error management</b></p>
-  </td>
-  <td>
     <img src="previews/Sign%20In%20and%20authorization.gif" align="center" width="295"/>
     <p align="center"><b>Sign In and authorization</b></p>
   </td>
   <td>
     <img src="previews/User%20session%20management.gif" align="center" width="295"/>
     <p align="center"><b>User session management</b></p>
+  </td>
+</tr>
+<tr>
+  <td>
+    <img src="previews/Caching%20system%20and%20error%20management.gif" width="295"/>
+    <p align="center"><b>Caching system and error management</b></p>
+  </td>
+  <td>
   </td>
 </tr>
 </table>
