@@ -122,18 +122,28 @@ Here you can take a quick overview about what Watcha does and what you can achie
     <p><b>Favorite list</b></p>
   </td>
   <td align="center">
-    <img src="previews/Movie%20trailers.gif" width="75%"/>
+    <img src="previews/YouTube%20trailer.gif" width="75%"/>
     <p><b>YouTube trailers</b></p>
   </td>
 </tr>
 <tr>
   <td align="center">
-    <img src="previews/Caching%20system%20and%20error%20management.gif" width="75%"/>
-    <p><b>Caching system and error management</b></p>
+    <img src="previews/Search.gif" width="75%"/>
+    <p><b>Search</b></p>
   </td>
   <td align="center">
     <img src="previews/Language%20selection.gif" width="75%"/>
     <p><b>Language selection</b></p>
+  </td>
+</tr>
+<tr>
+  <td align="center">
+    <img src="previews/Caching%20system.gif" width="75%"/>
+    <p><b>Caching system and error management</b></p>
+  </td>
+  <td align="center">
+    <img src="previews/Error%20management.gif" width="75%"/>
+    <p><b>Error management</b></p>
   </td>
 </tr>
 <tr>
