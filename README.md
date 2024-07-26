@@ -9,12 +9,12 @@
   <img src="previews/Presentation.gif" width="960"/>
 </p>
 
-## ✅ **Previous configuration**
+## 📋 **Previous configuration**
 ```
-- [x] Create a TMDB API key
-- [x] Create a Google ID API key
-- [x] Store both API keys within local.properties file
-- [x] Configure a Firebase Auth access
+✅ Create a TMDB API key
+✅ Create a Google ID API key
+✅ Store both API keys within local.properties file
+✅ Configure a Firebase Auth access
 ```
 
 ## ⚙️ **Project structure: tech stack and dependencies**
