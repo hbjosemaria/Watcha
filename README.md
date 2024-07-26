@@ -123,7 +123,7 @@ Here you can take a quick overview about what Watcha does and what you can achie
   </td>
   <td align="center">
     <img src="previews/YouTube%20trailer.gif" width="75%"/>
-    <p><b>YouTube trailers</b></p>
+    <p><b>YouTube trailer</b></p>
   </td>
 </tr>
 <tr>
@@ -139,7 +139,7 @@ Here you can take a quick overview about what Watcha does and what you can achie
 <tr>
   <td align="center">
     <img src="previews/Caching%20system.gif" width="75%"/>
-    <p><b>Caching system and error management</b></p>
+    <p><b>Caching system</b></p>
   </td>
   <td align="center">
     <img src="previews/Error%20management.gif" width="75%"/>
